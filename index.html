@@ -3,310 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Pro Max Ultra</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>日本旅遊神器 Ultra</title>
     <style>
-        /* --- 🎨 色彩與背景 --- */
+        /* 🎨 色彩與背景 */
         :root {
-            --bg-grad: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
-            --glass-bg: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.15);
+            --bg: #0f172a;
+            --glass: rgba(255, 255, 255, 0.1);
             --primary: #3b82f6;
             --success: #10b981;
-            --text-main: #ffffff;
-            --text-sub: #cbd5e1;
-            --star-color: #fbbf24;
         }
 
         body { 
-            background: var(--bg-grad); background-attachment: fixed; color: var(--text-main); 
-            margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; 
-            padding-bottom: 120px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); 
+            background-attachment: fixed; color: #fff; margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center; 
+            font-family: sans-serif; padding-bottom: 50px;
         }
 
-        /* --- 📱 主容器置中 --- */
-        .app-wrapper { width: 100%; max-width: 500px; padding: 0 15px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
-        h1 { margin: 25px 0 15px 0; font-size: 26px; font-weight: 800; text-align: center; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .app-wrapper { width: 100%; max-width: 500px; padding: 15px; box-sizing: border-box; text-align: center; }
+        h1 { font-size: 24px; margin: 20px 0; }
 
-        .glass { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); }
-
-        /* --- 🔍 搜尋與控制區 --- */
+        /* 搜尋與控制 */
         .search-box { 
-            width: 100%; padding: 15px 20px; border-radius: 20px; color: white; font-size: 16px; 
-            outline: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; margin-bottom: 12px;
+            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); 
+            background: var(--glass); color: #fff; margin-bottom: 10px; font-size: 16px; box-sizing: border-box;
         }
-        .search-box::placeholder { color: #94a3b8; }
-        .search-box:focus { background: rgba(255,255,255,0.15); border-color: var(--primary); }
-        
         .controls { 
-            display: flex; flex-wrap: wrap; width: 100%; justify-content: space-evenly; gap: 10px; 
-            padding: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); margin-bottom: 15px; box-sizing: border-box;
+            background: var(--glass); padding: 15px; border-radius: 15px; 
+            display: flex; justify-content: space-around; margin-bottom: 20px;
         }
-        .toggle-group { display: flex; align-items: center; font-size: 14px; gap: 8px; font-weight: 600; color: var(--text-sub); }
-        .switch { position: relative; display: inline-block; width: 42px; height: 24px; }
-        .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .3s; border-radius: 24px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--success); }
-        input:checked + .slider:before { transform: translateX(18px); }
+        .toggle-group { display: flex; align-items: center; gap: 5px; font-size: 14px; }
 
-        /* --- 🏷️ 分類標籤 (置中排列) --- */
-        .category-wrapper { width: 100%; max-width: 600px; display: flex; justify-content: center; }
+        /* 分類按鈕 */
         .category-container { 
-            display: flex; overflow-x: auto; white-space: nowrap; padding-bottom: 15px; padding-top: 5px; gap: 10px; 
-            scrollbar-width: none; width: 100%; padding-left: 15px; padding-right: 15px;
+            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; margin-bottom: 10px;
+            scrollbar-width: none; width: 100%;
         }
-        .category-container::-webkit-scrollbar { display: none; }
         .tab-btn { 
-            background: rgba(255,255,255,0.05); color: var(--text-sub); border: 1px solid var(--glass-border); 
-            border-radius: 25px; padding: 10px 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; 
+            background: var(--glass); color: #ccc; border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 18px; border-radius: 20px; white-space: nowrap; cursor: pointer; font-weight: bold;
         }
-        .tab-btn.active { background: linear-gradient(135deg, #3b82f6, #6366f1); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(99,102,241,0.4); }
+        .tab-btn.active { background: var(--primary); color: #fff; }
 
-        /* --- 💳 全新置中卡片 UI --- */
+        /* 卡片設計 - 完美置中 */
         .grid-container { display: flex; flex-direction: column; gap: 15px; width: 100%; }
         .phrase-card { 
-            position: relative; border-radius: 24px; padding: 25px 20px 20px; 
-            display: flex; flex-direction: column; align-items: center; text-align: center; /* 完美置中魔法 */
-            box-shadow: 0 8px 32px rgba(0,0,0,0.15); transition: 0.1s; cursor: pointer; 
+            background: var(--glass); border-radius: 20px; padding: 20px;
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .phrase-card:active { transform: scale(0.97); background: rgba(255,255,255,0.12); }
-        
-        .fav-star { position: absolute; top: 15px; left: 15px; font-size: 24px; cursor: pointer; color: rgba(255,255,255,0.2); transition: 0.2s; padding: 5px; z-index: 10; }
-        .fav-star.active { color: var(--star-color); text-shadow: 0 0 15px rgba(251,191,36,0.6); transform: scale(1.1); }
+        .zh-text { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+        .ja-text { font-size: 18px; color: #93c5fd; margin-bottom: 5px; }
+        .romaji-text { font-size: 14px; color: #94a3b8; font-style: italic; margin-bottom: 15px; }
 
-        .text-area { display: flex; flex-direction: column; align-items: center; margin-bottom: 18px; pointer-events: none; width: 100%; }
-        .zh-text { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: #ffffff; }
-        
-        .ja-wrapper { background: rgba(59, 130, 246, 0.15); border-radius: 12px; padding: 8px 16px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(59, 130, 246, 0.3); margin-bottom: 6px; }
-        .ja-text { font-size: 18px; color: #93c5fd; font-weight: 600; }
-        .romaji-text { font-size: 14px; color: #94a3b8; letter-spacing: 0.5px; font-style: italic; }
+        .fav-star { position: absolute; top: 15px; left: 15px; font-size: 24px; color: rgba(255,255,255,0.2); }
+        .fav-star.active { color: #fbbf24; }
 
-        .action-area { display: flex; justify-content: center; gap: 15px; width: 100%; }
+        .action-area { display: flex; gap: 10px; width: 100%; }
         .action-btn { 
-            background: rgba(255,255,255,0.08); color: #f1f5f9; border: 1px solid var(--glass-border); 
-            border-radius: 16px; padding: 10px 20px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; 
-            display: flex; align-items: center; gap: 5px; flex: 1; justify-content: center;
+            flex: 1; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05); color: #fff; font-weight: bold; cursor: pointer;
         }
-        .action-btn:active { background: rgba(255,255,255,0.2); }
 
-        /* --- 🌍 翻譯區 --- */
-        .custom-area { width: 100%; padding: 25px; border-radius: 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; box-sizing: border-box; }
-        .custom-textarea { width: 100%; height: 100px; border-radius: 16px; background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--glass-border); padding: 15px; font-size: 16px; box-sizing: border-box; resize: none; outline: none; text-align: center; }
-        .custom-textarea:focus { border-color: var(--success); }
-        .custom-play-btn { width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 16px; padding: 15px; font-size: 18px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 15px rgba(16,185,129,0.3); }
-        .translated-box { width: 100%; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); border-radius: 16px; padding: 15px; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; color: #6ee7b7; text-align: center; box-sizing: border-box; }
+        /* 自訂翻譯 */
+        .custom-area { background: var(--glass); padding: 20px; border-radius: 20px; width: 100%; box-sizing: border-box; }
+        .custom-textarea { width: 100%; height: 80px; background: rgba(0,0,0,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px; border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; font-size: 16px; }
+        .translated-box { background: rgba(16,185,129,0.1); padding: 15px; border-radius: 10px; color: #6ee7b7; font-weight: bold; margin-bottom: 10px; min-height: 40px; }
+        .custom-play-btn { width: 100%; padding: 15px; background: var(--success); color: #fff; border: none; border-radius: 10px; font-weight: bold; font-size: 18px; }
 
-        /* --- 提醒與 Modal --- */
-        .warning-banner { width: 100%; background: rgba(239,68,68,0.8); color: white; padding: 12px; border-radius: 16px; font-size: 14px; font-weight: bold; text-align: center; margin-bottom: 12px; display: none; box-sizing: border-box; }
-        .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(16,185,129,0.95); color: white; padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: 0.3s; z-index: 9999; }
-        .toast.show { bottom: 80px; }
-        
-        .modal { display: none; position: fixed; z-index: 2000; inset: 0; background: rgba(0,0,0,0.9); flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-        .modal-ja { color: #fff; font-size: 12vw; font-weight: 900; text-align: center; line-height: 1.3; }
-        .modal-zh { color: var(--text-sub); font-size: 22px; margin-top: 30px; text-align: center; font-weight: 500; }
-        .close-modal-btn { margin-top: 50px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        /* Modal & Toast */
+        .modal { display: none; position: fixed; inset: 0; background: #000; z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .modal-ja { font-size: 40px; font-weight: bold; color: #fff; text-align: center; }
+        .close-modal { margin-top: 30px; padding: 10px 30px; background: #333; color: #fff; border-radius: 20px; border: none; }
+        .toast { position: fixed; bottom: 20px; background: var(--success); color: #fff; padding: 10px 20px; border-radius: 20px; display: none; }
     </style>
 </head>
 <body>
 
     <div class="app-wrapper">
         <h1>🇯🇵 日本旅遊神器 Ultra</h1>
-
-        <div id="browserWarning" class="warning-banner glass">⚠️ 建議點擊右上角「...」選擇<b>「使用預設瀏覽器」</b>開啟！</div>
-        <div id="errorLog" class="warning-banner glass" style="background: rgba(200,0,0,0.8);"></div>
-
-        <input type="text" id="searchInput" class="search-box glass" placeholder="🔍 搜尋你想說的話...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋你想說的話...">
         
-        <div class="controls glass">
-            <div class="toggle-group"><label class="switch"><input type="checkbox" id="voiceGenderToggle"><span class="slider"></span></label><span id="genderLabel">女聲</span></div>
-            <div class="toggle-group"><label class="switch"><input type="checkbox" id="volumeToggle"><span class="slider"></span></label><span>大音量</span></div>
-            <div class="toggle-group"><label class="switch"><input type="checkbox" id="turtleToggle"><span class="slider"></span></label><span>🐢 龜速</span></div>
+        <div class="controls">
+            <div class="toggle-group">男聲 <input type="checkbox" id="voiceGenderToggle"></div>
+            <div class="toggle-group">大音量 <input type="checkbox" id="volumeToggle"></div>
+            <div class="toggle-group">🐢 龜速 <input type="checkbox" id="turtleToggle"></div>
         </div>
 
-        <div class="category-wrapper">
-            <div class="category-container" id="category-container"></div>
-        </div>
-        
+        <div class="category-container" id="category-container"></div>
         <div class="grid-container" id="button-container"></div>
     </div>
 
     <div id="fullScreenModal" class="modal">
         <div class="modal-ja" id="modalJaText"></div>
-        <div class="modal-zh" id="modalZhText"></div>
-        <button class="close-modal-btn" onclick="document.getElementById('fullScreenModal').style.display='none'">✖ 點擊關閉</button>
+        <button class="close-modal" onclick="document.getElementById('fullScreenModal').style.display='none'">關閉</button>
     </div>
 
-    <div id="toast" class="toast">✅ 已複製到剪貼簿！</div>
+    <div id="toast" class="toast">✅ 已複製！</div>
 
     <script>
-        // 抓蟲防禦：確保任何隱藏錯誤都能顯示在畫面上
-        window.onerror = function(msg) {
-            document.getElementById('errorLog').innerHTML = "系統錯誤，請使用 Safari/Chrome 開啟: " + msg;
-            document.getElementById('errorLog').style.display = 'block';
-        };
-
-        const phrasesData = {
-            "👋 招呼與禮貌": [
-                { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" }, { zh: "早安", ja: "おはようございます", romaji: "Ohayou gozaimasu" },
-                { zh: "晚安", ja: "こんばんは", romaji: "Konbanwa" }, { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou gozaimasu" },
-                { zh: "非常感謝", ja: "本当にありがとうございます", romaji: "Hontou ni arigatou gozaimasu" }, { zh: "不好意思/請問", ja: "すみません", romaji: "Sumimasen" }, 
-                { zh: "對不起", ja: "ごめんなさい", romaji: "Gomen nasai" }, { zh: "沒關係/不需要", ja: "大丈夫です", romaji: "Daijoubu desu" },
-                { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" }, { zh: "辛苦了", ja: "お疲れ様です", romaji: "Otsukaresama desu" }
+        // 🚀 核心資料 (精簡版)
+        var phrasesData = {
+            "👋 招呼": [
+                { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" },
+                { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou" },
+                { zh: "請問/不好意思", ja: "すみません", romaji: "Sumimasen" }
             ],
-            "💬 實用短語": [
-                { zh: "我明白了", ja: "わかりました", romaji: "Wakarimashita" }, { zh: "我聽不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga wakarimasen" },
-                { zh: "請再說一次", ja: "もう一度言ってください", romaji: "Mou ichido itte kudasai" }, { zh: "請說慢一點", ja: "もう少しゆっくり話してください", romaji: "Mou sukoshi yukkuri hanashite kudasai" },
-                { zh: "請稍等一下", ja: "少々お待ちください", romaji: "Shoushou omachi kudasai" }, { zh: "這個是什麼？", ja: "これは何ですか", romaji: "Kore wa nan desu ka" }
+            "🍜 餐廳": [
+                { zh: "請給我菜單", ja: "メニューをお願いします", romaji: "Menyuu" },
+                { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei" },
+                { zh: "很好吃", ja: "美味しいです", romaji: "Oishii" }
             ],
-            "🛃 機場與飯店": [
-                { zh: "我是來觀光的", ja: "観光で来ました", romaji: "Kankou de kimashita" }, { zh: "預計停留五天", ja: "5日間滞在します", romaji: "Itsukakan taizai shimasu" },
-                { zh: "我要辦理入住", ja: "チェックインをお願いします", romaji: "Chekku-in o onegaishimasu" }, { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか", romaji: "Nimotsu o azukatte moraemasu ka" },
-                { zh: "房間有Wi-Fi嗎？", ja: "部屋にWi-Fiはありますか", romaji: "Heya ni Wi-Fi wa arimasu ka" }, { zh: "請幫我叫計程車", ja: "タクシーを呼んでください", romaji: "Takushii o yonde kudasai" }
-            ],
-            "🚇 交通與問路": [
-                { zh: "洗手間在哪裡？", ja: "トイレはどこですか", romaji: "Toire wa doko desu ka" }, { zh: "車站在哪裡？", ja: "駅はどこですか", romaji: "Eki wa doko desu ka" },
-                { zh: "這班車有到新宿嗎？", ja: "この電車は新宿に行きますか", romaji: "Kono densha wa Shinjuku ni ikimasu ka" }, { zh: "我要在這裡下車", ja: "ここで降ります", romaji: "Koko de orimasu" },
-                { zh: "我迷路了", ja: "道に迷いました", romaji: "Michi ni mayoimashita" }
-            ],
-            "🛍️ 購物與藥妝": [
-                { zh: "請問這個多少錢？", ja: "これはいくらですか", romaji: "Kore wa ikura desu ka" }, { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" },
-                { zh: "可以免稅嗎？", ja: "免税できますか", romaji: "Menzei dekimasu ka" }, { zh: "可以刷卡嗎？", ja: "クレジットカードは使えますか", romaji: "Kurejitto kaado wa tsukaemasu ka" }, 
-                { zh: "請給我塑膠袋", ja: "レジ袋をお願いします", romaji: "Rejibukuro o onegaishimasu" }, { zh: "有大一點的尺寸嗎？", ja: "もう少し大きいサイズはありますか", romaji: "Mou sukoshi ookii saizu wa arimasu ka" },
-                { zh: "我可以試穿嗎？", ja: "試着してもいいですか", romaji: "Shichaku shite mo ii desu ka" }
-            ],
-            "🍜 餐廳與點餐": [
-                { zh: "我們有兩位", ja: "2人です", romaji: "Futari desu" }, { zh: "請給我菜單", ja: "メニューをお願いします", romaji: "Menyuu o onegaishimasu" },
-                { zh: "請問推薦什麼？", ja: "おすすめは何ですか", romaji: "Osusume wa nan desu ka" }, { zh: "請給我生啤酒", ja: "生ビールをお願いします", romaji: "Nama biiru o onegaishimasu" },
-                { zh: "可以幫我微波嗎？", ja: "これを温めてもらえますか", romaji: "Kore o atatamete moraemasu ka" }, { zh: "非常好吃！", ja: "とても美味しいです", romaji: "Totemo oishii desu" },
-                { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei o onegaishimasu" }, { zh: "可以分開結帳嗎？", ja: "別々に払えますか", romaji: "Betsubetsu ni haraemasu ka" }
-            ],
-            "📸 觀光與拍照": [
-                { zh: "可以幫我拍照嗎？", ja: "写真を撮ってもらえませんか", romaji: "Shashin o totte moraemasen ka" }, { zh: "要一起拍照嗎？", ja: "一緒に写真を撮りませんか", romaji: "Issho ni shashin o torimasen ka" },
-                { zh: "這裡可以拍照嗎？", ja: "ここで写真を撮ってもいいですか", romaji: "Koko de shashin o totte mo ii desu ka" }
-            ],
-            "🆘 緊急與醫療": [
-                { zh: "請幫幫我！", ja: "助けてください！", romaji: "Tasukete kudasai!" }, { zh: "請幫我叫救護車", ja: "救急車を呼んでください", romaji: "Kyuukyuusha o yonde kudasai" },
-                { zh: "我遺失了護照", ja: "パスポートをなくしました", romaji: "Pasupooto o nakushimashita" }, { zh: "我發燒了", ja: "熱があります", romaji: "Netsu ga arimasu" }
+            "🛍️ 購物": [
+                { zh: "多少錢？", ja: "いくらですか", romaji: "Ikura desu ka" },
+                { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" },
+                { zh: "可以刷卡嗎？", ja: "カードは使えますか", romaji: "Kaado" }
             ]
         };
 
-        const AppState = {
-            currentCategory: '🌟 全部',
-            voices: [], favs: [], history: [],
-            loadStorage() {
-                try {
-                    this.favs = JSON.parse(localStorage.getItem('jp_favs')) || [];
-                    this.history = JSON.parse(localStorage.getItem('jp_history')) || [];
-                } catch(e) {}
-            },
-            saveStorage() {
-                try {
-                    localStorage.setItem('jp_favs', JSON.stringify(this.favs));
-                    localStorage.setItem('jp_history', JSON.stringify(this.history));
-                } catch(e) {}
-            },
-            toggleFav(jaText) {
-                const idx = this.favs.indexOf(jaText);
-                if(idx > -1) this.favs.splice(idx, 1); else this.favs.push(jaText);
-                this.saveStorage();
-            },
-            addHistory(item) {
-                this.history = this.history.filter(function(h) { return h.ja !== item.ja; });
-                this.history.unshift(item);
-                if (this.history.length > 20) this.history.pop();
-                this.saveStorage();
-            }
-        };
+        var currentCategory = '🌟 全部';
+        var favorites = [];
+        try { favorites = JSON.parse(localStorage.getItem('jp_favs')) || []; } catch(e) {}
 
-        const DOM = {
-            search: document.getElementById('searchInput'),
-            container: document.getElementById('button-container'),
-            catContainer: document.getElementById('category-container'),
-            gender: document.getElementById('voiceGenderToggle'),
-            volume: document.getElementById('volumeToggle'),
-            turtle: document.getElementById('turtleToggle'),
-            toast: document.getElementById('toast'),
-            modal: document.getElementById('fullScreenModal')
-        };
-
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.onvoiceschanged = function() { 
-                AppState.voices = window.speechSynthesis.getVoices().filter(function(v) { return v.lang.includes('ja'); }); 
-            };
-        }
-
-        function speakText(item) {
-            const text = typeof item === 'string' ? item : item.ja;
-            if(!text) return;
-            if (typeof item === 'object') AppState.addHistory(item);
-
-            if (!('speechSynthesis' in window)) return alert("瀏覽器不支援語音！");
-            window.speechSynthesis.cancel(); 
-            const u = new SpeechSynthesisUtterance(text);
+        // 發音
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            var u = new SpeechSynthesisUtterance(text);
             u.lang = 'ja-JP';
-            u.rate = DOM.turtle.checked ? 0.45 : 0.85;
-            u.volume = DOM.volume.checked ? 1.0 : 0.8;
-            u.pitch = DOM.volume.checked ? 1.1 : 1.0;
-            if (AppState.voices.length > 0) {
-                let selectedVoice = AppState.voices[0];
-                if (DOM.gender.checked && AppState.voices.length > 1) {
-                    const male = AppState.voices.find(function(v){ return v.name.toLowerCase().includes('male'); });
-                    selectedVoice = male ? male : AppState.voices[1];
-                }
-                u.voice = selectedVoice;
-            }
+            u.rate = document.getElementById('turtleToggle').checked ? 0.5 : 0.9;
+            u.volume = document.getElementById('volumeToggle').checked ? 1.0 : 0.7;
             window.speechSynthesis.speak(u);
         }
 
-        DOM.container.addEventListener('click', function(e) {
-            if (e.target.id === 'translateBtn') return translateAndSpeak();
-            const card = e.target.closest('.phrase-card');
-            if (!card) return;
-
-            const itemData = JSON.parse(card.getAttribute('data-item'));
-
-            if (e.target.classList.contains('fav-star')) {
-                AppState.toggleFav(itemData.ja);
-                renderCards(AppState.currentCategory, DOM.search.value);
-            } else if (e.target.classList.contains('copy-btn')) {
-                navigator.clipboard.writeText(itemData.ja).then(function() {
-                    DOM.toast.classList.add('show');
-                    setTimeout(function() { DOM.toast.classList.remove('show'); }, 2000); 
-                });
-            } else if (e.target.classList.contains('show-btn')) {
-                document.getElementById('modalJaText').textContent = itemData.ja;
-                document.getElementById('modalZhText').textContent = itemData.zh;
-                DOM.modal.style.display = 'flex';
-            } else {
-                speakText(itemData);
+        // 渲染卡片
+        function render(cat, query) {
+            var container = document.getElementById('button-container');
+            container.innerHTML = '';
+            
+            if (cat === '✏️ 自訂') {
+                container.innerHTML = '<div class="custom-area"><textarea id="customInput" class="custom-textarea" placeholder="輸入中文..."></textarea><div id="translatedResult" class="translated-box">結果</div><button class="custom-play-btn" onclick="doTranslate()">翻譯並發音</button></div>';
+                return;
             }
-        });
 
-        // 完全拔除 ES2020 語法 (?. ) 以確保舊手機不當機
-        async function translateAndSpeak() {
-            const input = document.getElementById('customInput').value.trim();
-            const resultBox = document.getElementById('translatedResult');
-            const btn = document.getElementById('translateBtn');
-            if (!input) return alert("請輸入中文！");
-            if (/[ぁ-んァ-ン]/.test(input)) { resultBox.innerHTML = input; speakText(input); return; }
+            var list = [];
+            for (var k in phrasesData) {
+                if (cat === '🌟 全部' || cat === k) {
+                    list = list.concat(phrasesData[k]);
+                }
+            }
 
-            btn.disabled = true; btn.innerText = "⏳ 翻譯中..."; resultBox.innerHTML = "連線翻譯中...";
-            try {
-                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=zh-TW|ja`);
-                const data = await res.json();
+            if (query) {
+                list = list.filter(function(i) { return i.zh.indexOf(query) > -1 || i.ja.indexOf(query) > -1; });
+            }
+
+            for (var i = 0; i < list.length; i++) {
+                var item = list[i];
+                var isFav = favorites.indexOf(item.ja) > -1;
+                var div = document.createElement('div');
+                div.className = 'phrase-card';
+                div.innerHTML = '<div class="fav-star '+(isFav?'active':'')+'">★</div>' +
+                    '<div class="zh-text">'+item.zh+'</div>' +
+                    '<div class="ja-text">🔊 '+item.ja+'</div>' +
+                    '<div class="romaji-text">'+item.romaji+'</div>' +
+                    '<div class="action-area"><button class="action-btn" onclick="copy(\''+item.ja+'\')">複製</button><button class="action-btn" onclick="zoom(\''+item.ja+'\')">放大</button></div>';
                 
-                // 防呆：確保物件存在才讀取，不用 ?.
-                if (data && data.responseData && data.responseData.translatedText) {
-                    const ja = data.responseData.translatedText;
-                    if (ja === input) { resultBox.innerHTML = "⚠️ 無法辨識"; } 
-                    else { resultBox.innerHTML = ja; speakText(ja); AppState.addHistory({zh: input, ja: ja, romaji: ""}); }
-                } else { resultBox.innerHTML = "⚠️ 翻譯失敗"; }
-            } catch (err) { resultBox.innerHTML = "⚠️ 無法連線"; } 
-            finally { btn.disabled = false; btn.innerText = "🌍 翻譯並發音"; }
+                (function(txt){
+                    div.onclick = function(e) {
+                        if (e.target.tagName !== 'BUTTON') speak(txt);
+                    };
+                })(item.ja);
+                
+                container.appendChild(div);
+            }
         }
 
-        fun
+        function copy(t) {
+            navigator.clipboard.writeText(t);
+            var ts = document.getElementById('toast');
+            ts.style.display = 'block';
+            setTimeout(function(){ ts.style.display='none'; }, 2000);
+        }
+
+        function zoom(t) {
+            document.getElementById('modalJaText').innerText = t;
+            document.getElementById('fullScreenModal').style.display = 'flex';
+        }
+
+        async function doTranslate() {
+            var q = document.getElementById('customInput').value;
+            var rb = document.getElementById('translatedResult');
+            rb.innerText = '翻譯中...';
+            try {
+                var res = await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair=zh-TW|ja');
+                var d = await res.json();
+                var ja = d.responseData.translatedText;
+                rb.innerText = ja;
+                speak(ja);
+            } catch(e) { rb.innerText = '錯誤'; }
+        }
+
+        // 初始化
+        window.onload = function() {
+            var cc = document.getElementById('category-container');
+            var cats = ['🌟 全部', '👋 招呼', '🍜 餐廳', '🛍️ 購物', '✏️ 自訂'];
+            
+            cats.forEach(function(c) {
+                var b = document.createElement('button');
+                b.className = 'tab-btn' + (c === '🌟 全部' ? ' active' : '');
+                b.innerText = c;
+                b.onclick = function() {
+                    document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
+                    b.classList.add('active');
+                    currentCategory = c;
+                    render(c, '');
+                };
+                cc.appendChild(b);
+            });
+
+            document.getElementById('searchInput').oninput = function(e) {
+                render(currentCategory, e.target.value);
+            };
+
+            render('🌟 全部', '');
+        };
+    </script>
+</body>
+</html>
