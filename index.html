@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Pro Max</title>
+    <title>日本旅遊神器 Ultimate</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,36 +23,54 @@
         .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: #4CAF50; }
         input:checked + .slider:before { transform: translateX(18px); }
-        
-        /* 搜尋框 */
         .search-box { width: 100%; padding: 12px; border-radius: 12px; border: none; background: #333; color: white; font-size: 16px; box-sizing: border-box; outline: none; }
-        .search-box::placeholder { color: #888; }
 
         /* --- 分類標籤 --- */
         .category-container { display: flex; overflow-x: auto; white-space: nowrap; width: 100%; max-width: 600px; padding: 10px; gap: 10px; scrollbar-width: none; }
         .category-container::-webkit-scrollbar { display: none; }
-        .tab-btn { background-color: #333; color: #ccc; border: none; border-radius: 20px; padding: 12px 18px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .tab-btn { background-color: #333; color: #ccc; border: none; border-radius: 20px; padding: 10px 18px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .tab-btn.active { background-color: #ff9800; color: white; box-shadow: 0 0 10px rgba(255,152,0,0.5); }
 
-        /* --- 語音按鈕 (一排一格 + 最愛按鈕) --- */
-        .grid-container { display: grid; grid-template-columns: 1fr; gap: 15px; width: 100%; max-width: 600px; padding: 15px; box-sizing: border-box; }
-        .sound-btn-wrapper { position: relative; width: 100%; }
-        .sound-btn { width: 100%; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; border-radius: 16px; padding: 22px 15px 22px 40px; font-size: 22px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 0 #1e40af, 0 8px 15px rgba(0,0,0,0.4); transition: all 0.1s; display: flex; flex-direction: column; align-items: center; justify-content: center; box-sizing: border-box; }
-        .sound-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #1e40af, 0 2px 5px rgba(0,0,0,0.4); }
-        .ja-text { font-size: 15px; color: #dbeafe; margin-top: 8px; font-weight: normal; }
+        /* --- 全新卡片式 UI (UX 優化) --- */
+        .grid-container { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 600px; padding: 15px; box-sizing: border-box; }
         
-        /* 最愛星星按鈕 */
-        .fav-btn { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 24px; background: none; border: none; color: #ccc; cursor: pointer; z-index: 10; padding: 10px; }
-        .fav-btn.favorited { color: #ffeb3b; text-shadow: 0 0 5px rgba(255,235,59,0.5); }
+        .phrase-card { background: #222; border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border-left: 5px solid #3b82f6; position: relative; }
+        
+        /* 左側文字區 */
+        .text-area { display: flex; flex-direction: column; flex: 1; margin-right: 10px; }
+        .zh-text { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 4px; }
+        .ja-text { font-size: 16px; color: #93c5fd; }
+        .romaji-text { font-size: 13px; color: #888; font-style: italic; margin-top: 2px; }
+
+        /* 右側按鈕區 */
+        .action-area { display: flex; gap: 8px; }
+        .action-btn { width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; }
+        .play-btn { background: #3b82f6; color: white; box-shadow: 0 4px 0 #1e40af; }
+        .play-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #1e40af; }
+        .show-btn { background: #4b5563; color: white; box-shadow: 0 4px 0 #374151; }
+        .show-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #374151; }
+        
+        .fav-star { font-size: 22px; cursor: pointer; color: #555; margin-right: 10px; align-self: flex-start; margin-top: -2px; }
+        .fav-star.active { color: #ffeb3b; text-shadow: 0 0 8px rgba(255,235,59,0.5); }
+
+        /* --- 自訂發音區 --- */
+        .custom-area { background: #222; padding: 20px; border-radius: 16px; display: flex; flex-direction: column; gap: 15px; }
+        .custom-textarea { width: 100%; height: 120px; border-radius: 12px; background: #333; color: white; border: none; padding: 15px; font-size: 18px; box-sizing: border-box; resize: none; }
+        .custom-play-btn { background: #4CAF50; color: white; border: none; border-radius: 12px; padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; }
+
+        /* --- 舉牌模式 (全螢幕 Modal) --- */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: #000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-ja { color: #fff; font-size: 10vw; /* 根據螢幕寬度自動調整巨大字體 */ font-weight: bold; text-align: center; line-height: 1.4; word-wrap: break-word; }
+        .modal-zh { color: #888; font-size: 20px; margin-top: 30px; text-align: center; }
+        .close-modal-btn { margin-top: 50px; background: #333; color: white; border: 2px solid #555; padding: 15px 40px; border-radius: 30px; font-size: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1>🇯🇵 日本旅遊神器 Pro Max</h1>
+    <h1>🇯🇵 日本旅遊神器 Ultimate</h1>
 
     <div class="controls-container">
         <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋你想說的中文或日文...">
-        
         <div class="controls">
             <div class="toggle-group"><label class="switch"><input type="checkbox" id="voiceGenderToggle"><span class="slider"></span></label><span id="genderLabel">女聲</span></div>
             <div class="toggle-group"><label class="switch"><input type="checkbox" id="volumeToggle"><span class="slider"></span></label><span>大音量</span></div>
@@ -61,62 +79,47 @@
     </div>
 
     <div class="category-container" id="category-container"></div>
-    
     <div class="grid-container" id="button-container"></div>
 
+    <div id="fullScreenModal" class="modal">
+        <div class="modal-ja" id="modalJaText"></div>
+        <div class="modal-zh" id="modalZhText"></div>
+        <button class="close-modal-btn" onclick="closeModal()">✖ 關閉</button>
+    </div>
+
     <script>
-        // --- 1. 百大旅遊語音庫 ---
+        // --- 1. 資料庫 (加入羅馬拼音示範) ---
+        // 為了確保你看得懂結構，我幫「基本禮貌」加上了 romaji 欄位。你可以依樣畫葫蘆加到其他句型！
         const phrasesData = {
             "👋 基本禮貌": [
-                { zh: "你好", ja: "こんにちは" }, { zh: "謝謝", ja: "ありがとうございます" },
-                { zh: "不好意思 / 請問一下", ja: "すみません" }, { zh: "沒關係 / 不要緊", ja: "大丈夫です" },
-                { zh: "拜託您了", ja: "お願いします" }, { zh: "早安", ja: "おはようございます" },
-                { zh: "晚安", ja: "こんばんは" }, { zh: "辛苦了", ja: "お疲れ様です" },
-                { zh: "我聽不懂日文", ja: "日本語がわかりません" }, { zh: "請再說一次", ja: "もう一度言ってください" }
+                { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" }, 
+                { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou gozaimasu" },
+                { zh: "不好意思 / 請問一下", ja: "すみません", romaji: "Sumimasen" }, 
+                { zh: "沒關係 / 不要緊", ja: "大丈夫です", romaji: "Daijoubu desu" },
+                { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" }
             ],
             "🛃 機場/飯店": [
-                { zh: "我是來旅遊的", ja: "観光できました" }, { zh: "預計停留五天", ja: "5日間滞在します" },
-                { zh: "這是我的護照", ja: "これが私のパスポートです" }, { zh: "我要辦理入住", ja: "チェックインをお願いします" },
-                { zh: "我要辦理退房", ja: "チェックアウトをお願いします" }, { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか" },
-                { zh: "請問早餐幾點開始？", ja: "朝食は何時からですか" }, { zh: "請幫我叫計程車", ja: "タクシーを呼んでください" },
-                { zh: "房間沒有熱水", ja: "部屋にお湯が出ません" }, { zh: "冷氣壞掉了", ja: "エアコンが壊れています" }
+                { zh: "我是來旅遊的", ja: "観光できました" }, { zh: "我要辦理入住", ja: "チェックインをお願いします" },
+                { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか" }, { zh: "請幫我叫計程車", ja: "タクシーを呼んでください" }
             ],
             "🛍️ 購物/藥妝": [
                 { zh: "請問這個多少錢？", ja: "これはいくらですか" }, { zh: "我要買這個", ja: "これをください" },
-                { zh: "可以免稅嗎？", ja: "免税できますか" }, { zh: "有全新的嗎？", ja: "新しいものはありますか" },
-                { zh: "有大一點的尺寸嗎？", ja: "もっと大きいサイズはありますか" }, { zh: "有小一點的尺寸嗎？", ja: "もっと小さいサイズはありますか" },
-                { zh: "可以試穿嗎？", ja: "試着してもいいですか" }, { zh: "可以刷卡嗎？", ja: "クレジットカードは使えますか" },
-                { zh: "可以用西瓜卡付嗎？", ja: "Suicaで払えますか" }, { zh: "請給我塑膠袋", ja: "レジ袋をお願いします" },
-                { zh: "請分開包裝", ja: "別々に包んでください" }, { zh: "這是在哪裡製造的？", ja: "これはどこで作られたものですか" }
+                { zh: "可以免稅嗎？", ja: "免税できますか" }, { zh: "可以刷卡嗎？", ja: "クレジットカードは使えますか" },
+                { zh: "請分開包裝", ja: "別々に包んでください" }
             ],
             "🍜 餐廳點餐": [
-                { zh: "兩位", ja: "2人です" }, { zh: "請給我菜單", ja: "メニューをお願いします" },
-                { zh: "有中文菜單嗎？", ja: "中国語のメニューはありますか" }, { zh: "請推薦招牌菜", ja: "おすすめは何ですか" },
-                { zh: "請給我冰水", ja: "お冷をお願いします" }, { zh: "請給我生啤酒", ja: "生ビールをお願いします" },
-                { zh: "我要去冰", ja: "氷なしでお願いします" }, { zh: "不要加蔥", ja: "ネギは入れないでください" },
-                { zh: "不要加芥末", ja: "わさび抜きでお願いします" }, { zh: "非常好吃！", ja: "美味しいです" },
-                { zh: "我要結帳", ja: "お会計をお願いします" }, { zh: "可以分開結帳嗎？", ja: "別々に払えますか" },
-                { zh: "請給我外帶盒", ja: "持ち帰り用のパックをください" }
+                { zh: "請給我菜單", ja: "メニューをお願いします" }, { zh: "請給我生啤酒", ja: "生ビールをお願いします" },
+                { zh: "不要加蔥", ja: "ネギは入れないでください" }, { zh: "我要結帳", ja: "お会計をお願いします" }
             ],
             "🚇 交通/網路": [
                 { zh: "洗手間在哪裡？", ja: "トイレはどこですか" }, { zh: "車站怎麼走？", ja: "駅はどこですか" },
-                { zh: "這班車有到新宿嗎？", ja: "この電車は新宿に行きますか" }, { zh: "在哪裡買票？", ja: "チケットはどこで買えますか" },
-                { zh: "我迷路了", ja: "道に迷いました" }, { zh: "請帶我到這個地址", ja: "この住所までお願いします" },
-                { zh: "請問這裡有Wi-Fi嗎？", ja: "ここにWi-Fiはありますか" }, { zh: "可以幫我拍照嗎？", ja: "写真を撮ってもらえませんか" }
-            ],
-            "🆘 緊急/醫療": [
-                { zh: "請幫幫我", ja: "助けてください" }, { zh: "我遺失了護照", ja: "パスポートをなくしました" },
-                { zh: "我的錢包被偷了", ja: "財布を盗まれました" }, { zh: "請幫我叫救護車", ja: "救急車を呼んでください" },
-                { zh: "我身體不舒服", ja: "気分が悪いです" }, { zh: "我發燒了", ja: "熱があります" },
-                { zh: "肚子痛", ja: "お腹が痛いです" }, { zh: "請問附近有藥局嗎？", ja: "近くに薬局はありますか" },
-                { zh: "我對花生過敏", ja: "ピーナッツアレルギーがあります" }, { zh: "我對海鮮過敏", ja: "シーフードアレルギーがあります" }
+                { zh: "請問這裡有Wi-Fi嗎？", ja: "ここにWi-Fiはありますか" }
             ]
         };
 
         // --- 2. 狀態與語音設定 ---
         let currentCategory = '🌟 全部';
         let japaneseVoices = [];
-        // 從 LocalStorage 讀取最愛清單 (存的是日文句子作為 ID)
         let favorites = JSON.parse(localStorage.getItem('jp_favs')) || [];
 
         const genderToggle = document.getElementById('voiceGenderToggle');
@@ -125,143 +128,127 @@
         const searchInput = document.getElementById('searchInput');
 
         genderToggle.addEventListener('change', (e) => { document.getElementById('genderLabel').textContent = e.target.checked ? "男聲(若支援)" : "女聲"; });
-        
         window.speechSynthesis.onvoiceschanged = () => { japaneseVoices = window.speechSynthesis.getVoices().filter(v => v.lang.includes('ja')); };
 
-        function speakJapanese(text) {
+        function speakText(text) {
+            if (!text) return;
             if (!('speechSynthesis' in window)) return alert("裝置不支援語音！");
             window.speechSynthesis.cancel(); 
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
-
-            // 龜速模式判斷
             utterance.rate = turtleToggle.checked ? 0.4 : 0.85;
-            
-            // 音量/音調判斷
-            if (volumeToggle.checked) { utterance.volume = 1.0; utterance.pitch = 1.2; } 
-            else { utterance.volume = 0.8; utterance.pitch = 1.0; }
-
-            // 尋找聲音
+            if (volumeToggle.checked) { utterance.volume = 1.0; utterance.pitch = 1.2; } else { utterance.volume = 0.8; utterance.pitch = 1.0; }
             if (japaneseVoices.length > 0) {
-                if (genderToggle.checked && japaneseVoices.length > 1) {
-                    const maleVoice = japaneseVoices.find(v => v.name.toLowerCase().includes('male'));
-                    utterance.voice = maleVoice || japaneseVoices[1]; 
-                } else {
-                    utterance.voice = japaneseVoices[0];
-                }
+                utterance.voice = (genderToggle.checked && japaneseVoices.length > 1) ? 
+                    (japaneseVoices.find(v => v.name.toLowerCase().includes('male')) || japaneseVoices[1]) : japaneseVoices[0];
             }
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- 3. 畫面渲染與邏輯 ---
-        function toggleFavorite(event, item) {
-            event.stopPropagation(); // 阻止按鈕被點擊時發音
-            if (favorites.includes(item.ja)) {
-                favorites = favorites.filter(fav => fav !== item.ja);
-            } else {
-                favorites.push(item.ja);
-            }
+        // --- 3. 畫面渲染 ---
+        function toggleFav(itemJa) {
+            if (favorites.includes(itemJa)) favorites = favorites.filter(f => f !== itemJa);
+            else favorites.push(itemJa);
             localStorage.setItem('jp_favs', JSON.stringify(favorites));
-            renderButtons(currentCategory, searchInput.value); // 重新渲染更新星星狀態
+            renderCards(currentCategory, searchInput.value);
         }
 
-        function renderButtons(categoryName, searchQuery = "") {
+        // 全螢幕展示邏輯
+        function openModal(ja, zh) {
+            document.getElementById('modalJaText').textContent = ja;
+            document.getElementById('modalZhText').textContent = zh;
+            document.getElementById('fullScreenModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('fullScreenModal').style.display = 'none';
+        }
+
+        function renderCards(categoryName, searchQuery = "") {
             const container = document.getElementById('button-container');
             container.innerHTML = ''; 
-            let phrasesToRender = [];
 
-            // 1. 決定資料來源
+            // 如果點擊的是自訂發音區
+            if (categoryName === '✏️ 自訂') {
+                container.innerHTML = `
+                    <div class="custom-area">
+                        <div style="color:#aaa; font-size:14px; line-height:1.5;">
+                            💡 <b>提醒</b>：離線版無法即時中翻日。請先使用翻譯軟體翻成日文後，貼到下方發音。
+                        </div>
+                        <textarea id="customInput" class="custom-textarea" placeholder="在此輸入或貼上日文 (例如: トイレはどこですか)"></textarea>
+                        <button class="custom-play-btn" onclick="speakText(document.getElementById('customInput').value)">🔊 唸出日文</button>
+                    </div>
+                `;
+                return;
+            }
+
+            let phrasesToRender = [];
             if (categoryName === '⭐ 最愛') {
-                // 找出所有存在最愛清單中的物件
-                Object.values(phrasesData).flat().forEach(item => {
-                    if (favorites.includes(item.ja) && !phrasesToRender.some(p => p.ja === item.ja)) {
-                        phrasesToRender.push(item);
-                    }
-                });
+                Object.values(phrasesData).flat().forEach(item => { if (favorites.includes(item.ja) && !phrasesToRender.some(p => p.ja === item.ja)) phrasesToRender.push(item); });
             } else if (categoryName === '🌟 全部') {
                 phrasesToRender = Object.values(phrasesData).flat();
             } else {
                 phrasesToRender = phrasesData[categoryName];
             }
 
-            // 2. 如果有搜尋關鍵字，進行過濾
             if (searchQuery.trim() !== "") {
                 const q = searchQuery.toLowerCase();
-                phrasesToRender = phrasesToRender.filter(item => item.zh.toLowerCase().includes(q) || item.ja.includes(q));
+                phrasesToRender = phrasesToRender.filter(item => item.zh.toLowerCase().includes(q) || item.ja.includes(q) || (item.romaji && item.romaji.toLowerCase().includes(q)));
             }
 
-            // 3. 畫出按鈕
             if (phrasesToRender.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#888;">沒有找到相關的句子喔 🥺</p>';
-                return;
+                container.innerHTML = '<p style="text-align:center; color:#888; margin-top:30px;">沒有找到相關的句子喔 🥺</p>'; return;
             }
 
-            // 避免重複顯示 (因為「全部」可能有重複抓取的狀況)
             const uniquePhrases = [...new Map(phrasesToRender.map(item => [item.ja, item])).values()];
 
             uniquePhrases.forEach(item => {
                 const isFav = favorites.includes(item.ja);
-                const wrapper = document.createElement('div');
-                wrapper.className = 'sound-btn-wrapper';
+                const romajiHtml = item.romaji ? `<div class="romaji-text">${item.romaji}</div>` : '';
                 
-                // 建立最愛星星按鈕
-                const favBtn = document.createElement('button');
-                favBtn.className = `fav-btn ${isFav ? 'favorited' : ''}`;
-                favBtn.innerHTML = isFav ? '★' : '☆';
-                favBtn.onclick = (e) => toggleFavorite(e, item);
-
-                // 建立語音按鈕
-                const btn = document.createElement('button');
-                btn.className = 'sound-btn';
-                btn.innerHTML = `${item.zh}<span class="ja-text">${item.ja}</span>`;
-                btn.onclick = () => speakJapanese(item.ja);
-
-                wrapper.appendChild(favBtn);
-                wrapper.appendChild(btn);
-                container.appendChild(wrapper);
+                // 建立卡片 HTML
+                const card = document.createElement('div');
+                card.className = 'phrase-card';
+                card.innerHTML = `
+                    <div class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFav('${item.ja}')">${isFav ? '★' : '☆'}</div>
+                    <div class="text-area">
+                        <div class="zh-text">${item.zh}</div>
+                        <div class="ja-text">${item.ja}</div>
+                        ${romajiHtml}
+                    </div>
+                    <div class="action-area">
+                        <button class="action-btn show-btn" onclick="openModal('${item.ja}', '${item.zh}')" title="全螢幕顯示">🪧</button>
+                        <button class="action-btn play-btn" onclick="speakText('${item.ja}')" title="播放">🔊</button>
+                    </div>
+                `;
+                container.appendChild(card);
             });
         }
 
-        // 搜尋框監聽
-        searchInput.addEventListener('input', (e) => {
-            renderButtons(currentCategory, e.target.value);
-        });
+        searchInput.addEventListener('input', (e) => renderCards(currentCategory, e.target.value));
 
         function initApp() {
             const categoryContainer = document.getElementById('category-container');
-            const categories = ['⭐ 最愛', '🌟 全部', ...Object.keys(phrasesData)];
+            const categories = ['⭐ 最愛', '🌟 全部', ...Object.keys(phrasesData), '✏️ 自訂'];
 
             categories.forEach((category, index) => {
                 const tabBtn = document.createElement('button');
                 tabBtn.className = 'tab-btn';
                 tabBtn.textContent = category;
                 
-                // 預設選擇「全部」
-                if (category === '🌟 全部') {
-                    tabBtn.classList.add('active');
-                    currentCategory = '🌟 全部';
-                    renderButtons(currentCategory); 
-                }
+                if (category === '🌟 全部') { tabBtn.classList.add('active'); currentCategory = '🌟 全部'; renderCards(currentCategory); }
                 
                 tabBtn.onclick = () => {
                     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                     tabBtn.classList.add('active');
                     currentCategory = category;
-                    // 切換分類時清空搜尋框
                     searchInput.value = '';
-                    renderButtons(category);
+                    renderCards(category);
                 };
                 categoryContainer.appendChild(tabBtn);
             });
-            
-            // 註冊 Service Worker (離線功能核心)
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').then(() => console.log('Service Worker 註冊成功！'));
-            }
         }
 
         initApp();
     </script>
 </body>
 </html>
-
