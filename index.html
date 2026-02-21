@@ -3,85 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Pro Max 300+</title>
+    <title>日本旅遊神器 Pro Max Ultra</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
         :root {
-            --bg: #0f172a;
-            --glass: rgba(255, 255, 255, 0.08);
-            --primary: #3b82f6;
-            --success: #10b981;
+            --bg-dark: #070b14;
+            --accent-blue: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
             --text-sub: #94a3b8;
+            --success: #10b981;
         }
 
         body { 
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); 
-            background-attachment: fixed; color: #fff; margin: 0; padding: 0;
+            background: radial-gradient(circle at top, #1e293b 0%, var(--bg-dark) 100%);
+            background-attachment: fixed; color: var(--text-main); margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center; 
-            font-family: -apple-system, "Microsoft JhengHei", sans-serif; padding-bottom: 80px;
+            font-family: -apple-system, "SF Pro Display", "Microsoft JhengHei", sans-serif; padding-bottom: 100px;
         }
 
         .app-wrapper { width: 100%; max-width: 500px; padding: 15px; box-sizing: border-box; text-align: center; }
-        h1 { font-size: 26px; margin: 25px 0; font-weight: 900; letter-spacing: 1px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        h1 { font-size: 28px; margin: 30px 0; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #fff; text-shadow: 0 0 20px var(--accent-glow); }
 
+        /* 🔍 頂部控制區 */
         .search-box { 
-            width: 100%; padding: 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); 
-            background: var(--glass); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none;
+            width: 100%; padding: 18px; border-radius: 20px; border: 1px solid var(--card-border); 
+            background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; backdrop-filter: blur(10px);
         }
-
         .controls { 
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 20px; 
-            display: flex; justify-content: space-around; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 20px; 
+            display: flex; justify-content: space-around; margin-bottom: 30px; border: 1px solid var(--card-border);
         }
-        .toggle-group { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #cbd5e1; font-weight: bold; }
+        .toggle-group { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-sub); font-weight: bold; }
 
+        /* 🏷️ 分類選單 */
         .category-container { 
-            display: flex; overflow-x: auto; gap: 12px; padding-bottom: 15px; margin-bottom: 15px;
+            display: flex; overflow-x: auto; gap: 12px; padding: 5px 0 20px 0; margin-bottom: 10px;
             scrollbar-width: none; width: 100%; -webkit-overflow-scrolling: touch;
         }
         .category-container::-webkit-scrollbar { display: none; }
         .tab-btn { 
-            background: var(--glass); color: var(--text-sub); border: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 22px; border-radius: 25px; white-space: nowrap; cursor: pointer; font-weight: bold; transition: 0.3s;
+            background: var(--card-bg); color: var(--text-sub); border: 1px solid var(--card-border);
+            padding: 10px 22px; border-radius: 50px; white-space: nowrap; cursor: pointer; font-weight: bold; transition: 0.3s;
         }
-        .tab-btn.active { background: var(--primary); color: #fff; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(59,130,246,0.4); }
+        .tab-btn.active { background: var(--accent-blue); color: #fff; box-shadow: 0 0 15px var(--accent-glow); border-color: transparent; }
 
-        .grid-container { display: flex; flex-direction: column; gap: 18px; width: 100%; }
+        /* 💳 進化版置中卡片 */
+        .grid-container { display: flex; flex-direction: column; gap: 20px; width: 100%; }
         .phrase-card { 
-            background: var(--glass); border-radius: 28px; padding: 30px 20px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            border-radius: 30px; padding: 0; /* padding 改為 0 由內部決定 */
             display: flex; flex-direction: column; align-items: center; position: relative;
-            border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 40px rgba(0,0,0,0.3); transition: 0.1s;
+            border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: 0.2s; overflow: hidden;
         }
-        .phrase-card:active { transform: scale(0.96); background: rgba(255,255,255,0.12); }
+        .phrase-card:active { transform: scale(0.97); background: rgba(255,255,255,0.1); }
         
-        .zh-text { font-size: 22px; font-weight: 800; margin-bottom: 12px; color: #fff; }
-        .ja-wrapper { background: rgba(59, 130, 246, 0.2); padding: 10px 20px; border-radius: 15px; margin-bottom: 8px; }
-        .ja-text { font-size: 19px; color: #93c5fd; font-weight: bold; }
+        .card-content { padding: 30px 20px 20px 20px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
+        .zh-text { font-size: 22px; font-weight: 800; margin-bottom: 15px; color: #fff; letter-spacing: 1px; }
+        
+        .ja-wrapper { background: rgba(59, 130, 246, 0.1); padding: 12px 25px; border-radius: 15px; margin-bottom: 8px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .ja-text { font-size: 20px; color: #93c5fd; font-weight: bold; display: flex; align-items: center; gap: 8px; }
         .romaji-text { font-size: 14px; color: var(--text-sub); font-style: italic; margin-bottom: 15px; }
 
-        .fav-star { position: absolute; top: 20px; left: 20px; font-size: 28px; color: rgba(255,255,255,0.15); transition: 0.2s; }
+        .fav-star { position: absolute; top: 20px; left: 25px; font-size: 26px; color: rgba(255,255,255,0.1); transition: 0.2s; }
         .fav-star.active { color: #fbbf24; text-shadow: 0 0 10px rgba(251,191,36,0.5); }
 
-        .show-btn { 
-            width: 80%; padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.05); color: #cbd5e1; font-weight: bold; cursor: pointer; font-size: 15px;
+        /* 🚀 長條形放大按鈕 */
+        .full-bar-btn { 
+            width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: none;
+            border-top: 1px solid var(--card-border); padding: 15px; font-weight: bold; 
+            cursor: pointer; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
+        .full-bar-btn:active { background: rgba(255,255,255,0.15); color: #fff; }
 
-        .modal { display: none; position: fixed; inset: 0; background: #000; z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 25px; }
-        .modal-ja { font-size: 48px; font-weight: 900; color: #fff; text-align: center; line-height: 1.4; }
-        .modal-zh { font-size: 22px; color: var(--text-sub); margin-top: 30px; }
-        .close-modal { margin-top: 60px; padding: 18px 50px; background: #222; color: #fff; border-radius: 40px; border: 1px solid #444; font-size: 18px; font-weight: bold; }
+        /* 🌍 自訂翻譯 */
+        .custom-area { background: rgba(0,0,0,0.4); padding: 25px; border-radius: 30px; width: 100%; box-sizing: border-box; border: 1px solid var(--card-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .custom-textarea { width: 100%; height: 100px; background: rgba(255,255,255,0.03); color: #fff; border: 1px solid var(--card-border); padding: 15px; border-radius: 18px; box-sizing: border-box; margin-bottom: 15px; font-size: 18px; outline: none; text-align: center; }
+        .translated-box { background: rgba(16,185,129,0.05); padding: 20px; border-radius: 15px; color: #6ee7b7; font-weight: bold; margin-bottom: 15px; min-height: 50px; border: 1px solid rgba(16,185,129,0.2); font-size: 22px; }
+        .custom-play-btn { width: 100%; padding: 20px; background: linear-gradient(135deg, var(--success), #059669); color: #fff; border: none; border-radius: 18px; font-weight: bold; font-size: 20px; box-shadow: 0 5px 20px rgba(16,185,129,0.3); }
 
-        .custom-area { background: rgba(0,0,0,0.3); padding: 25px; border-radius: 30px; width: 100%; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.1); }
-        .custom-textarea { width: 100%; height: 100px; background: rgba(0,0,0,0.4); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 15px; border-radius: 18px; box-sizing: border-box; margin-bottom: 15px; font-size: 18px; outline: none; text-align: center; }
-        .translated-box { background: rgba(16,185,129,0.1); padding: 18px; border-radius: 15px; color: #6ee7b7; font-weight: bold; margin-bottom: 15px; min-height: 50px; border: 1px solid rgba(16,185,129,0.2); font-size: 20px; }
-        .custom-play-btn { width: 100%; padding: 18px; background: var(--success); color: #fff; border: none; border-radius: 18px; font-weight: bold; font-size: 20px; box-shadow: 0 5px 20px rgba(16,185,129,0.4); }
+        /* 全螢幕 Modal */
+        .modal { display: none; position: fixed; inset: 0; background: #000; z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 30px; box-sizing: border-box; }
+        .modal-ja { font-size: 12vw; font-weight: 900; color: #fff; text-align: center; line-height: 1.3; text-shadow: 0 0 30px var(--accent-glow); }
+        .modal-zh { font-size: 24px; color: var(--text-sub); margin-top: 40px; font-weight: bold; }
+        .close-modal { margin-top: 80px; padding: 20px 60px; background: #1e293b; color: #fff; border-radius: 50px; border: 1px solid #334155; font-size: 20px; font-weight: bold; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 
     <div class="app-wrapper">
-        <h1>🇯🇵 日本旅遊神器 300+</h1>
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋 300+ 句實用日語...">
+        <h1>🇯🇵 Japan Travel Pro</h1>
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋你想說的話...">
         
         <div class="controls">
             <div class="toggle-group">男聲 <input type="checkbox" id="voiceGenderToggle"></div>
@@ -100,45 +116,33 @@
     </div>
 
     <script>
-        // 🚀 終極語料庫：超過 300 句
-        // 這裡僅列出精選類別與範例，建議將此物件獨立管理或依需求擴充
+        // 🚀 核心資料庫 (結構優化，方便你擴展至 300 句)
         var phrasesData = {
-            "👋 禮貌/回應": [
+            "👋 招呼/常用": [
                 { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" },
+                { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou" },
+                { zh: "請問 / 不好意思", ja: "すみません", romaji: "Sumimasen" },
+                { zh: "沒關係 / 不要緊", ja: "大丈夫です", romaji: "Daijoubu" },
+                { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" },
+                { zh: "對不起", ja: "ごめんなさい", romaji: "Gomennasai" },
                 { zh: "早安", ja: "おはようございます", romaji: "Ohayou" },
                 { zh: "晚安", ja: "こんばんは", romaji: "Konbanwa" },
-                { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou" },
-                { zh: "不好意思/請問", ja: "すみません", romaji: "Sumimasen" },
-                { zh: "對不起", ja: "ごめんなさい", romaji: "Gomennasai" },
-                { zh: "沒關係/不要緊", ja: "大丈夫です", romaji: "Daijoubu" },
-                { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" },
-                { zh: "我懂了", ja: "わかりました", romaji: "Wakarimashita" },
-                { zh: "我不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga wakarimasen" },
-                { zh: "請再說一次", ja: "もう一度言ってください", romaji: "Mou ichido" },
-                { zh: "請寫在這裡", ja: "ここに書いてください", romaji: "Koko ni kaite" },
-                { zh: "好的", ja: "はい", romaji: "Hai" },
-                { zh: "不是的", ja: "いいえ", romaji: "Iie" }
+                { zh: "我不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga wakarimasen" }
             ],
             "🏨 飯店/住宿": [
                 { zh: "我要辦理入住", ja: "チェックインをお願いします", romaji: "Chekku-in" },
-                { zh: "我有預約", ja: "予約しています", romaji: "Yoyaku shiteimasu" },
-                { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか", romaji: "Nimotsu o azukatte" },
+                { zh: "我有預約", ja: "予約しています", romaji: "Yoyaku" },
+                { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか", romaji: "Nimotsu" },
                 { zh: "Wi-Fi 密碼是多少？", ja: "Wi-Fiのパスワードは何ですか", romaji: "Pasuwaado" },
                 { zh: "早餐是幾點？", ja: "朝食は何時ですか", romaji: "Choushoku" },
-                { zh: "附近有便利商店嗎？", ja: "近くにコンビニはありますか", romaji: "Konbini" },
-                { zh: "房間沒有熱水", ja: "お湯が出ません", romaji: "Oyu ga demasen" },
-                { zh: "冷氣壞掉了", ja: "エアコンが壊れています", romaji: "Eakon" },
-                { zh: "我要退房", ja: "チェックアウトをお願いします", romaji: "Chekku-auto" }
+                { zh: "我要辦理退房", ja: "チェックアウトをお願いします", romaji: "Chekku-auto" }
             ],
-            "🍜 餐廳/居酒屋": [
+            "🍜 餐廳/用餐": [
                 { zh: "兩位", ja: "2人です", romaji: "Futari desu" },
                 { zh: "請給我菜單", ja: "メニューをお願いします", romaji: "Menyuu" },
-                { zh: "推薦的餐點是什麼？", ja: "おすすめは何ですか", romaji: "Osusume" },
-                { zh: "有中文菜單嗎？", ja: "中国語のメニューはありますか", romaji: "Chuugokugo menyuu" },
-                { zh: "我不吃肉", ja: "肉は食べられません", romaji: "Niku wa" },
-                { zh: "請去冰", ja: "氷なしでお願いします", romaji: "Koori nashi" },
-                { zh: "很好吃！", ja: "とても美味しいです", romaji: "Oishii" },
-                { zh: "請給我生啤酒", ja: "生ビールをお願いします", romaji: "Nama biiru" },
+                { zh: "有推薦的餐點嗎？", ja: "おすすめは何ですか", romaji: "Osusume" },
+                { zh: "請給我冰水", ja: "お冷をください", romaji: "Ohie" },
+                { zh: "我不吃芥末", ja: "わさび抜きでお願いします", romaji: "Wasabi nuki" },
                 { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei" }
             ],
             "🛍️ 購物/免稅": [
@@ -146,52 +150,19 @@
                 { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" },
                 { zh: "可以免稅嗎？", ja: "免税できますか", romaji: "Menzei" },
                 { zh: "可以用信用卡嗎？", ja: "カードは使えますか", romaji: "Kaado" },
-                { zh: "可以試穿嗎？", ja: "試着してもいいですか", romaji: "Shichaku" },
-                { zh: "有全新的嗎？", ja: "新しいものはありますか", romaji: "Atarashii mono" },
-                { zh: "有大一點的嗎？", ja: "もっと大きいのはありますか", romaji: "Ookii no" },
-                { zh: "請給我塑膠袋", ja: "レジ袋をください", romaji: "Rejibukuro" }
+                { zh: "有全新的嗎？", ja: "新しいものはありますか", romaji: "Atarashii mono" }
             ],
-            "🚇 交通/地鐵": [
+            "🚇 交通/問路": [
                 { zh: "洗手間在哪裡？", ja: "トイレはどこですか", romaji: "Toire wa doko" },
                 { zh: "車站在哪裡？", ja: "駅はどこですか", romaji: "Eki wa doko" },
-                { zh: "這班有到新宿嗎？", ja: "新宿に行きますか", romaji: "Shinjuku ni ikimasu ka" },
-                { zh: "在哪裡買票？", ja: "チケットはどこで買えますか", romaji: "Chiketto" },
-                { zh: "我要在這裡下車", ja: "ここで降ります", romaji: "Koko de orimasu" },
-                { zh: "下一站是哪裡？", ja: "次の駅はどこですか", romaji: "Tsugi no eki" }
-            ],
-            "🚑 醫療/緊急": [
-                { zh: "請幫幫我", ja: "助けてください", romaji: "Tasukete" },
                 { zh: "我迷路了", ja: "道に迷いました", romaji: "Michi ni mayoimashita" },
-                { zh: "我遺失了錢包", ja: "財布をなくしました", romaji: "Saifu o nakushimashita" },
-                { zh: "請叫救護車", ja: "救急車を呼んでください", romaji: "Kyuukyuusha" },
-                { zh: "我發燒了", ja: "熱があります", romaji: "Netsu ga arimasu" },
-                { zh: "我肚子痛", ja: "お腹が痛いです", romaji: "Onaka ga itai" }
+                { zh: "去這裡請幫幫我", ja: "ここに行きたいです", romaji: "Koko ni" }
             ]
         };
-
-        // 此處可繼續堆疊更多分類... (略過 200 句以維持代碼精簡，開發者可自行填入)
 
         var currentCategory = '🌟 全部';
         var favorites = [];
         try { favorites = JSON.parse(localStorage.getItem('jp_favs')) || []; } catch(e) {}
-
-        // --- 優化後的男聲搜尋邏輯 ---
-        function getBestVoice() {
-            var voices = window.speechSynthesis.getVoices();
-            var useMale = document.getElementById('voiceGenderToggle').checked;
-            var jaVoices = voices.filter(v => v.lang.includes('ja'));
-
-            if (useMale) {
-                // 優先尋找名稱中包含男聲特徵的語音包
-                var maleVoice = jaVoices.find(v => 
-                    v.name.toLowerCase().includes('male') || 
-                    v.name.toLowerCase().includes('otoya') || 
-                    v.name.toLowerCase().includes('ichiro')
-                );
-                return maleVoice || jaVoices[0]; // 找不到男聲則退回第一個日文語音
-            }
-            return jaVoices[0];
-        }
 
         function speak(text) {
             window.speechSynthesis.cancel();
@@ -199,7 +170,15 @@
             u.lang = 'ja-JP';
             u.rate = document.getElementById('turtleToggle').checked ? 0.45 : 0.85;
             u.volume = document.getElementById('volumeToggle').checked ? 1.0 : 0.7;
-            u.voice = getBestVoice();
+            
+            var voices = window.speechSynthesis.getVoices();
+            if (document.getElementById('voiceGenderToggle').checked) {
+                var male = voices.find(v => v.lang.includes('ja') && (v.name.includes('Male') || v.name.includes('Otoya')));
+                if(male) u.voice = male;
+            } else {
+                var female = voices.find(v => v.lang.includes('ja') && (v.name.includes('Female') || v.name.includes('Kyoko')));
+                if(female) u.voice = female;
+            }
             window.speechSynthesis.speak(u);
         }
 
@@ -208,7 +187,7 @@
             container.innerHTML = '';
             
             if (cat === '✏️ 自訂') {
-                container.innerHTML = '<div class="custom-area"><textarea id="customInput" class="custom-textarea" placeholder="輸入中文..."></textarea><div id="translatedResult" class="translated-box">翻譯結果</div><button class="custom-play-btn" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
+                container.innerHTML = '<div class="custom-area"><textarea id="customInput" class="custom-textarea" placeholder="在此輸入中文，我們幫您翻譯..."></textarea><div id="translatedResult" class="translated-box">翻譯結果</div><button class="custom-play-btn" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
                 return;
             }
 
@@ -220,9 +199,8 @@
             }
 
             if (query) {
-                var q = query.toLowerCase();
                 list = list.filter(function(i) { 
-                    return i.zh.includes(q) || i.ja.includes(q) || i.romaji.toLowerCase().includes(q); 
+                    return i.zh.indexOf(query) > -1 || i.ja.indexOf(query) > -1 || i.romaji.toLowerCase().indexOf(query.toLowerCase()) > -1; 
                 });
             }
 
@@ -231,15 +209,20 @@
                 var isFav = favorites.indexOf(item.ja) > -1;
                 var div = document.createElement('div');
                 div.className = 'phrase-card';
-                div.innerHTML = '<div class="fav-star '+(isFav?'active':'')+'">★</div>' +
-                    '<div class="zh-text">'+item.zh+'</div>' +
-                    '<div class="ja-wrapper"><span class="ja-text">🔊 '+item.ja+'</span></div>' +
-                    '<div class="romaji-text">'+item.romaji+'</div>' +
-                    '<div class="action-area"><button class="show-btn" onclick="event.stopPropagation(); zoom(\''+item.ja+'\',\''+item.zh+'\')">🪧 全螢幕放大</button></div>';
+                div.innerHTML = `
+                    <div class="card-content">
+                        <div class="fav-star ${isFav?'active':''}">★</div>
+                        <div class="zh-text">${item.zh}</div>
+                        <div class="ja-wrapper"><span class="ja-text">🔊 ${item.ja}</span></div>
+                        <div class="romaji-text">${item.romaji}</div>
+                    </div>
+                    <button class="full-bar-btn" onclick="event.stopPropagation(); zoom('${item.ja}','${item.zh}')">🪧 全螢幕放大顯示</button>
+                `;
                 
                 (function(obj){
-                    div.onclick = function() { speak(obj.ja); };
-                    // 星星點擊邏輯
+                    div.onclick = function(e) {
+                        if (e.target.tagName !== 'BUTTON') speak(obj.ja);
+                    };
                     div.querySelector('.fav-star').onclick = function(e) {
                         e.stopPropagation();
                         var idx = favorites.indexOf(obj.ja);
@@ -270,12 +253,12 @@
                 var ja = d.responseData.translatedText;
                 rb.innerText = ja;
                 speak(ja);
-            } catch(e) { rb.innerText = '❌ 翻譯失敗'; }
+            } catch(e) { rb.innerText = '❌ 網路錯誤'; }
         }
 
         window.onload = function() {
             var cc = document.getElementById('category-container');
-            var cats = ['🌟 全部', '👋 禮貌/回應', '🏨 飯店/住宿', '🍜 餐廳/居酒屋', '🛍️ 購物/免稅', '🚇 交通/地鐵', '🚑 醫療/緊急', '✏️ 自訂'];
+            var cats = ['🌟 全部', '👋 招呼/常用', '🏨 飯店/住宿', '🍜 餐廳/用餐', '🛍️ 購物/免稅', '🚇 交通/問路', '✏️ 自訂'];
             
             cats.forEach(function(c) {
                 var b = document.createElement('button');
@@ -295,10 +278,8 @@
             };
 
             render('🌟 全部', '');
-            // 預載語音包
             window.speechSynthesis.getVoices();
         };
     </script>
 </body>
 </html>
-
