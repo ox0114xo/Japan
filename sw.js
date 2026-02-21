@@ -1,26 +1,23 @@
-const CACHE_NAME = 'jp-travel-v1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
-];
+function getBestVoice() {
+    var voices = window.speechSynthesis.getVoices();
+    var useMale = document.getElementById('voiceGenderToggle').checked;
+    var jaVoices = voices.filter(function(v) { return v.lang.includes('ja'); });
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-  );
-});
+    if (jaVoices.length === 0) return null;
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) {
-          return response; // 斷網時從快取讀取
-        }
-        return fetch(event.request); // 有網路時去抓新的
-      })
-  );
-});
-
+    if (useMale) {
+        // 安卓 Google 語音引擎常見的男聲關鍵代號與關鍵字
+        var maleVoice = jaVoices.find(function(v) {
+            var name = v.name.toLowerCase();
+            return name.includes('male') || 
+                   name.includes('otoya') || 
+                   name.includes('ichiro') ||
+                   name.includes('google-jp-male') ||
+                   // 以下是安卓 Google TTS 常見的男聲代碼特徵
+                   name.includes('x-jdj') || 
+                   name.includes('x-fis');
+        });
+        return maleVoice || jaVoices[0]; // 找不到男聲則回退
+    }
+    return jaVoices[0];
+}
