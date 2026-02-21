@@ -6,11 +6,32 @@
     <title>日本旅遊神器 Ultra 最終版</title>
     <meta property="og:title" content="日本旅遊神器 Ultra">
     <meta property="og:description" content="內建海量實用旅遊日語。支援離線收藏、發音與即時翻譯，助您日本行溝通無阻。">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/197/197604.png">
+
+    <script>
+        (function() {
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            var isLINE = (ua.indexOf("Line") > -1);
+            var isFB = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+            var isIG = (ua.indexOf("Instagram") > -1);
+            
+            if (isLINE || isFB || isIG) {
+                if (isLINE && location.search.indexOf("openExternalBrowser=1") === -1) {
+                    location.href = location.href + (location.search ? "&" : "?") + "openExternalBrowser=1";
+                }
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('inAppBlocker').style.display = 'flex';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+        })();
+    </script>
+
     <style>
         :root { --bg: #070b14; --blue: #3b82f6; --card: rgba(255,255,255,0.06); --border: rgba(255,255,255,0.1); --txt: #fff; --sub: #94a3b8; --green: #10b981; --gold: #fbbf24; --red: #ef4444; }
         body { background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 100%); background-attachment: fixed; color: var(--txt); margin: 0; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; padding-bottom: 120px; min-height: 100vh; }
         .wrap { width: 100%; max-width: 500px; padding: 15px; box-sizing: border-box; text-align: center; }
-        #title { font-size: 26px; margin: 20px 0; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); cursor: pointer; }
+        #title { font-size: 26px; margin: 20px 0; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); cursor: pointer; user-select: none; }
         .search { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: rgba(0,0,0,0.4); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; }
         
         .grid-ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
@@ -30,9 +51,9 @@
         .ja-box { background: rgba(59,130,246,0.15); padding: 8px 15px; border-radius: 10px; border: 1px solid rgba(59,130,246,0.2); margin-bottom: 6px; }
         .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
         .ro { font-size: 13px; color: var(--sub); font-style: italic; margin-bottom: 5px; }
-        .star { position: absolute; top: 15px; left: 15px; font-size: 24px; color: rgba(255,255,255,0.1); padding: 5px; }
+        .star { position: absolute; top: 15px; left: 15px; font-size: 24px; color: rgba(255,255,255,0.1); padding: 5px; cursor: pointer;}
         .star.active { color: var(--gold); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
-        .bar-btn { width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; letter-spacing: 2px; }
+        .bar-btn { width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; letter-spacing: 2px; cursor: pointer;}
         
         .modal { display: none; position: fixed; inset: 0; background: #000; z-index: 99; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .m-ja { font-size: 12vw; font-weight: 900; color: #fff; text-align: center; }
@@ -43,9 +64,22 @@
         .c-txt { width: 100%; height: 80px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-sizing: border-box; text-align: center; font-size: 16px; outline: none; }
         .c-res { padding: 15px; color: var(--green); font-weight: bold; font-size: 18px; text-align: center; min-height: 30px; }
         .c-btn { width: 100%; padding: 15px; background: var(--green); color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 18px; }
+
+        /* 🚫 內部瀏覽器攔截器樣式 */
+        #inAppBlocker { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.98); z-index: 999999; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; backdrop-filter: blur(20px); }
+        .b-title { color: var(--red); font-size: 80px; margin-bottom: 20px; }
+        .b-text { color: #fff; font-size: 20px; font-weight: bold; line-height: 1.6; margin-bottom: 30px; }
+        .b-hint { background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; color: var(--green); font-size: 18px; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
+
+    <div id="inAppBlocker">
+        <div class="b-title">⚠️</div>
+        <div class="b-text">偵測到內部瀏覽器<br><br><span style="color:#94a3b8;font-size:16px;">內部瀏覽器會限制「發音功能」<br>為確保出國正常運作，請切換瀏覽器。</span></div>
+        <div class="b-hint">👉 請點擊右上角的「⋮」或「⠇」<br><br>👉 選擇「使用預設瀏覽器開啟」<br><span style="font-size:14px;color:#94a3b8;">( 以 Chrome 或 Safari 開啟即可發音 )</span></div>
+    </div>
+
     <div class="wrap">
         <h1 id="title">🇯🇵 Japan Travel Ultra</h1>
         <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話...">
@@ -68,7 +102,7 @@
     </div>
 
     <script>
-        // 🚀 高密度壓縮語料庫 (確保語法絕對正確不會斷尾)
+        // 🚀 高密度壓縮語料庫 (維持絕對穩定)
         const D = {
             "👋 常用": [
                 {z:"你好",j:"こんにちは",r:"Konnichiwa"},{z:"謝謝",j:"ありがとうございます",r:"Arigatou"},{z:"不好意思",j:"すみません",r:"Sumimasen"},{z:"沒關係",j:"大丈夫です",r:"Daijoubu"},{z:"拜託了",j:"お願いします",r:"Onegaishimasu"},{z:"對不起",j:"ごめんなさい",r:"Gomennasai"},{z:"早安",j:"おはようございます",r:"Ohayou"},{z:"晚安",j:"こんばんは",r:"Konbanwa"},{z:"不懂日文",j:"日本語がわかりません",r:"Nihongo ga wakarimasen"},{z:"再說一次",j:"もう一度言ってください",r:"Mou ichido"},{z:"好的",j:"はい",r:"Hai"},{z:"不是",j:"いいえ",r:"Iie"},{z:"幫大忙了",j:"助かりました",r:"Tasukari"},{z:"慢一點",j:"ゆっくり話してください",r:"Yukkuri"}
@@ -105,13 +139,14 @@
 
         function spk(txt, item) {
             try {
+                if(!window.speechSynthesis) return alert("此設備無法發音");
                 window.speechSynthesis.cancel();
                 let u = new SpeechSynthesisUtterance(txt);
                 u.lang = 'ja-JP';
                 u.rate = document.getElementById('spd').checked ? 0.45 : 0.85;
                 u.volume = document.getElementById('vol').checked ? 1.0 : 0.8;
                 window.speechSynthesis.speak(u);
-            } catch(e) { alert("此設備無法發音"); }
+            } catch(e) { alert("發音模組錯誤"); }
 
             if (item) {
                 hist = hist.filter(h => h.j !== item.j);
@@ -142,7 +177,6 @@
                 arr = arr.filter(i => i.z.includes(q) || i.j.includes(q) || (i.r && i.r.toLowerCase().includes(q)));
             }
 
-            // 去重複
             let uniq = []; let seen = new Set();
             for (let i of arr) { if (!seen.has(i.j)) { seen.add(i.j); uniq.push(i); } }
 
@@ -203,7 +237,6 @@
         function setC(c) {
             cur = c;
             document.querySelectorAll('.cat-btn, .btn-top').forEach(btn => btn.classList.remove('active'));
-            
             if(c === '🕒 最近') document.getElementById('b-rec').classList.add('active');
             else if(c === '⭐ 最愛') document.getElementById('b-fav').classList.add('active');
             else {
@@ -213,7 +246,6 @@
             draw(c, document.getElementById('search').value);
         }
 
-        // 啟動
         let cbox = document.getElementById('cat-box');
         ['🌟 全部', ...Object.keys(D), '✏️ 自訂'].forEach(c => {
             let b = document.createElement('button'); b.className = 'cat-btn' + (c==='🌟 全部'?' active':''); b.innerText = c;
