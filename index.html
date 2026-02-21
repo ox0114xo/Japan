@@ -35,24 +35,31 @@
         .tab-btn { background-color: #1f2937; color: #9ca3af; border: 1px solid #374151; border-radius: 20px; padding: 10px 20px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .tab-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
 
-        /* --- 卡片式 UI --- */
+        /* --- 全新卡片式 UI (全區塊可點擊) --- */
         .grid-container { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 600px; padding: 0 15px; box-sizing: border-box; }
-        .phrase-card { background: #1f2937; border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #374151; transition: transform 0.1s; }
-        .phrase-card:active { transform: scale(0.98); }
         
-        .text-area { display: flex; flex-direction: column; flex: 1; margin-right: 12px; margin-left: 8px; }
+        .phrase-card { 
+            background: #1f2937; border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; align-items: center; 
+            border: 1px solid #374151; transition: transform 0.1s, background-color 0.2s; cursor: pointer; 
+        }
+        /* 點擊整張卡片的回饋效果 */
+        .phrase-card:active { transform: scale(0.98); background-color: #374151; }
+        
+        .text-area { display: flex; flex-direction: column; flex: 1; margin-right: 12px; margin-left: 8px; pointer-events: none; /* 確保點擊穿透到卡片本身 */ }
         .zh-text { font-size: 18px; font-weight: 700; color: #f9fafb; margin-bottom: 6px; }
-        .ja-text { font-size: 16px; color: #60a5fa; font-weight: 500; margin-bottom: 4px; }
+        .ja-text { font-size: 16px; color: #60a5fa; font-weight: 500; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
         .romaji-text { font-size: 13px; color: #9ca3af; font-family: "SF Pro Text", -apple-system, sans-serif; letter-spacing: 0.5px; }
 
         .action-area { display: flex; gap: 10px; }
-        .action-btn { width: 48px; height: 48px; border-radius: 14px; border: none; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; }
-        .play-btn { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .play-btn:active { background: #3b82f6; color: white; }
-        .show-btn { background: rgba(107, 114, 128, 0.2); color: #d1d5db; border: 1px solid rgba(107, 114, 128, 0.3); }
-        .show-btn:active { background: #6b7280; color: white; }
         
-        .fav-star { font-size: 24px; cursor: pointer; color: #4b5563; align-self: flex-start; margin-top: -2px; user-select: none; transition: 0.2s; }
+        /* 放大按鈕 */
+        .show-btn { 
+            background: rgba(107, 114, 128, 0.2); color: #d1d5db; border: 1px solid rgba(107, 114, 128, 0.3); 
+            border-radius: 12px; padding: 10px 14px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px;
+        }
+        .show-btn:active { background: #6b7280; color: white; transform: scale(0.95); }
+        
+        .fav-star { font-size: 26px; cursor: pointer; color: #4b5563; align-self: flex-start; margin-top: -2px; user-select: none; transition: 0.2s; padding: 5px; margin-left: -5px; }
         .fav-star.active { color: #fbbf24; text-shadow: 0 0 12px rgba(251, 191, 36, 0.4); }
 
         /* --- 底部安裝 --- */
@@ -148,19 +155,16 @@
 
         genderToggle.addEventListener('change', (e) => { document.getElementById('genderLabel').textContent = e.target.checked ? "男聲(若有)" : "女聲"; });
         
-        // 💡 防呆重點：確定裝置有語音功能才執行，避免當機！
         if ('speechSynthesis' in window) {
             window.speechSynthesis.onvoiceschanged = () => { 
                 japaneseVoices = window.speechSynthesis.getVoices().filter(v => v.lang.includes('ja')); 
             };
         } else {
-            // 如果沒有語音功能，顯示紅色警告
             document.getElementById('browserWarning').style.display = 'block';
         }
 
         function speakText(text) {
             if (!text) return;
-            // 點擊時再次檢查
             if (!('speechSynthesis' in window)) {
                 alert("目前瀏覽器不支援語音！\n請點擊右上角「使用 Safari 或 Chrome 開啟」！");
                 return;
@@ -230,16 +234,20 @@
                 
                 const card = document.createElement('div');
                 card.className = 'phrase-card';
+                
+                // 💡 把發音功能綁定在整張卡片上
+                card.onclick = () => speakText(item.ja);
+
+                // 💡 在星星和放大按鈕上加上 event.stopPropagation()，避免點擊時觸發卡片的發音
                 card.innerHTML = `
-                    <div class="fav-star ${isFav ? 'active' : ''}" onclick="toggleFav('${item.ja}')">${isFav ? '★' : '☆'}</div>
+                    <div class="fav-star ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFav('${item.ja}')">${isFav ? '★' : '☆'}</div>
                     <div class="text-area">
                         <div class="zh-text">${item.zh}</div>
-                        <div class="ja-text">${item.ja}</div>
+                        <div class="ja-text">🔊 ${item.ja}</div>
                         ${romajiHtml}
                     </div>
                     <div class="action-area">
-                        <button class="action-btn show-btn" onclick="openModal('${item.ja}', '${item.zh}')" title="全螢幕">🪧</button>
-                        <button class="action-btn play-btn" onclick="speakText('${item.ja}')" title="播放">🔊</button>
+                        <button class="show-btn" onclick="event.stopPropagation(); openModal('${item.ja}', '${item.zh}')" title="全螢幕">🪧 放大</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -280,7 +288,6 @@
         }
 
         function initApp() {
-            // 檢查是否在 LINE/FB 內建瀏覽器中
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             if (/FBAN|FBAV|Line/i.test(userAgent) || !('speechSynthesis' in window)) {
                 document.getElementById('browserWarning').style.display = 'block';
@@ -309,9 +316,7 @@
             checkInstallPrompt();
         }
 
-        // 啟動程式！
         initApp();
     </script>
 </body>
 </html>
-
