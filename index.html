@@ -1,3 +1,5 @@
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -29,7 +31,12 @@
 
     <style>
         :root { --bg: #070b14; --blue: #3b82f6; --card: rgba(255,255,255,0.06); --border: rgba(255,255,255,0.1); --txt: #fff; --sub: #94a3b8; --green: #10b981; --gold: #fbbf24; --red: #ef4444; }
-        body { background: radial-gradient(circle at top, #1e293b 0%, var(--bg) 100%); background-attachment: fixed; color: var(--txt); margin: 0; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; padding-bottom: 120px; min-height: 100vh; }
+        
+        /* 🛠️ 修復底部白塊：強制把網頁最底層也漆成黑色 */
+        html { background-color: #070b14; height: 100%; }
+        
+        body { background-color: #070b14; background-image: radial-gradient(circle at top, #1e293b 0%, #070b14 100%); background-attachment: fixed; color: var(--txt); margin: 0; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; padding-bottom: 120px; min-height: 100vh; }
+        
         .wrap { width: 100%; max-width: 500px; padding: 15px; box-sizing: border-box; text-align: center; }
         #title { font-size: 26px; margin: 20px 0; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); cursor: pointer; user-select: none; }
         .search { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: rgba(0,0,0,0.4); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; }
@@ -39,7 +46,6 @@
         .btn-top.active { background: var(--blue); border-color: transparent; box-shadow: 0 0 10px var(--blue); }
         .panel { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 15px; padding: 12px; display: flex; justify-content: center; align-items: center; font-size: 13px; color: var(--sub); font-weight: bold; gap: 5px; }
         
-        /* 🚨 新增的急救按鈕區域 */
         .quick-nav { grid-column: span 2; display: flex; gap: 8px; }
         .nav-btn { flex: 1; padding: 12px 5px; border-radius: 15px; border: 1px solid var(--border); background: var(--card); color: #fff; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.2s; text-align: center;}
         .nav-btn.active { background: var(--blue); box-shadow: 0 0 10px var(--blue); border-color: transparent; }
@@ -71,7 +77,6 @@
         .m-zh { font-size: 22px; color: var(--sub); margin-top: 30px; }
         .m-close { margin-top: 40px; padding: 15px 50px; background: #1e293b; color: #fff; border-radius: 30px; font-size: 18px; font-weight: bold; border: 1px solid var(--border); cursor:pointer;}
         
-        /* 🚑 語音急救教學面板 */
         .tts-box { background: #1e293b; border: 1px solid var(--border); border-radius: 20px; padding: 25px; max-width: 400px; width: 100%; box-sizing: border-box; text-align: left; box-shadow: 0 20px 50px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
         .tts-title { color: var(--red); font-size: 22px; font-weight: 900; text-align: center; margin-bottom: 10px; }
         .tts-step { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
@@ -79,7 +84,6 @@
         .tts-txt { color: #fff; font-size: 14px; line-height: 1.6; }
         .tts-txt span { color: var(--gold); font-weight: bold; }
         
-        /* 不再提示選項區塊 */
         .tts-ignore-box { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; margin-bottom: 5px; cursor: pointer; color: var(--sub); font-size: 14px; }
         .tts-btn { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; margin-top: 10px; cursor: pointer; }
 
@@ -164,7 +168,6 @@
     </div>
 
     <script>
-        // 🚀 完整語料庫 (ES5 安全格式)
         var D = {
             "👋 常用": [
                 {z:"你好",j:"こんにちは",r:"Konnichiwa"},{z:"謝謝",j:"ありがとうございます",r:"Arigatou"},{z:"不好意思",j:"すみません",r:"Sumimasen"},{z:"沒關係",j:"大丈夫です",r:"Daijoubu"},{z:"拜託了",j:"お願いします",r:"Onegaishimasu"},{z:"對不起",j:"ごめんなさい",r:"Gomennasai"},{z:"早安",j:"おはようございます",r:"Ohayou"},{z:"晚安",j:"こんばんは",r:"Konbanwa"},{z:"不懂日文",j:"日本語がわかりません",r:"Nihongo ga wakarimasen"},{z:"再說一次",j:"もう一度言ってください",r:"Mou ichido"},{z:"好的",j:"はい",r:"Hai"},{z:"不是",j:"いいえ",r:"Iie"},{z:"幫大忙了",j:"助かりました",r:"Tasukari"},{z:"慢一點",j:"ゆっくり話してください",r:"Yukkuri"},{z:"這是什麼",j:"これは何ですか",r:"Kore wa nan desu ka"}
@@ -199,26 +202,20 @@
         var cur = '🌟 全部', favs = [], hist = [], clk = 0;
         var lastSpkTxt = '';
         var lastSpkTime = 0;
-        var ignoreTTSPopup = false; // 是否關閉自動提示
+        var ignoreTTSPopup = false;
         
         window.onload = function() {
             try { 
                 var f = localStorage.getItem('jp_f'); if(f) favs = JSON.parse(f);
                 var h = localStorage.getItem('jp_h'); if(h) hist = JSON.parse(h);
-                // 讀取「不再提示」的設定
-                if(localStorage.getItem('jp_tts_ignore') === 'true') {
-                    ignoreTTSPopup = true;
-                }
+                if(localStorage.getItem('jp_tts_ignore') === 'true') { ignoreTTSPopup = true; }
             } catch(e) {}
 
-            // 顯示教學面板 (isManual 表示是否為手動點擊按鈕呼叫)
             window.showTutorial = function(isManual) { 
-                // 如果是系統自動偵測觸發的，且使用者已經勾選過「不要提示」，就直接跳過不顯示
                 if (!isManual && ignoreTTSPopup) return;
                 document.getElementById('ttsGuideModal').style.display = 'flex'; 
             };
 
-            // 關閉教學面板並儲存設定
             window.closeTTS = function() {
                 var chk = document.getElementById('chkIgnoreTTS');
                 if (chk && chk.checked) {
@@ -228,17 +225,12 @@
                 document.getElementById('ttsGuideModal').style.display = 'none';
             };
             
-            // 綁定右上角手動呼叫「沒聲音?」按鈕 (手動呼叫時強迫顯示，無視 ignore 設定)
             document.getElementById('b-help').onclick = function() { showTutorial(true); };
 
             window.spk = function(txt, item) {
-                // 🤖 智慧防焦慮連點偵測 (3秒內連按同一個句子，自動觸發教學)
                 var now = new Date().getTime();
-                if (txt === lastSpkTxt && (now - lastSpkTime) < 3000) {
-                    showTutorial(false); // false 代表這是系統自動觸發
-                }
-                lastSpkTxt = txt;
-                lastSpkTime = now;
+                if (txt === lastSpkTxt && (now - lastSpkTime) < 3000) { showTutorial(false); }
+                lastSpkTxt = txt; lastSpkTime = now;
 
                 if (!window.speechSynthesis) { showTutorial(false); return; }
                 
@@ -316,88 +308,4 @@
                 for (var i=0; i<uniq.length; i++) {
                     (function(item) {
                         var isF = favs.indexOf(item.j) > -1;
-                        var d = document.createElement('div');
-                        d.className = 'card';
-                        d.innerHTML = '<div class="card-in">' +
-                            '<div class="star ' + (isF ? 'active' : '') + '">★</div>' +
-                            '<div class="zh">' + item.z + '</div>' +
-                            '<div class="ja-box"><span class="ja">🔊 ' + item.j + '</span></div>' +
-                            '<div class="ro">' + (item.r||'') + '</div>' +
-                            '</div><button class="bar-btn">🪧 放大顯示</button>';
-                        
-                        d.onclick = function(e) { if(e.target.tagName !== 'BUTTON' && e.target.className.indexOf('star')===-1) spk(item.j, item); };
-                        d.querySelector('.star').onclick = function(e) {
-                            e.stopPropagation();
-                            var idx = favs.indexOf(item.j);
-                            if(idx > -1) favs.splice(idx,1); else favs.push(item.j);
-                            try{ localStorage.setItem('jp_f', JSON.stringify(favs)); }catch(err){}
-                            draw(cur, document.getElementById('search').value);
-                        };
-                        d.querySelector('.bar-btn').onclick = function(e) {
-                            e.stopPropagation();
-                            document.getElementById('m-ja').innerText = item.j;
-                            document.getElementById('m-zh').innerText = item.z;
-                            document.getElementById('mod').style.display = 'flex';
-                        };
-                        box.appendChild(d);
-                    })(uniq[i]);
-                }
-            };
-
-            window.trans = function() {
-                var q = document.getElementById('cin').value, r = document.getElementById('cres');
-                if(!q) return; r.innerText = '⏳ 翻譯中...';
-                fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair=zh-TW|ja')
-                .then(function(res) { return res.json(); })
-                .then(function(data) { r.innerText = data.responseData.translatedText; spk(r.innerText, null); })
-                .catch(function(e) { r.innerText = '❌ 網路錯誤'; });
-            };
-
-            document.getElementById('title').onclick = function() {
-                clk++;
-                if (clk === 10) {
-                    var b = document.createElement('button'); b.className = 'cat-btn'; b.style.color = '#ef4444'; b.style.borderColor = '#ef4444'; b.innerText = '🔞 隱藏';
-                    b.onclick = function() { setC('🔞 隱藏'); };
-                    document.getElementById('cat-box').prepend(b);
-                    setC('🔞 隱藏'); alert("😈 解鎖隱藏髒話模式！");
-                }
-            };
-
-            window.setC = function(c) {
-                cur = c;
-                var btns = document.querySelectorAll('.cat-btn, .nav-btn');
-                for(var i=0; i<btns.length; i++) {
-                    if(btns[i].id !== 'b-help') btns[i].classList.remove('active');
-                }
-                
-                if(c === '🕒 最近') document.getElementById('b-rec').classList.add('active');
-                else if(c === '⭐ 最愛') document.getElementById('b-fav').classList.add('active');
-                else {
-                    var cbtns = document.querySelectorAll('.cat-btn');
-                    for(var j=0; j<cbtns.length; j++) { if(cbtns[j].innerText === c) cbtns[j].classList.add('active'); }
-                }
-                draw(c, document.getElementById('search').value);
-            };
-
-            var cbox = document.getElementById('cat-box');
-            var baseCats = ['🌟 全部'];
-            for(var k in D) baseCats.push(k);
-            baseCats.push('✏️ 自訂');
-
-            for(var i=0; i<baseCats.length; i++) {
-                (function(c) {
-                    var b = document.createElement('button'); b.className = 'cat-btn' + (c==='🌟 全部'?' active':''); b.innerText = c;
-                    b.onclick = function() { document.getElementById('search').value = ''; setC(c); };
-                    cbox.appendChild(b);
-                })(baseCats[i]);
-            }
-
-            document.getElementById('b-rec').onclick = function() { setC('🕒 最近'); };
-            document.getElementById('b-fav').onclick = function() { setC('⭐ 最愛'); };
-            document.getElementById('search').oninput = function(e) { draw(cur, e.target.value); };
-            
-            draw('🌟 全部', '');
-        };
-    </script>
-</body>
-</html>
+                        var d = docum
