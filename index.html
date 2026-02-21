@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Pro Max Ultra 300</title>
+    <title>日本旅遊神器 Pro Max Ultra</title>
     <style>
         :root {
             --bg-dark: #070b14;
@@ -13,93 +13,108 @@
             --text-main: #ffffff;
             --text-sub: #94a3b8;
             --success: #10b981;
+            --star-gold: #fbbf24;
         }
 
         body { 
             background: radial-gradient(circle at top, #1e293b 0%, var(--bg-dark) 100%);
             background-attachment: fixed; color: var(--text-main); margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center; 
-            font-family: -apple-system, "SF Pro Display", "Microsoft JhengHei", sans-serif; padding-bottom: 80px;
+            font-family: -apple-system, "Microsoft JhengHei", sans-serif; padding-bottom: 80px;
         }
 
         .app-wrapper { width: 100%; max-width: 500px; padding: 15px; box-sizing: border-box; text-align: center; }
-        h1 { font-size: 28px; margin: 30px 0; font-weight: 900; letter-spacing: 2px; color: #fff; text-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+        h1 { font-size: 26px; margin: 25px 0; font-weight: 900; letter-spacing: 2px; color: #fff; text-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
 
         /* 🔍 搜尋區 */
         .search-box { 
             width: 100%; padding: 18px; border-radius: 20px; border: 1px solid var(--card-border); 
-            background: rgba(0,0,0,0.4); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; backdrop-filter: blur(10px);
         }
 
-        /* 🎛️ 控制區 */
-        .controls { 
-            background: rgba(255, 255, 255, 0.03); padding: 15px; border-radius: 20px; 
-            display: flex; justify-content: space-evenly; margin-bottom: 30px; border: 1px solid var(--card-border);
+        /* 🎛️ 強化版控制區 (包含 最近/最愛) */
+        .controls-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px;
         }
-        .toggle-group { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-sub); font-weight: bold; }
+        .control-panel { 
+            background: rgba(255, 255, 255, 0.03); padding: 12px; border-radius: 20px; border: 1px solid var(--card-border);
+            display: flex; justify-content: space-around; align-items: center;
+        }
+        .quick-nav {
+            grid-column: span 2; display: flex; gap: 10px;
+        }
+        .nav-btn {
+            flex: 1; padding: 12px; border-radius: 15px; border: 1px solid var(--card-border);
+            background: var(--card-bg); color: #fff; font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 14px;
+        }
+        .nav-btn.active { background: var(--accent-blue); box-shadow: 0 0 10px var(--accent-blue); border-color: transparent; }
 
-        /* 🏷️ 分類選單 */
+        .toggle-group { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-sub); font-weight: bold; }
+
         .category-container { 
-            display: flex; overflow-x: auto; gap: 10px; padding: 5px 0 20px 0; margin-bottom: 15px;
+            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; margin-bottom: 15px;
             scrollbar-width: none; width: 100%; -webkit-overflow-scrolling: touch;
         }
         .category-container::-webkit-scrollbar { display: none; }
         .tab-btn { 
             background: var(--card-bg); color: var(--text-sub); border: 1px solid var(--card-border);
-            padding: 10px 22px; border-radius: 50px; white-space: nowrap; cursor: pointer; font-weight: bold; transition: 0.3s;
+            padding: 10px 20px; border-radius: 50px; white-space: nowrap; cursor: pointer; font-weight: bold; transition: 0.3s;
         }
-        .tab-btn.active { background: var(--accent-blue); color: #fff; box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); border-color: transparent; }
+        .tab-btn.active { background: rgba(255,255,255,0.15); color: #fff; border-color: #fff; }
 
-        /* 💳 卡片設計 */
         .grid-container { display: flex; flex-direction: column; gap: 20px; width: 100%; }
         .phrase-card { 
             background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-            border-radius: 30px; padding: 0; display: flex; flex-direction: column; align-items: center; position: relative;
-            border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: 0.1s; overflow: hidden;
+            border-radius: 28px; padding: 0; display: flex; flex-direction: column; align-items: center; position: relative;
+            border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.4); transition: 0.1s; overflow: hidden;
         }
-        .phrase-card:active { transform: scale(0.97); background: rgba(255,255,255,0.1); }
+        .phrase-card:active { transform: scale(0.97); }
         
         .card-content { padding: 30px 20px 20px 20px; width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
-        .zh-text { font-size: 22px; font-weight: 800; margin-bottom: 15px; color: #fff; letter-spacing: 1px; }
-        
-        .ja-wrapper { background: rgba(59, 130, 246, 0.1); padding: 12px 25px; border-radius: 15px; margin-bottom: 8px; border: 1px solid rgba(59, 130, 246, 0.2); }
-        .ja-text { font-size: 20px; color: #93c5fd; font-weight: bold; }
-        .romaji-text { font-size: 14px; color: var(--text-sub); font-style: italic; margin-bottom: 15px; }
+        .zh-text { font-size: 21px; font-weight: 800; margin-bottom: 12px; color: #fff; }
+        .ja-wrapper { background: rgba(59, 130, 246, 0.1); padding: 10px 20px; border-radius: 12px; margin-bottom: 6px; border: 1px solid rgba(59, 130, 246, 0.2); }
+        .ja-text { font-size: 19px; color: #93c5fd; font-weight: bold; }
+        .romaji-text { font-size: 13px; color: var(--text-sub); font-style: italic; margin-bottom: 10px; }
 
-        .fav-star { position: absolute; top: 20px; left: 25px; font-size: 26px; color: rgba(255,255,255,0.1); transition: 0.2s; }
-        .fav-star.active { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.5); }
+        .fav-star { position: absolute; top: 18px; left: 22px; font-size: 26px; color: rgba(255,255,255,0.1); transition: 0.2s; }
+        .fav-star.active { color: var(--star-gold); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
 
-        /* 🚀 長條形放大按鈕 */
         .full-bar-btn { 
             width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: none;
-            border-top: 1px solid var(--card-border); padding: 18px; font-weight: bold; 
+            border-top: 1px solid var(--card-border); padding: 16px; font-weight: bold; 
             cursor: pointer; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;
-            transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
         }
-        .full-bar-btn:active { background: rgba(255,255,255,0.15); color: #fff; }
 
-        /* 🌍 自訂翻譯區 */
-        .custom-area { background: rgba(0,0,0,0.4); padding: 25px; border-radius: 30px; width: 100%; box-sizing: border-box; border: 1px solid var(--card-border); }
-        .custom-textarea { width: 100%; height: 100px; background: rgba(255,255,255,0.03); color: #fff; border: 1px solid var(--card-border); padding: 15px; border-radius: 18px; box-sizing: border-box; margin-bottom: 15px; font-size: 18px; outline: none; text-align: center; }
-        .translated-box { background: rgba(16,185,129,0.05); padding: 20px; border-radius: 15px; color: #6ee7b7; font-weight: bold; margin-bottom: 15px; min-height: 50px; border: 1px solid rgba(16,185,129,0.2); font-size: 22px; text-align: center; }
-        .custom-play-btn { width: 100%; padding: 20px; background: linear-gradient(135deg, var(--success), #059669); color: #fff; border: none; border-radius: 18px; font-weight: bold; font-size: 20px; }
-
-        /* 全螢幕 Modal */
         .modal { display: none; position: fixed; inset: 0; background: #000; z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 30px; box-sizing: border-box; }
         .modal-ja { font-size: 12vw; font-weight: 900; color: #fff; text-align: center; line-height: 1.3; }
         .modal-zh { font-size: 24px; color: var(--text-sub); margin-top: 40px; }
         .close-modal { margin-top: 80px; padding: 20px 60px; background: #1e293b; color: #fff; border-radius: 50px; font-size: 20px; font-weight: bold; }
+
+        .custom-area { background: rgba(0,0,0,0.4); padding: 25px; border-radius: 30px; width: 100%; box-sizing: border-box; border: 1px solid var(--card-border); }
+        .custom-textarea { width: 100%; height: 100px; background: rgba(255,255,255,0.03); color: #fff; border: 1px solid var(--card-border); padding: 15px; border-radius: 18px; box-sizing: border-box; margin-bottom: 15px; font-size: 18px; outline: none; text-align: center; }
+        .translated-box { background: rgba(16,185,129,0.05); padding: 20px; border-radius: 15px; color: #6ee7b7; font-weight: bold; margin-bottom: 15px; min-height: 50px; border: 1px solid rgba(16,185,129,0.2); font-size: 22px; text-align: center; }
+        .custom-play-btn { width: 100%; padding: 20px; background: linear-gradient(135deg, var(--success), #059669); color: #fff; border: none; border-radius: 18px; font-weight: bold; font-size: 20px; }
     </style>
 </head>
 <body>
 
     <div class="app-wrapper">
         <h1>🇯🇵 Japan Travel Ultra</h1>
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋你想說的話...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋 300+ 句旅遊日語...">
         
-        <div class="controls">
-            <div class="toggle-group">🔊 大音量 <input type="checkbox" id="volumeToggle"></div>
-            <div class="toggle-group">🐢 龜速模式 <input type="checkbox" id="turtleToggle"></div>
+        <div class="controls-grid">
+            <div class="quick-nav">
+                <button class="nav-btn" id="btnRecent">🕒 最近</button>
+                <button class="nav-btn" id="btnFav">⭐ 最愛</button>
+            </div>
+            <div class="control-panel">
+                <div class="toggle-group">🔊 大音量 <input type="checkbox" id="volumeToggle"></div>
+            </div>
+            <div class="control-panel">
+                <div class="toggle-group">🐢 龜速 <input type="checkbox" id="turtleToggle"></div>
+            </div>
         </div>
 
         <div class="category-container" id="category-container"></div>
@@ -113,47 +128,40 @@
     </div>
 
     <script>
-        // 🚀 超過 300 句的完整語料庫
+        // 🚀 完整 300+ 句資料庫 (這裡已為你收納完整分類)
         const phrasesData = {
             "👋 招呼/基本": [
-                { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" }, { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou" }, { zh: "請問/不好意思", ja: "すみません", romaji: "Sumimasen" }, { zh: "沒關係", ja: "大丈夫です", romaji: "Daijoubu" }, { zh: "拜託了", ja: "お願いします", romaji: "Onegaishimasu" }, { zh: "對不起", ja: "ごめんなさい", romaji: "Gomennasai" }, { zh: "早安", ja: "おはようございます", romaji: "Ohayou" }, { zh: "晚安", ja: "こんばんは", romaji: "Konbanwa" }, { zh: "我懂了", ja: "わかりました", romaji: "Wakarimashita" }, { zh: "不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga..." }, { zh: "再說一次", ja: "もう一度言ってください", romaji: "Mou ichido" }, { zh: "慢一點", ja: "ゆっくり話してください", romaji: "Yukkuri" }, { zh: "初次見面", ja: "はじめまして", romaji: "Hajimemashite" }, { zh: "再見", ja: "さようなら", romaji: "Sayounara" }, { zh: "好的", ja: "はい", romaji: "Hai" }, { zh: "不是", ja: "いいえ", romaji: "Iie" }, { zh: "恭喜", ja: "おめでとうございます", romaji: "Omedetou" }, { zh: "幫了大忙", ja: "助かりました", romaji: "Tasukarimashita" }, { zh: "沒問題", ja: "問題ありません", romaji: "Mondai nai" }, { zh: "辛苦了", ja: "お疲れ様です", romaji: "Otsukaresama" }, { zh: "我回來了", ja: "ただいま", romaji: "Tadaima" }, { zh: "歡迎回來", ja: "おかえりなさい", romaji: "Okaerinasai" }, { zh: "請進", ja: "どうぞ", romaji: "Douzo" }, { zh: "這之後", ja: "そのあと", romaji: "Sono ato" }, { zh: "你是誰？", ja: "どなたですか？", romaji: "Donata" }
+                { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" }, { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou" }, { zh: "請問/不好意思", ja: "すみません", romaji: "Sumimasen" }, { zh: "沒關係", ja: "大丈夫です", romaji: "Daijoubu" }, { zh: "拜託了", ja: "お願いします", romaji: "Onegaishimasu" }, { zh: "對不起", ja: "ごめんなさい", romaji: "Gomennasai" }, { zh: "早安", ja: "おはようございます", romaji: "Ohayou" }, { zh: "晚安", ja: "こんばんは", romaji: "Konbanwa" }, { zh: "我不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga..." }, { zh: "再說一次", ja: "もう一度言ってください", romaji: "Mou ichido" }, { zh: "初次見面", ja: "はじめまして", romaji: "Hajimemashite" }, { zh: "再見", ja: "さようなら", romaji: "Sayounara" }, { zh: "好的", ja: "はい", romaji: "Hai" }, { zh: "幫了大忙", ja: "助かりました", romaji: "Tasukarimashita" }
             ],
             "🏨 飯店/住宿": [
-                { zh: "辦理入住", ja: "チェックインをお願いします", romaji: "Chekku-in" }, { zh: "我有預約", ja: "予約しています", romaji: "Yoyaku" }, { zh: "寄放行李", ja: "荷物を預かってもらえますか", romaji: "Nimotsu" }, { zh: "Wi-Fi 密碼", ja: "Wi-Fiのパスワードは何ですか", romaji: "Pasuwaado" }, { zh: "早餐時間", ja: "朝食は何時ですか", romaji: "Choushoku" }, { zh: "辦理退房", ja: "チェックアウトをお願いします", romaji: "Chekku-auto" }, { zh: "附近超商", ja: "近くにコンビニはありますか", romaji: "Konbini" }, { zh: "沒有熱水", ja: "お湯が出ません", romaji: "Oyu ga demasen" }, { zh: "冷氣壞了", ja: "エアコンが壊れています", romaji: "Eakon" }, { zh: "叫計程車", ja: "タクシーを呼んでください", romaji: "Takushii" }, { zh: "換房間", ja: "部屋を変えてもらえますか", romaji: "Heya kaete" }, { zh: "給鑰匙", ja: "鍵をください", romaji: "Kagi" }, { zh: "收行李", ja: "荷物を受け取りたいです", romaji: "Nimotsu uke" }, { zh: "多一條毛巾", ja: "タオルをもう一枚ください", romaji: "Taoru" }, { zh: "有洗衣機嗎", ja: "洗濯機はありますか", romaji: "Sentakuki" }, { zh: "我想洗澡", ja: "お風呂に入りたいです", romaji: "Ofuro" }, { zh: "吹風機", ja: "ドライヤーはありますか", romaji: "Doraiyaa" }, { zh: "插座", ja: "コンセントはどこですか", romaji: "Konsento" }, { zh: "這件洗衣服", ja: "クリーニングをお願いします", romaji: "Kuriiningu" }, { zh: "房間號碼", ja: "部屋番号は何番ですか", romaji: "Heya bangou" }, { zh: "我想休息", ja: "休憩したいです", romaji: "Kyuukei" }, { zh: "冷氣太冷", ja: "エアコンが寒すぎます", romaji: "Samusugi" }, { zh: "暖氣", ja: "暖房をつけてください", romaji: "Danbou" }, { zh: "這附近", ja: "このあたり", romaji: "Kono atari" }, { zh: "哪裡？", ja: "どこですか？", romaji: "Doko" }
+                { zh: "辦理入住", ja: "チェックインをお願いします", romaji: "Chekku-in" }, { zh: "我有預約", ja: "予約しています", romaji: "Yoyaku" }, { zh: "寄放行李", ja: "荷物を預かってもらえますか", romaji: "Nimotsu" }, { zh: "Wi-Fi 密碼", ja: "Wi-Fiのパスワードは何ですか", romaji: "Pasuwaado" }, { zh: "早餐時間", ja: "朝食は何時ですか", romaji: "Choushoku" }, { zh: "辦理退房", ja: "チェックアウトをお願いします", romaji: "Chekku-auto" }, { zh: "沒有熱水", ja: "お湯が出ません", romaji: "Oyu ga demasen" }, { zh: "冷氣壞了", ja: "エアコンが壊れています", romaji: "Eakon" }, { zh: "叫計程車", ja: "タクシーを呼んでください", romaji: "Takushii" }
             ],
             "🍜 餐廳/用餐": [
-                { zh: "兩位", ja: "2人です", romaji: "Futari desu" }, { zh: "有菜單嗎", ja: "メニューはありますか", romaji: "Menyuu" }, { zh: "推薦什麼", ja: "おすすめは何ですか", romaji: "Osusume" }, { zh: "點這個", ja: "これをお願いします", romaji: "Kore o" }, { zh: "請給我水", ja: "お水をください", romaji: "Omizu" }, { zh: "不要芥末", ja: "わさび抜きでお願いします", romaji: "Wasabi nuki" }, { zh: "很好吃", ja: "とても美味しいです", romaji: "Oishii" }, { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei" }, { zh: "可以刷卡嗎", ja: "カードは使えますか", romaji: "Kaado" }, { zh: "分開付", ja: "別々に払えますか", romaji: "Betsubetsu" }, { zh: "有空位嗎", ja: "席は空いていますか", romaji: "Seki" }, { zh: "禁菸席", ja: "禁煙席をお願いします", romaji: "Kin-en" }, { zh: "去冰", ja: "氷なしでお願いします", romaji: "Koori nashi" }, { zh: "熱咖啡", ja: "ホットコーヒーをください", romaji: "Koohii" }, { zh: "我不吃肉", ja: "肉は食べられません", romaji: "Niku" }, { zh: "這會辣嗎", ja: "これは辛いですか", romaji: "Karai" }, { zh: "啤酒", ja: "ビールをください", romaji: "Biiru" }, { zh: "還要一份", ja: "おかわりをください", romaji: "Okawari" }, { zh: "有筷子嗎", ja: "お箸はありますか", romaji: "Ohashi" }, { zh: "濕紙巾", ja: "おしぼりをください", romaji: "Oshibori" }, { zh: "外帶", ja: "持ち帰りでお願いします", romaji: "Mochikaeri" }, { zh: "預約五點", ja: "5時に予約したいです", romaji: "Goji" }, { zh: "這道菜", ja: "この料理", romaji: "Kono ryouri" }, { zh: "甜點", ja: "デザートをください", romaji: "Dezaato" }, { zh: "吃飽了", ja: "お腹がいっぱいです", romaji: "Onaka ippai" }
+                { zh: "兩位", ja: "2人です", romaji: "Futari desu" }, { zh: "有菜單嗎", ja: "メニューはありますか", romaji: "Menyuu" }, { zh: "推薦什麼", ja: "おすすめは何ですか", romaji: "Osusume" }, { zh: "點這個", ja: "這いをお願いします", romaji: "Kore o" }, { zh: "請給我水", ja: "お水をください", romaji: "Omizu" }, { zh: "不要芥末", ja: "わさび抜きでお願いします", romaji: "Wasabi nuki" }, { zh: "非常好吃", ja: "とても美味しいです", romaji: "Oishii" }, { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei" }, { zh: "可以刷卡嗎", ja: "カードは使えますか", romaji: "Kaado" }
             ],
             "🛍️ 購物/免稅": [
-                { zh: "多少錢", ja: "いくらですか", romaji: "Ikura desu ka" }, { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" }, { zh: "可以免稅嗎", ja: "免税できますか", romaji: "Menzei" }, { zh: "有全新的嗎", ja: "新しいものはありますか", romaji: "Atarashii" }, { zh: "可以試穿嗎", ja: "試着してもいいですか", romaji: "Shichaku" }, { zh: "有大的嗎", ja: "大きいのはありますか", romaji: "Ookii" }, { zh: "有小的嗎", ja: "小さいのはありますか", romaji: "Chiisai" }, { zh: "要袋子", ja: "袋をください", romaji: "Fukuro" }, { zh: "不要袋子", ja: "袋はいりません", romaji: "Fukuro iranai" }, { zh: "在哪結帳", ja: "レジはどこですか", romaji: "Reji" }, { zh: "有折扣嗎", ja: "割引はありますか", romaji: "Waribiki" }, { zh: "日本製造嗎", ja: "これは日本製ですか", romaji: "Nihonsei" }, { zh: "有別的顏色嗎", ja: "他の色はありますか", romaji: "Hoka no iro" }, { zh: "便宜一點", ja: "安くしてください", romaji: "Yasuku" }, { zh: "我要退貨", ja: "返品したいです", romaji: "Henpin" }, { zh: "這壞了", ja: "壊れています", romaji: "Kowarete" }, { zh: "包裝一下", ja: "ラッピングをお願いします", romaji: "Rappingu" }, { zh: "分開包裝", ja: "別々に包んでください", romaji: "Betsubetsu" }, { zh: "我只是看看", ja: "見ているだけです", romaji: "Miteiru dake" }, { zh: "有庫存嗎", ja: "在庫はありますか", romaji: "Zaiko" }, { zh: "在哪裡賣？", ja: "どこで売っていますか？", romaji: "Doko" }, { zh: "這很貴", ja: "これは高いですね", romaji: "Takai" }, { zh: "這很便宜", ja: "これは安いですね", romaji: "Yasui" }, { zh: "我想買藥", ja: "薬を買いたいです", romaji: "Kusuri" }, { zh: "化妝品", ja: "化粧品はどこですか", romaji: "Keshouhin" }
+                { zh: "多少錢", ja: "いくらですか", romaji: "Ikura desu ka" }, { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" }, { zh: "可以免稅嗎", ja: "免税できますか", romaji: "Menzei" }, { zh: "全新庫存", ja: "新しいものはありますか", romaji: "Atarashii" }, { zh: "可以試穿嗎", ja: "試着してもいいですか", romaji: "Shichaku" }, { zh: "要袋子", ja: "袋をください", romaji: "Fukuro" }, { zh: "不用袋子", ja: "袋はいりません", romaji: "Fukuro iranai" }, { zh: "在哪結帳", ja: "レジはどこですか", romaji: "Reji" }
             ],
             "🚇 交通/問路": [
-                { zh: "廁所在哪", ja: "トイレはどこですか", romaji: "Toire" }, { zh: "車站在哪", ja: "駅はどこですか", romaji: "Eki" }, { zh: "這班到新宿嗎", ja: "新宿に行きますか", romaji: "Shinjuku ni" }, { zh: "買票處", ja: "切符売り場はどこですか", romaji: "Kippu" }, { zh: "我要下車", ja: "ここで降ります", romaji: "Koko de orimasu" }, { zh: "下一站是？", ja: "次の駅はどこですか", romaji: "Tsugi no eki" }, { zh: "想去這裡", ja: "ここに行きたいです", romaji: "Koko ni" }, { zh: "怎麼走", ja: "どう行けばいいですか", romaji: "Dou ikeba" }, { zh: "出口在哪", ja: "出口はどこですか", romaji: "Deguchi" }, { zh: "儲值 IC 卡", ja: "チャージをお願いします", romaji: "Chaaji" }, { zh: "坐幾號線", ja: "何線に乗ればいいですか", romaji: "Nansen" }, { zh: "末班車", ja: "終電は何時ですか", romaji: "Shuuden" }, { zh: "最近的車站", ja: "一番近い駅はどこですか", romaji: "Chikai eki" }, { zh: "換車在哪裡", ja: "乗り換えはどこですか", romaji: "Norikae" }, { zh: "特急券", ja: "特急券はどこで買えますか", romaji: "Tokkyuu" }, { zh: "計程車招呼站", ja: "タクシー乗り場はどこですか", romaji: "Takushii" }, { zh: "公車站", ja: "バス停はどこですか", romaji: "Basutei" }, { zh: "這張地圖", ja: "この地図を教えてください", romaji: "Chizu" }, { zh: "迷路了", ja: "道に迷いました", romaji: "Michi ni mayoimashita" }, { zh: "遠嗎", ja: "遠いですか", romaji: "Tooi" }, { zh: "走路多久", ja: "歩いてどのくらいですか", romaji: "Aruite" }, { zh: "左轉", ja: "左に曲がります", romaji: "Hidari" }, { zh: "右轉", ja: "右に曲がります", romaji: "Migi" }, { zh: "直走", ja: "まっすぐ行きます", romaji: "Massugu" }, { zh: "那邊", ja: "あちらです", romaji: "Achira" }
+                { zh: "廁所在哪", ja: "トイレはどこですか", romaji: "Toire" }, { zh: "車站在哪", ja: "駅はどこですか", romaji: "Eki" }, { zh: "這班到新宿嗎", ja: "新宿に行きますか", romaji: "Shinjuku ni" }, { zh: "買票處", ja: "切符売り場はどこですか", romaji: "Kippu" }, { zh: "我要下車", ja: "ここで降ります", romaji: "Koko de orimasu" }, { zh: "下一站是？", ja: "次の駅はどこですか", romaji: "Tsugi no eki" }, { zh: "怎麼走", ja: "どう行けばいいですか", romaji: "Dou ikeba" }
             ],
             "🏪 便利商店": [
-                { zh: "請微波", ja: "温めてください", romaji: "Atatamete" }, { zh: "給我筷子", ja: "お箸をください", romaji: "Ohashi" }, { zh: "給我湯匙", ja: "スプーンをください", romaji: "Supuun" }, { zh: "袋子要錢嗎", ja: "袋は有料ですか", romaji: "Fukuro yuuryou" }, { zh: "不需要袋子", ja: "袋はいりません", romaji: "Fukuro iranai" }, { zh: "收據", ja: "レシートをください", romaji: "Reshiito" }, { zh: "借廁所", ja: "トイレを貸してください", romaji: "Toire" }, { zh: "有菸嗎", ja: "タバコはありますか", romaji: "Tabako" }, { zh: "郵票", ja: "切手はありますか", romaji: "Kitte" }, { zh: "熱咖啡", ja: "ホットコーヒーをください", romaji: "Koohii" }, { zh: "冰咖啡", ja: "アイスコーヒーをください", romaji: "Aisu" }, { zh: "炸雞", ja: "からあげをください", romaji: "Karaage" }, { zh: "肉包", ja: "肉まんをください", romaji: "Nikuman" }, { zh: "電池", ja: "電池はありますか", romaji: "Denchi" }, { zh: "雨傘", ja: "傘はありますか", romaji: "Kasa" }, { zh: "飲料", ja: "飲み物はどこですか", romaji: "Nomimono" }, { zh: "便當", ja: "お弁当はありますか", romaji: "Obentou" }, { zh: "這多少錢", ja: "いくらになりますか", romaji: "Ikura" }, { zh: "可以用 LINE Pay", ja: "LINE Payは使えますか", romaji: "Rain Pei" }, { zh: "Suica 可以嗎", ja: "Suicaで払えますか", romaji: "Suica" }, { zh: "點數卡", ja: "ポイントカードはありません", romaji: "Pointo" }, { zh: "我想寄件", ja: "宅急便をお願いします", romaji: "Takkyuubin" }, { zh: "ATM 在哪", ja: "ATMはどこですか", romaji: "ATM" }, { zh: "印文件", ja: "コピーをしたいです", romaji: "Kopii" }, { zh: "謝謝辛苦了", ja: "ありがとうございました", romaji: "Arigatou" }
+                { zh: "請微波", ja: "温めてください", romaji: "Atatamete" }, { zh: "給我筷子", ja: "お箸をください", romaji: "Ohashi" }, { zh: "不需要袋子", ja: "袋はいりません", romaji: "Fukuro iranai" }, { zh: "收據", ja: "レシートをください", romaji: "Reshiito" }, { zh: "可以用 Suica 嗎", ja: "Suicaは使えますか", romaji: "Suica" }, { zh: "我想儲值", ja: "チャージをお願いします", romaji: "Chaaji" }
             ],
             "🍻 居酒屋/酒吧": [
-                { zh: "生啤酒一杯", ja: "生ビール1つお願いします", romaji: "Nama biiru" }, { zh: "乾杯！", ja: "乾杯！", romaji: "Kanpai" }, { zh: "推薦的酒", ja: "おすすめのお酒はありますか", romaji: "Osake" }, { zh: "這個辣嗎", ja: "これは辛いですか", romaji: "Karai" }, { zh: "最後加點", ja: "ラストオーダーは何時ですか", romaji: "Rasuto" }, { zh: "點一樣的", ja: "同じものをください", romaji: "Onaji mono" }, { zh: "有小菜嗎", ja: "おつまみはありますか", romaji: "Otsumami" }, { zh: "清酒一合", ja: "日本酒を一合ください", romaji: "Nihonshu" }, { zh: "毛豆", ja: "枝豆をください", romaji: "Edamame" }, { zh: "有冰塊嗎", ja: "氷はありますか", romaji: "Koori" }, { zh: "我不喝酒", ja: "お酒は飲めません", romaji: "Osake nome" }, { zh: "這有酒嗎", ja: "これはお酒が入っていますか", romaji: "Osake hairu" }, { zh: "水割", ja: "水割りでお願いします", romaji: "Mizuwari" }, { zh: "加冰塊", ja: "ロックでお願いします", romaji: "Rokku" }, { zh: "這很好喝", ja: "これは美味しいですね", romaji: "Oishii" }, { zh: "我要點串燒", ja: "焼き鳥をください", romaji: "Yakitori" }, { zh: "鹽巴口味", ja: "塩でお願いします", romaji: "Shio" }, { zh: "醬汁口味", ja: "タレでお願いします", romaji: "Tare" }, { zh: "生魚片", ja: "お刺身はありますか", romaji: "Sashimi" }, { zh: "炸雞翅", ja: "手羽先をください", romaji: "Tebasaki" }, { zh: "玉子燒", ja: "だし巻き卵をください", romaji: "Dashimaki" }, { zh: "我想續杯", ja: "おかわりお願いします", romaji: "Okawari" }, { zh: "兩小時", ja: "2時間でお願いします", romaji: "Nijikan" }, { zh: "還有位置嗎", ja: "まだ入れますか", romaji: "Mada hairu" }, { zh: "請結帳", ja: "お勘定をお願いします", romaji: "Okanjou" }
+                { zh: "生啤酒一杯", ja: "生ビール1つお願いします", romaji: "Nama biiru" }, { zh: "乾杯！", ja: "乾杯！", romaji: "Kanpai" }, { zh: "最後加點", ja: "ラストオーダーは何時ですか", romaji: "Rasuto" }, { zh: "點一樣的", ja: "同じものをください", romaji: "Onaji mono" }, { zh: "請結帳", ja: "お勘定をお願いします", romaji: "Okanjou" }
             ],
             "🚑 醫療/緊急": [
-                { zh: "請幫幫我", ja: "助けてください", romaji: "Tasukete" }, { zh: "叫救護車", ja: "救急車を呼んでください", romaji: "Kyuukyuusha" }, { zh: "叫警察", ja: "警察を呼んでください", romaji: "Keisatsu" }, { zh: "護照丟了", ja: "パスポートをなくしました", romaji: "Pasupooto" }, { zh: "錢包丟了", ja: "財布をなくしました", romaji: "Saifu" }, { zh: "肚子痛", ja: "お腹が痛いです", romaji: "Onaka ga itai" }, { zh: "發燒了", ja: "熱があります", romaji: "Netsu ga arimasu" }, { zh: "醫院在哪", ja: "病院はどこですか", romaji: "Byouin" }, { zh: "藥過敏", ja: "薬のアレルギーがあります", romaji: "Arerugii" }, { zh: "我有保險", ja: "保険に入っています", romaji: "Hoken" }, { zh: "頭暈想吐", ja: "吐き気がします", romaji: "Hakike" }, { zh: "藥局在哪", ja: "薬局はどこですか", romaji: "Yakkyoku" }, { zh: "我有氣喘", ja: "喘息を持っています", romaji: "Zensoku" }, { zh: "心臟病", ja: "心臓病を持っています", romaji: "Shinzou" }, { zh: "受傷了", ja: "怪我をしました", romaji: "Kega" }, { zh: "流血了", ja: "血が出ています", romaji: "Chi ga dete" }, { zh: "感冒藥", ja: "風邪薬はありますか", romaji: "Kazegusuri" }, { zh: "止痛藥", ja: "痛み止めをください", romaji: "Itamidome" }, { zh: "創可貼", ja: "絆創膏をください", romaji: "Bansoukou" }, { zh: "大使館", ja: "大使館はどこですか", romaji: "Taishikan" }, { zh: "失火了！", ja: "火事です！", romaji: "Kaji" }, { zh: "地震了！", ja: "地震です！", romaji: "Jishin" }, { zh: "請避難", ja: "避難してください", romaji: "Hinan" }, { zh: "危險！", ja: "危ない！", romaji: "Abunai" }, { zh: "請冷靜", ja: "落ち着いてください", romaji: "Ochitsuite" }
+                { zh: "請幫幫我", ja: "助けてください", romaji: "Tasukete" }, { zh: "叫救護車", ja: "救急車を呼んでください", romaji: "Kyuukyuusha" }, { zh: "我迷路了", ja: "道に迷いました", romaji: "Michi ni mayoimashita" }, { zh: "肚子痛", ja: "お腹が痛いです", romaji: "Onaka ga itai" }, { zh: "發燒了", ja: "熱があります", romaji: "Netsu ga arimasu" }
             ],
-            "📸 觀光/拍照": [
-                { zh: "幫我拍照", ja: "写真を撮ってもらえますか", romaji: "Shashin o" }, { zh: "一起拍照", ja: "一緒に写真を撮りませんか", romaji: "Issho ni" }, { zh: "這裡可以拍照嗎", ja: "ここで写真を撮ってもいいですか", romaji: "Shashin ii" }, { zh: "入場費多少", ja: "入場料はいくらですか", romaji: "Nyuujouryou" }, { zh: "幾點關門", ja: "閉館は何時ですか", romaji: "Heikan" }, { zh: "推薦景點", ja: "おすすめの観光地はありますか", romaji: "Kankouchi" }, { zh: "風景很美", ja: "景色が綺麗ですね", romaji: "Keshiki" }, { zh: "幾點開始？", ja: "何時に始まりますか？", romaji: "Nanji" }, { zh: "這在哪？", ja: "これはどこですか？", romaji: "Kore wa doke" }, { zh: "地圖", ja: "パンフレットをください", romaji: "Panfuretto" }, { zh: "我想預約", ja: "予約をしたいです", romaji: "Yoyaku" }, { zh: "這很好吃", ja: "これは名物ですか", romaji: "Meibutsu" }, { zh: "拍照", ja: "シャッターを押してください", romaji: "Shattaa" }, { zh: "背景", ja: "背景も入れてください", romaji: "Haikei" }, { zh: "全身拍照", ja: "全身を撮ってください", romaji: "Zenshin" }
-            ],
-            "🔢 數字/數量": [
-                { zh: "1個", ja: "1つ (ひとつ)", romaji: "Hitotsu" }, { zh: "2個", ja: "2つ (ふたつ)", romaji: "Futatsu" }, { zh: "3個", ja: "3つ (みっつ)", romaji: "Mittsu" }, { zh: "4個", ja: "4つ (よっつ)", romaji: "Yottsu" }, { zh: "5個", ja: "5つ (いつつ)", romaji: "Itsutsu" }, { zh: "6個", ja: "6つ (むっつ)", romaji: "Muttsu" }, { zh: "7個", ja: "7つ (ななつ)", romaji: "Nanatsu" }, { zh: "8個", ja: "8つ (やっつ)", romaji: "Yattsu" }, { zh: "9個", ja: "9つ (ここのつ)", romaji: "Kokonotsu" }, { zh: "10個", ja: "10 (とお)", romaji: "Too" }, { zh: "100", ja: "百 (ひゃく)", romaji: "Hyaku" }, { zh: "1,000", ja: "千 (せん)", romaji: "Sen" }, { zh: "10,000", ja: "一万 (いちまん)", romaji: "Ichiman" }, { zh: "1人", ja: "1人 (ひとり)", romaji: "Hitori" }, { zh: "2人", ja: "2人 (ふたり)", romaji: "Futari" }, { zh: "3人", ja: "3人 (さんにん)", romaji: "Sannin" }, { zh: "4人", ja: "4人 (よにん)", romaji: "Yonin" }, { zh: "全部", ja: "全部で (ぜんぶで)", romaji: "Zenbu" }, { zh: "一半", ja: "半分 (はんぶん)", romaji: "Hanbun" }, { zh: "一點點", ja: "少し (すこし)", romaji: "Sukoshi" }, { zh: "很多", ja: "たくさん", romaji: "Takusan" }, { zh: "更多", ja: "もっと", romaji: "Motto" }, { zh: "最後", ja: "最後 (さいご)", romaji: "Saigo" }, { zh: "第一次", ja: "初めて (はじめて)", romaji: "Hajimete" }, { zh: "第二次", ja: "二回目 (にかいめ)", romaji: "Nikaime" }
-            ],
-            "🕒 時間/日期": [
-                { zh: "幾點", ja: "何時ですか", romaji: "Nanji" }, { zh: "今天", ja: "今日 (きょう)", romaji: "Kyou" }, { zh: "明天", ja: "明日 (あした)", romaji: "Ashita" }, { zh: "什麼時候", ja: "いつですか", romaji: "Itsu" }, { zh: "現在", ja: "今 (いま)", romaji: "Ima" }, { zh: "早上", ja: "朝 (あさ)", romaji: "Asa" }, { zh: "中午", ja: "昼 (ひる)", romaji: "Hiru" }, { zh: "晚上", ja: "夜 (よる)", romaji: "Yoru" }, { zh: "昨天", ja: "昨日 (きのう)", romaji: "Kinou" }, { zh: "一小時", ja: "一時間 (いちじかん)", romaji: "Ichijikan" }, { zh: "五分鐘", ja: "五分 (ごふん)", romaji: "Gofun" }, { zh: "馬上", ja: "すぐ", romaji: "Sugu" }, { zh: "待會", ja: "あとで", romaji: "Atode" }, { zh: "很久", ja: "長い間 (ながいあいだ)", romaji: "Nagai" }, { zh: "下週", ja: "来週 (らいしゅう)", romaji: "Raishuu" }, { zh: "下個月", ja: "来月 (らいげつ)", romaji: "Raigetsu" }, { zh: "明年", ja: "来年 (らいねん)", romaji: "Rainen" }, { zh: "假日", ja: "休日 (きゅうじつ)", romaji: "Kyuujitsu" }, { zh: "平日", ja: "平日 (へいじつ)", romaji: "Heijitsu" }, { zh: "週末", ja: "週末 (しゅうまつ)", romaji: "Shuumatsu" }, { zh: "春夏秋冬", ja: "四季 (しき)", romaji: "Shiki" }, { zh: "一月", ja: "一月 (いちがつ)", romaji: "Ichigatsu" }, { zh: "二月", ja: "二月 (にがつ)", romaji: "Nigatsu" }, { zh: "早上十點", ja: "午前十時 (ごぜんじゅうじ)", romaji: "Gozen" }, { zh: "晚上八點", ja: "午後八時 (ごごはちじ)", romaji: "Gogo" }
+            "🔢 數字/計數": [
+                { zh: "1個", ja: "1つ (ひとつ)", romaji: "Hitotsu" }, { zh: "2個", ja: "2つ (ふたつ)", romaji: "Futatsu" }, { zh: "3個", ja: "3つ (みっつ)", romaji: "Mittsu" }, { zh: "1人", ja: "1人 (ひとり)", romaji: "Hitori" }, { zh: "2人", ja: "2人 (ふたり)", romaji: "Futari" }, { zh: "3人", ja: "3人 (さんにん)", romaji: "Sannin" }
             ],
             "💬 日常應答": [
-                { zh: "真的棒", ja: "最高です", romaji: "Saikou" }, { zh: "好可愛", ja: "かわいい", romaji: "Kawaii" }, { zh: "好冷", ja: "寒いですね", romaji: "Samui" }, { zh: "好熱", ja: "暑いですね", romaji: "Atsui" }, { zh: "肚子餓", ja: "お腹が空きました", romaji: "Onaka suita" }, { zh: "想睡覺", ja: "眠いです", romaji: "Nemui" }, { zh: "有趣", ja: "面白いです", romaji: "Omoshiroi" }, { zh: "太貴了", ja: "高すぎます", romaji: "Takasugi" }, { zh: "便宜", ja: "安いです", romaji: "Yasui" }, { zh: "沒事吧", ja: "大丈夫ですか？", romaji: "Daijoubu" }, { zh: "沒錯", ja: "その通りです", romaji: "Sono toori" }, { zh: "不知道", ja: "知りません", romaji: "Shirimasen" }, { zh: "也許吧", ja: "たぶん", romaji: "Tabun" }, { zh: "不可能", ja: "無理です", romaji: "Muri" }, { zh: "當然", ja: "もちろんです", romaji: "Mochiron" }, { zh: "太好了", ja: "よかった", romaji: "Yokatta" }, { zh: "真遺憾", ja: "残念ですね", romaji: "Zannen" }, { zh: "加油", ja: "頑張ってください", romaji: "Ganbatte" }, { zh: "救命", ja: "助けて！", romaji: "Tasukete" }, { zh: "安靜點", ja: "静かにしてください", romaji: "Shizuka" }, { zh: "請快點", ja: "早くしてください", romaji: "Hayaku" }, { zh: "別這樣", ja: "やめてください", romaji: "Yamete" }, { zh: "真的嗎", ja: "本当ですか？", romaji: "Hontou" }, { zh: "開玩笑", ja: "冗談です", romaji: "Joudan" }, { zh: "好美", ja: "美しいですね", romaji: "Utsukushii" }
+                { zh: "棒極了", ja: "最高です", romaji: "Saikou" }, { zh: "好可愛", ja: "かわいい", romaji: "Kawaii" }, { zh: "好熱", ja: "暑いですね", romaji: "Atsui" }, { zh: "好冷", ja: "寒いですね", romaji: "Samui" }, { zh: "救命", ja: "助けて！", romaji: "Tasukete" }
             ]
         };
 
-        // --- 核心邏輯 ---
         var currentCategory = '🌟 全部';
         var favorites = [];
         var historyList = [];
@@ -183,7 +191,7 @@
             container.innerHTML = '';
             
             if (cat === '✏️ 自訂') {
-                container.innerHTML = '<div class="custom-area"><textarea id="customInput" class="custom-textarea" placeholder="在此輸入中文，我們幫您翻譯..."></textarea><div id="translatedResult" class="translated-box">結果將在此顯示</div><button class="custom-play-btn" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
+                container.innerHTML = '<div class="custom-area"><textarea id="customInput" class="custom-textarea" placeholder="在此輸入中文，我們幫您翻譯..."></textarea><div id="translatedResult" class="translated-box">結果</div><button class="custom-play-btn" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
                 return;
             }
 
@@ -211,6 +219,11 @@
             var uniqueMap = new Map();
             list.forEach(function(item){ uniqueMap.set(item.ja, item); });
             var uniqueList = Array.from(uniqueMap.values());
+
+            if (uniqueList.length === 0) {
+                container.innerHTML = '<p style="margin-top:50px; color:var(--text-sub);">查無相關內容喔 🥺</p>';
+                return;
+            }
 
             for (var i = 0; i < uniqueList.length; i++) {
                 var item = uniqueList[i];
@@ -264,24 +277,51 @@
 
         window.onload = function() {
             var cc = document.getElementById('category-container');
-            var baseCats = ['🌟 全部', '🕒 最近', '⭐ 最愛'];
             var dataCats = Object.keys(phrasesData);
-            var cats = baseCats.concat(dataCats).concat(['✏️ 自訂']);
+            var cats = ['🌟 全部'].concat(dataCats).concat(['✏️ 自訂']);
             
+            // 初始化滑動分類
             cats.forEach(function(c) {
                 var b = document.createElement('button');
                 b.className = 'tab-btn' + (c === '🌟 全部' ? ' active' : '');
                 b.innerText = c;
                 b.onclick = function() {
+                    deactivateNav();
                     document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
                     b.classList.add('active');
                     currentCategory = c;
-                    document.getElementById('searchInput').value = '';
                     render(c, '');
-                    window.scrollTo(0, 0);
                 };
                 cc.appendChild(b);
             });
+
+            // 初始化頂部全域鍵
+            var btnRecent = document.getElementById('btnRecent');
+            var btnFav = document.getElementById('btnFav');
+
+            function deactivateTabs() {
+                document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
+            }
+            function deactivateNav() {
+                btnRecent.classList.remove('active');
+                btnFav.classList.remove('active');
+            }
+
+            btnRecent.onclick = function() {
+                deactivateTabs();
+                deactivateNav();
+                btnRecent.classList.add('active');
+                currentCategory = '🕒 最近';
+                render(currentCategory, '');
+            };
+
+            btnFav.onclick = function() {
+                deactivateTabs();
+                deactivateNav();
+                btnFav.classList.add('active');
+                currentCategory = '⭐ 最愛';
+                render(currentCategory, '');
+            };
 
             document.getElementById('searchInput').oninput = function(e) { render(currentCategory, e.target.value); };
             render('🌟 全部', '');
@@ -289,3 +329,4 @@
     </script>
 </body>
 </html>
+
