@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Ultra 終極防彈</title>
+    <title>日本旅遊神器 Ultra 終極防彈版</title>
     <meta property="og:title" content="日本旅遊神器 Ultra">
     <meta property="og:description" content="內建海量實用旅遊日語。支援離線收藏、發音與即時翻譯，助您日本行溝通無阻。">
-    
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/197/197604.png">
+
     <script>
-        // 🚀 內部瀏覽器攔截
         (function() {
             try {
                 var ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -21,7 +21,7 @@
                     }
                     document.addEventListener('DOMContentLoaded', function() {
                         var blocker = document.getElementById('inAppBlocker');
-                        if(blocker) { blocker.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+                        if (blocker) { blocker.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
                     });
                 }
             } catch(e){}
@@ -30,8 +30,11 @@
 
     <style>
         :root { --bg: #070b14; --blue: #3b82f6; --card: rgba(255,255,255,0.06); --border: rgba(255,255,255,0.1); --txt: #fff; --sub: #94a3b8; --green: #10b981; --gold: #fbbf24; --red: #ef4444; }
+        
+        /* 徹底修復底部白塊 */
         html { background-color: #070b14; height: 100%; }
         body { background-color: #070b14; background-image: radial-gradient(circle at top, #1e293b 0%, #070b14 100%); background-attachment: fixed; color: var(--txt); margin: 0; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; padding-bottom: 120px; min-height: 100vh; }
+        
         .wrap { width: 100%; max-width: 500px; padding: 15px; box-sizing: border-box; text-align: center; }
         #title { font-size: 26px; margin: 20px 0; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); cursor: pointer; user-select: none; }
         .search { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: rgba(0,0,0,0.4); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; }
@@ -72,13 +75,13 @@
         .m-zh { font-size: 22px; color: var(--sub); margin-top: 30px; }
         .m-close { margin-top: 40px; padding: 15px 50px; background: #1e293b; color: #fff; border-radius: 30px; font-size: 18px; font-weight: bold; border: 1px solid var(--border); cursor:pointer;}
         
+        /* 🚑 語音急救教學面板 */
         .tts-box { background: #1e293b; border: 1px solid var(--border); border-radius: 20px; padding: 25px; max-width: 400px; width: 100%; box-sizing: border-box; text-align: left; box-shadow: 0 20px 50px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
         .tts-title { color: var(--red); font-size: 22px; font-weight: 900; text-align: center; margin-bottom: 10px; }
         .tts-step { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .tts-os { color: var(--blue); font-weight: bold; font-size: 16px; margin-bottom: 8px; border-bottom: 1px solid rgba(59,130,246,0.3); padding-bottom: 5px; }
         .tts-txt { color: #fff; font-size: 14px; line-height: 1.6; }
         .tts-txt span { color: var(--gold); font-weight: bold; }
-        
         .tts-ignore-box { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; margin-bottom: 5px; cursor: pointer; color: var(--sub); font-size: 14px; }
         .tts-btn { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; margin-top: 10px; cursor: pointer; }
 
@@ -92,7 +95,7 @@
 
     <div id="inAppBlocker">
         <div class="b-title">⚠️</div>
-        <div class="b-text">偵測到內部瀏覽器<br><br><span style="color:#94a3b8;font-size:16px;">這會導致網頁「無法發出聲音」<br>為確保正常運作，請切換瀏覽器。</span></div>
+        <div class="b-text">偵測到內部瀏覽器<br><br><span style="color:#94a3b8;font-size:16px;">這會導致網頁「無法發出聲音」<br>為確保出國正常運作，請切換瀏覽器。</span></div>
         <div class="b-hint">👉 點擊右上角的「⋮」或「⠇」<br><br>👉 選擇「使用預設瀏覽器開啟」</div>
     </div>
 
@@ -148,7 +151,10 @@
         </div>
 
         <div class="cats" id="cat-box"></div>
-        <div class="list" id="list"></div>
+        
+        <div class="list" id="list">
+            <p style="color:var(--sub); font-size:18px; font-weight:bold; margin-top:50px;">⏳ 正在準備金句，請稍候...</p>
+        </div>
     </div>
 
     <div id="mod" class="modal">
@@ -158,7 +164,7 @@
     </div>
 
     <script>
-        try {
+        (function() {
             var D = {
                 "👋 常用": [
                     {z:"你好",j:"こんにちは",r:"Konnichiwa"},{z:"謝謝",j:"ありがとうございます",r:"Arigatou"},{z:"不好意思",j:"すみません",r:"Sumimasen"},{z:"沒關係",j:"大丈夫です",r:"Daijoubu"},{z:"拜託了",j:"お願いします",r:"Onegaishimasu"},{z:"對不起",j:"ごめんなさい",r:"Gomennasai"},{z:"早安",j:"おはようございます",r:"Ohayou"},{z:"晚安",j:"こんばんは",r:"Konbanwa"},{z:"不懂日文",j:"日本語がわかりません",r:"Nihongo ga wakarimasen"},{z:"再說一次",j:"もう一度言ってください",r:"Mou ichido"},{z:"好的",j:"はい",r:"Hai"},{z:"不是",j:"いいえ",r:"Iie"},{z:"幫大忙了",j:"助かりました",r:"Tasukari"},{z:"慢一點",j:"ゆっくり話してください",r:"Yukkuri"},{z:"這是什麼",j:"これは何ですか",r:"Kore wa nan desu ka"}
@@ -201,7 +207,8 @@
 
             window.showTutorial = function(isManual) { 
                 if (!isManual && ignoreTTSPopup) return;
-                document.getElementById('ttsGuideModal').style.display = 'flex'; 
+                var mod = document.getElementById('ttsGuideModal');
+                if(mod) mod.style.display = 'flex'; 
             };
 
             window.closeTTS = function() {
@@ -210,10 +217,12 @@
                     ignoreTTSPopup = true;
                     try { window.localStorage.setItem('jp_tts_ignore', 'true'); } catch(e) {}
                 }
-                document.getElementById('ttsGuideModal').style.display = 'none';
+                var mod = document.getElementById('ttsGuideModal');
+                if(mod) mod.style.display = 'none';
             };
             
-            document.getElementById('b-help').onclick = function() { showTutorial(true); };
+            var bHelp = document.getElementById('b-help');
+            if(bHelp) bHelp.onclick = function() { showTutorial(true); };
 
             window.spk = function(txt, item) {
                 var now = new Date().getTime();
@@ -222,12 +231,23 @@
 
                 if (!window.speechSynthesis) { showTutorial(false); return; }
                 
+                var voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    var hasJa = false;
+                    for(var i=0; i<voices.length; i++) { if(voices[i].lang.indexOf('ja') > -1) { hasJa = true; break; } }
+                    if(!hasJa) showTutorial(false);
+                }
+
                 try {
                     window.speechSynthesis.cancel();
                     var u = new SpeechSynthesisUtterance(txt);
                     u.lang = 'ja-JP';
-                    u.rate = document.getElementById('spd').checked ? 0.45 : 0.85;
-                    u.volume = document.getElementById('vol').checked ? 1.0 : 0.8;
+                    
+                    var spdEl = document.getElementById('spd');
+                    var volEl = document.getElementById('vol');
+                    u.rate = (spdEl && spdEl.checked) ? 0.45 : 0.85;
+                    u.volume = (volEl && volEl.checked) ? 1.0 : 0.8;
+                    
                     u.onerror = function(e) { showTutorial(false); };
                     window.speechSynthesis.speak(u);
                 } catch(e) { showTutorial(false); }
@@ -242,8 +262,11 @@
                 }
             };
 
+            if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); }; }
+
             window.draw = function(cat, q) {
                 var box = document.getElementById('list');
+                if(!box) return;
                 box.innerHTML = '';
                 
                 if (cat === '✏️ 自訂') {
@@ -282,20 +305,4 @@
                     if (!seen[arr[z].j]) { seen[arr[z].j] = true; uniq.push(arr[z]); }
                 }
 
-                if(uniq.length === 0) { box.innerHTML = '<p style="color:#94a3b8;margin-top:30px;font-weight:bold;">查無資料 🥺</p>'; return; }
-
-                for (var i=0; i<uniq.length; i++) {
-                    (function(item) {
-                        var isF = favs.indexOf(item.j) > -1;
-                        var d = document.createElement('div');
-                        d.className = 'card';
-                        d.innerHTML = '<div class="card-in">' +
-                            '<div class="star ' + (isF ? 'active' : '') + '">★</div>' +
-                            '<div class="zh">' + item.z + '</div>' +
-                            '<div class="ja-box"><span class="ja">🔊 ' + item.j + '</span></div>' +
-                            '<div class="ro">' + (item.r||'') + '</div>' +
-                            '</div><button class="bar-btn">🪧 放大顯示</button>';
-                        
-                        d.onclick = function(e) { if(e.target.tagName !== 'BUTTON' && e.target.className.indexOf('star')===-1) spk(item.j, item); };
-                        d.querySelector('.star').onclick = function(e) {
-    
+                if(uniq.length === 0) { box.innerHTML = '<p style="color:#94a3b8;margin
