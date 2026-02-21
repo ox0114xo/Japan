@@ -3,74 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Ultimate</title>
+    <title>日本旅遊神器 Pro Max</title>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <style>
-        /* --- 全局設定 --- */
-        body { font-family: "Microsoft JhengHei", -apple-system, sans-serif; background-color: #121212; color: #ffffff; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 80px; }
-        h1 { margin: 15px 0 10px 0; font-size: 24px; text-align: center; }
+        /* --- 全局設定：現代深色模式 --- */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #f3f4f6; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; padding-bottom: 100px; }
+        h1 { margin: 20px 0 15px 0; font-size: 24px; text-align: center; font-weight: 800; letter-spacing: 1px; }
 
-        /* --- 頂部控制列與搜尋 --- */
-        .controls-container { width: 90%; max-width: 600px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
-        .controls { display: flex; flex-wrap: wrap; gap: 15px; background: #2a2a2a; padding: 12px; border-radius: 15px; justify-content: center; }
-        .toggle-group { display: flex; align-items: center; font-size: 14px; gap: 8px; }
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        /* --- 頂部控制列 --- */
+        .controls-container { width: 92%; max-width: 600px; display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .search-box { width: 100%; padding: 14px 18px; border-radius: 16px; border: 1px solid #374151; background: #1f2937; color: white; font-size: 16px; box-sizing: border-box; outline: none; transition: border-color 0.2s; }
+        .search-box:focus { border-color: #3b82f6; }
+        .controls { display: flex; flex-wrap: wrap; gap: 12px; background: #1f2937; padding: 12px 18px; border-radius: 16px; justify-content: center; }
+        .toggle-group { display: flex; align-items: center; font-size: 14px; gap: 8px; font-weight: 500; color: #d1d5db; }
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #555; transition: .4s; border-radius: 22px; }
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: #4CAF50; }
-        input:checked + .slider:before { transform: translateX(18px); }
-        .search-box { width: 100%; padding: 12px; border-radius: 12px; border: none; background: #333; color: white; font-size: 16px; box-sizing: border-box; outline: none; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #4b5563; transition: .3s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        input:checked + .slider { background-color: #10b981; }
+        input:checked + .slider:before { transform: translateX(20px); }
 
         /* --- 分類標籤 --- */
-        .category-container { display: flex; overflow-x: auto; white-space: nowrap; width: 100%; max-width: 600px; padding: 10px; gap: 10px; scrollbar-width: none; }
+        .category-container { display: flex; overflow-x: auto; white-space: nowrap; width: 100%; max-width: 600px; padding: 5px 15px 15px 15px; gap: 10px; scrollbar-width: none; box-sizing: border-box; }
         .category-container::-webkit-scrollbar { display: none; }
-        .tab-btn { background-color: #333; color: #ccc; border: none; border-radius: 20px; padding: 10px 18px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .tab-btn.active { background-color: #ff9800; color: white; box-shadow: 0 0 10px rgba(255,152,0,0.5); }
+        .tab-btn { background-color: #1f2937; color: #9ca3af; border: 1px solid #374151; border-radius: 20px; padding: 10px 20px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
 
-        /* --- 全新卡片式 UI (UX 優化) --- */
-        .grid-container { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 600px; padding: 15px; box-sizing: border-box; }
+        /* --- 卡片式 UI (極致易讀) --- */
+        .grid-container { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 600px; padding: 0 15px; box-sizing: border-box; }
+        .phrase-card { background: #1f2937; border-radius: 18px; padding: 18px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #374151; transition: transform 0.1s; }
+        .phrase-card:active { transform: scale(0.98); }
         
-        .phrase-card { background: #222; border-radius: 16px; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border-left: 5px solid #3b82f6; position: relative; }
-        
-        /* 左側文字區 */
-        .text-area { display: flex; flex-direction: column; flex: 1; margin-right: 10px; }
-        .zh-text { font-size: 18px; font-weight: bold; color: #fff; margin-bottom: 4px; }
-        .ja-text { font-size: 16px; color: #93c5fd; }
-        .romaji-text { font-size: 13px; color: #888; font-style: italic; margin-top: 2px; }
+        /* 文字區 */
+        .text-area { display: flex; flex-direction: column; flex: 1; margin-right: 12px; margin-left: 8px; }
+        .zh-text { font-size: 18px; font-weight: 700; color: #f9fafb; margin-bottom: 6px; }
+        .ja-text { font-size: 16px; color: #60a5fa; font-weight: 500; margin-bottom: 4px; }
+        .romaji-text { font-size: 13px; color: #9ca3af; font-family: "SF Pro Text", -apple-system, sans-serif; letter-spacing: 0.5px; }
 
-        /* 右側按鈕區 */
-        .action-area { display: flex; gap: 8px; }
-        .action-btn { width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; }
-        .play-btn { background: #3b82f6; color: white; box-shadow: 0 4px 0 #1e40af; }
-        .play-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #1e40af; }
-        .show-btn { background: #4b5563; color: white; box-shadow: 0 4px 0 #374151; }
-        .show-btn:active { transform: translateY(4px); box-shadow: 0 0 0 #374151; }
+        /* 按鈕區 */
+        .action-area { display: flex; gap: 10px; }
+        .action-btn { width: 48px; height: 48px; border-radius: 14px; border: none; font-size: 20px; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s; }
+        .play-btn { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .play-btn:active { background: #3b82f6; color: white; }
+        .show-btn { background: rgba(107, 114, 128, 0.2); color: #d1d5db; border: 1px solid rgba(107, 114, 128, 0.3); }
+        .show-btn:active { background: #6b7280; color: white; }
         
-        .fav-star { font-size: 22px; cursor: pointer; color: #555; margin-right: 10px; align-self: flex-start; margin-top: -2px; }
-        .fav-star.active { color: #ffeb3b; text-shadow: 0 0 8px rgba(255,235,59,0.5); }
+        .fav-star { font-size: 24px; cursor: pointer; color: #4b5563; align-self: flex-start; margin-top: -2px; user-select: none; transition: 0.2s; }
+        .fav-star.active { color: #fbbf24; text-shadow: 0 0 12px rgba(251, 191, 36, 0.4); }
+
+        /* --- 底部一鍵安裝列 --- */
+        .install-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: #3b82f6; color: white; border-radius: 16px; padding: 16px 20px; display: none; justify-content: space-between; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000; box-sizing: border-box; }
+        .install-text { font-size: 15px; font-weight: 600; line-height: 1.4; }
+        .install-btn { background: white; color: #3b82f6; border: none; padding: 8px 16px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; }
+        .close-install { background: none; border: none; color: rgba(255,255,255,0.7); font-size: 20px; margin-left: 10px; }
 
         /* --- 自訂發音區 --- */
-        .custom-area { background: #222; padding: 20px; border-radius: 16px; display: flex; flex-direction: column; gap: 15px; }
-        .custom-textarea { width: 100%; height: 120px; border-radius: 12px; background: #333; color: white; border: none; padding: 15px; font-size: 18px; box-sizing: border-box; resize: none; }
-        .custom-play-btn { background: #4CAF50; color: white; border: none; border-radius: 12px; padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        .custom-area { background: #1f2937; padding: 20px; border-radius: 18px; display: flex; flex-direction: column; gap: 15px; border: 1px solid #374151; }
+        .custom-textarea { width: 100%; height: 120px; border-radius: 12px; background: #111827; color: white; border: 1px solid #4b5563; padding: 15px; font-size: 18px; box-sizing: border-box; resize: none; outline: none; }
+        .custom-play-btn { background: #10b981; color: white; border: none; border-radius: 12px; padding: 15px; font-size: 18px; font-weight: bold; cursor: pointer; }
 
-        /* --- 舉牌模式 (全螢幕 Modal) --- */
+        /* --- 舉牌模式 Modal --- */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: #000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .modal-ja { color: #fff; font-size: 10vw; /* 根據螢幕寬度自動調整巨大字體 */ font-weight: bold; text-align: center; line-height: 1.4; word-wrap: break-word; }
-        .modal-zh { color: #888; font-size: 20px; margin-top: 30px; text-align: center; }
-        .close-modal-btn { margin-top: 50px; background: #333; color: white; border: 2px solid #555; padding: 15px 40px; border-radius: 30px; font-size: 20px; cursor: pointer; }
+        .modal-ja { color: #fff; font-size: 12vw; font-weight: 900; text-align: center; line-height: 1.3; }
+        .modal-zh { color: #9ca3af; font-size: 22px; margin-top: 30px; text-align: center; font-weight: 500; }
+        .close-modal-btn { margin-top: 50px; background: #1f2937; color: white; border: 1px solid #374151; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <h1>🇯🇵 日本旅遊神器 Ultimate</h1>
+    <h1>🇯🇵 日本旅遊神器 Pro Max</h1>
 
     <div class="controls-container">
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋你想說的中文或日文...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋中文、日文或羅馬拼音...">
         <div class="controls">
             <div class="toggle-group"><label class="switch"><input type="checkbox" id="voiceGenderToggle"><span class="slider"></span></label><span id="genderLabel">女聲</span></div>
             <div class="toggle-group"><label class="switch"><input type="checkbox" id="volumeToggle"><span class="slider"></span></label><span>大音量</span></div>
@@ -81,39 +88,82 @@
     <div class="category-container" id="category-container"></div>
     <div class="grid-container" id="button-container"></div>
 
+    <div id="installBar" class="install-bar">
+        <div class="install-text" id="installText">將此工具安裝到桌面<br><span style="font-size: 12px; font-weight: normal; opacity: 0.9;">出國離線也能一鍵秒開！</span></div>
+        <div>
+            <button class="install-btn" id="installBtn">安裝 APP</button>
+            <button class="close-install" onclick="document.getElementById('installBar').style.display='none'">✖</button>
+        </div>
+    </div>
+
     <div id="fullScreenModal" class="modal">
         <div class="modal-ja" id="modalJaText"></div>
         <div class="modal-zh" id="modalZhText"></div>
-        <button class="close-modal-btn" onclick="closeModal()">✖ 關閉</button>
+        <button class="close-modal-btn" onclick="closeModal()">✖ 點擊關閉</button>
     </div>
 
     <script>
-        // --- 1. 資料庫 (加入羅馬拼音示範) ---
-        // 為了確保你看得懂結構，我幫「基本禮貌」加上了 romaji 欄位。你可以依樣畫葫蘆加到其他句型！
+        // --- 1. 極致精準翻譯 & 百大語庫 (含羅馬拼音) ---
         const phrasesData = {
-            "👋 基本禮貌": [
+            "👋 招呼/禮貌": [
                 { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" }, 
-                { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou gozaimasu" },
-                { zh: "不好意思 / 請問一下", ja: "すみません", romaji: "Sumimasen" }, 
-                { zh: "沒關係 / 不要緊", ja: "大丈夫です", romaji: "Daijoubu desu" },
-                { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" }
+                { zh: "謝謝 (敬語)", ja: "ありがとうございます", romaji: "Arigatou gozaimasu" },
+                { zh: "不好意思 / 請問", ja: "すみません", romaji: "Sumimasen" }, 
+                { zh: "沒關係 / 不需要", ja: "大丈夫です", romaji: "Daijoubu desu" },
+                { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" },
+                { zh: "辛苦了", ja: "お疲れ様です", romaji: "Otsukaresama desu" },
+                { zh: "我聽不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga wakarimasen" },
+                { zh: "請再說一次", ja: "もう一度言ってください", romaji: "Mou ichido itte kudasai" }
             ],
             "🛃 機場/飯店": [
-                { zh: "我是來旅遊的", ja: "観光できました" }, { zh: "我要辦理入住", ja: "チェックインをお願いします" },
-                { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか" }, { zh: "請幫我叫計程車", ja: "タクシーを呼んでください" }
+                { zh: "我是來旅遊的", ja: "観光できました", romaji: "Kankou de kimashita" }, 
+                { zh: "我要辦理入住", ja: "チェックインをお願いします", romaji: "Chekku-in o onegaishimasu" },
+                { zh: "我要退房", ja: "チェックアウトをお願いします", romaji: "Chekku-auto o onegaishimasu" },
+                { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか", romaji: "Nimotsu o azukatte moraemasu ka" },
+                { zh: "早餐是幾點？", ja: "朝食は何時からですか", romaji: "Choushoku wa nanji kara desu ka" },
+                { zh: "房間沒有熱水", ja: "お湯が出ません", romaji: "Oyu ga demasen" },
+                { zh: "請幫我叫計程車", ja: "タクシーを呼んでください", romaji: "Takushii o yonde kudasai" }
             ],
             "🛍️ 購物/藥妝": [
-                { zh: "請問這個多少錢？", ja: "これはいくらですか" }, { zh: "我要買這個", ja: "これをください" },
-                { zh: "可以免稅嗎？", ja: "免税できますか" }, { zh: "可以刷卡嗎？", ja: "クレジットカードは使えますか" },
-                { zh: "請分開包裝", ja: "別々に包んでください" }
+                { zh: "請問這個多少錢？", ja: "これはいくらですか", romaji: "Kore wa ikura desu ka" }, 
+                { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" },
+                { zh: "可以免稅嗎？", ja: "免税できますか", romaji: "Menzei dekimasu ka" }, 
+                { zh: "有全新的嗎？", ja: "新しいものはありますか", romaji: "Atarashii mono wa arimasu ka" },
+                { zh: "有其他顏色嗎？", ja: "別の色はありますか", romaji: "Betsu no iro wa arimasu ka" },
+                { zh: "有大一點的尺寸嗎？", ja: "もう少し大きいサイズはありますか", romaji: "Mou sukoshi ookii saizu wa arimasu ka" },
+                { zh: "可以試穿嗎？", ja: "試着してもいいですか", romaji: "Shichaku shite mo ii desu ka" }, 
+                { zh: "可以刷卡嗎？", ja: "クレジットカードは使えますか", romaji: "Kurejitto kaado wa tsukaemasu ka" },
+                { zh: "請給我塑膠袋", ja: "レジ袋をお願いします", romaji: "Rejibukuro o onegaishimasu" },
+                { zh: "這是在日本製造的嗎？", ja: "これは日本製ですか", romaji: "Kore wa nihonsei desu ka" }
             ],
-            "🍜 餐廳點餐": [
-                { zh: "請給我菜單", ja: "メニューをお願いします" }, { zh: "請給我生啤酒", ja: "生ビールをお願いします" },
-                { zh: "不要加蔥", ja: "ネギは入れないでください" }, { zh: "我要結帳", ja: "お会計をお願いします" }
+            "🍜 餐廳/居酒屋": [
+                { zh: "兩位", ja: "2人です", romaji: "Futari desu" }, 
+                { zh: "請給我菜單", ja: "メニューをお願いします", romaji: "Menyuu o onegaishimasu" },
+                { zh: "有中文菜單嗎？", ja: "中国語のメニューはありますか", romaji: "Chuugokugo no menyuu wa arimasu ka" }, 
+                { zh: "請推薦招牌菜", ja: "おすすめは何ですか", romaji: "Osusume wa nan desu ka" },
+                { zh: "請給我冰水", ja: "お水をもらえますか", romaji: "Omizu o moraemasu ka" }, 
+                { zh: "請給我生啤酒", ja: "生ビールをお願いします", romaji: "Nama biiru o onegaishimasu" },
+                { zh: "我要去冰", ja: "氷なしでお願いします", romaji: "Koori nashi de onegaishimasu" }, 
+                { zh: "不要加蔥", ja: "ネギ抜きでお願いします", romaji: "Negi nuki de onegaishimasu" },
+                { zh: "非常好吃！", ja: "とても美味しいです", romaji: "Totemo oishii desu" }, 
+                { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei o onegaishimasu" },
+                { zh: "可以分開結帳嗎？", ja: "別々に払えますか", romaji: "Betsubetsu ni haraemasu ka" }
             ],
-            "🚇 交通/網路": [
-                { zh: "洗手間在哪裡？", ja: "トイレはどこですか" }, { zh: "車站怎麼走？", ja: "駅はどこですか" },
-                { zh: "請問這裡有Wi-Fi嗎？", ja: "ここにWi-Fiはありますか" }
+            "🚇 交通/問路": [
+                { zh: "洗手間在哪裡？", ja: "トイレはどこですか", romaji: "Toire wa doko desu ka" }, 
+                { zh: "車站怎麼走？", ja: "駅はどこですか", romaji: "Eki wa doko desu ka" },
+                { zh: "我想去這個地方", ja: "ここに行きたいです", romaji: "Koko ni ikitai desu" },
+                { zh: "這班車有到新宿嗎？", ja: "この電車は新宿に行きますか", romaji: "Kono densha wa Shinjuku ni ikimasu ka" }, 
+                { zh: "在哪裡買票？", ja: "切符売り場はどこですか", romaji: "Kippuuriba wa doko desu ka" },
+                { zh: "可以幫我拍照嗎？", ja: "写真を撮ってもらえませんか", romaji: "Shashin o totte moraemasen ka" }
+            ],
+            "🆘 醫療/緊急": [
+                { zh: "請幫幫我", ja: "助けてください", romaji: "Tasukete kudasai" }, 
+                { zh: "我遺失了護照", ja: "パスポートをなくしました", romaji: "Pasupooto o nakushimashita" },
+                { zh: "請幫我叫救護車", ja: "救急車を呼んでください", romaji: "Kyuukyuusha o yonde kudasai" },
+                { zh: "我身體不舒服", ja: "気分が悪いです", romaji: "Kibun ga warui desu" }, 
+                { zh: "我對花生過敏", ja: "ピーナッツアレルギーがあります", romaji: "Piinattsu arerugii ga arimasu" }, 
+                { zh: "我對海鮮過敏", ja: "シーフードアレルギーがあります", romaji: "Shiifuudo arerugii ga arimasu" }
             ]
         };
 
@@ -127,7 +177,7 @@
         const turtleToggle = document.getElementById('turtleToggle');
         const searchInput = document.getElementById('searchInput');
 
-        genderToggle.addEventListener('change', (e) => { document.getElementById('genderLabel').textContent = e.target.checked ? "男聲(若支援)" : "女聲"; });
+        genderToggle.addEventListener('change', (e) => { document.getElementById('genderLabel').textContent = e.target.checked ? "男聲(若有)" : "女聲"; });
         window.speechSynthesis.onvoiceschanged = () => { japaneseVoices = window.speechSynthesis.getVoices().filter(v => v.lang.includes('ja')); };
 
         function speakText(text) {
@@ -136,8 +186,8 @@
             window.speechSynthesis.cancel(); 
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
-            utterance.rate = turtleToggle.checked ? 0.4 : 0.85;
-            if (volumeToggle.checked) { utterance.volume = 1.0; utterance.pitch = 1.2; } else { utterance.volume = 0.8; utterance.pitch = 1.0; }
+            utterance.rate = turtleToggle.checked ? 0.45 : 0.85;
+            if (volumeToggle.checked) { utterance.volume = 1.0; utterance.pitch = 1.1; } else { utterance.volume = 0.8; utterance.pitch = 1.0; }
             if (japaneseVoices.length > 0) {
                 utterance.voice = (genderToggle.checked && japaneseVoices.length > 1) ? 
                     (japaneseVoices.find(v => v.name.toLowerCase().includes('male')) || japaneseVoices[1]) : japaneseVoices[0];
@@ -153,31 +203,24 @@
             renderCards(currentCategory, searchInput.value);
         }
 
-        // 全螢幕展示邏輯
         function openModal(ja, zh) {
             document.getElementById('modalJaText').textContent = ja;
             document.getElementById('modalZhText').textContent = zh;
             document.getElementById('fullScreenModal').style.display = 'flex';
         }
-        function closeModal() {
-            document.getElementById('fullScreenModal').style.display = 'none';
-        }
+        function closeModal() { document.getElementById('fullScreenModal').style.display = 'none'; }
 
         function renderCards(categoryName, searchQuery = "") {
             const container = document.getElementById('button-container');
             container.innerHTML = ''; 
 
-            // 如果點擊的是自訂發音區
             if (categoryName === '✏️ 自訂') {
                 container.innerHTML = `
                     <div class="custom-area">
-                        <div style="color:#aaa; font-size:14px; line-height:1.5;">
-                            💡 <b>提醒</b>：離線版無法即時中翻日。請先使用翻譯軟體翻成日文後，貼到下方發音。
-                        </div>
-                        <textarea id="customInput" class="custom-textarea" placeholder="在此輸入或貼上日文 (例如: トイレはどこですか)"></textarea>
+                        <div style="color:#9ca3af; font-size:14px; line-height:1.5;">💡 提示：輸入日文後點擊播放。可搭配翻譯軟體使用。</div>
+                        <textarea id="customInput" class="custom-textarea" placeholder="在此輸入或貼上日文..."></textarea>
                         <button class="custom-play-btn" onclick="speakText(document.getElementById('customInput').value)">🔊 唸出日文</button>
-                    </div>
-                `;
+                    </div>`;
                 return;
             }
 
@@ -196,7 +239,7 @@
             }
 
             if (phrasesToRender.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#888; margin-top:30px;">沒有找到相關的句子喔 🥺</p>'; return;
+                container.innerHTML = '<p style="text-align:center; color:#6b7280; margin-top:30px;">查無相關句子喔</p>'; return;
             }
 
             const uniquePhrases = [...new Map(phrasesToRender.map(item => [item.ja, item])).values()];
@@ -205,7 +248,6 @@
                 const isFav = favorites.includes(item.ja);
                 const romajiHtml = item.romaji ? `<div class="romaji-text">${item.romaji}</div>` : '';
                 
-                // 建立卡片 HTML
                 const card = document.createElement('div');
                 card.className = 'phrase-card';
                 card.innerHTML = `
@@ -216,7 +258,7 @@
                         ${romajiHtml}
                     </div>
                     <div class="action-area">
-                        <button class="action-btn show-btn" onclick="openModal('${item.ja}', '${item.zh}')" title="全螢幕顯示">🪧</button>
+                        <button class="action-btn show-btn" onclick="openModal('${item.ja}', '${item.zh}')" title="全螢幕">🪧</button>
                         <button class="action-btn play-btn" onclick="speakText('${item.ja}')" title="播放">🔊</button>
                     </div>
                 `;
@@ -226,6 +268,38 @@
 
         searchInput.addEventListener('input', (e) => renderCards(currentCategory, e.target.value));
 
+        // --- 4. 終極 PWA 一鍵安裝邏輯 ---
+        let deferredPrompt;
+        const installBar = document.getElementById('installBar');
+        const installBtn = document.getElementById('installBtn');
+        const installText = document.getElementById('installText');
+
+        // 攔截 Android/Chrome 的安裝提示
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBar.style.display = 'flex'; // 顯示我們自訂的安裝列
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') { installBar.style.display = 'none'; }
+                deferredPrompt = null;
+            }
+        });
+
+        function checkInstallPrompt() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (!isStandalone && /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase())) {
+                // 如果是 iOS 且還沒安裝，顯示教學提示
+                installText.innerHTML = "💡 <b>iOS 安裝秘訣</b><br><span style='font-size:12px; font-weight:normal;'>點擊瀏覽器下方「分享」圖示，選擇「加入主畫面」即可離線使用！</span>";
+                installBtn.style.display = 'none'; // 隱藏按鈕，因為 iOS 無法用按鈕觸發
+                installBar.style.display = 'flex';
+            }
+        }
+
         function initApp() {
             const categoryContainer = document.getElementById('category-container');
             const categories = ['⭐ 最愛', '🌟 全部', ...Object.keys(phrasesData), '✏️ 自訂'];
@@ -233,22 +307,3 @@
             categories.forEach((category, index) => {
                 const tabBtn = document.createElement('button');
                 tabBtn.className = 'tab-btn';
-                tabBtn.textContent = category;
-                
-                if (category === '🌟 全部') { tabBtn.classList.add('active'); currentCategory = '🌟 全部'; renderCards(currentCategory); }
-                
-                tabBtn.onclick = () => {
-                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                    tabBtn.classList.add('active');
-                    currentCategory = category;
-                    searchInput.value = '';
-                    renderCards(category);
-                };
-                categoryContainer.appendChild(tabBtn);
-            });
-        }
-
-        initApp();
-    </script>
-</body>
-</html>
