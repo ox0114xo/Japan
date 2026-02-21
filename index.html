@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Ultra 語音平權版</title>
+    <title>日本旅遊神器 Ultra 語音平權防彈版</title>
     <meta property="og:title" content="日本旅遊神器 Ultra">
     <meta property="og:description" content="內建海量實用旅遊日語。支援離線收藏、發音與即時翻譯，助您日本行溝通無阻。">
-    
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/197/197604.png">
+
     <script>
         (function() {
             var ua = navigator.userAgent || navigator.vendor || window.opera;
@@ -59,17 +60,14 @@
         .c-res { padding: 15px; color: var(--green); font-weight: bold; font-size: 18px; text-align: center; min-height: 30px; }
         .c-btn { width: 100%; padding: 15px; background: var(--green); color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 18px; }
 
-        /* 模態框共用樣式 */
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
-        
-        /* 放大顯示框 */
         .m-ja { font-size: 12vw; font-weight: 900; color: #fff; text-align: center; }
         .m-zh { font-size: 22px; color: var(--sub); margin-top: 30px; }
         .m-close { margin-top: 40px; padding: 15px 50px; background: #1e293b; color: #fff; border-radius: 30px; font-size: 18px; font-weight: bold; border: 1px solid var(--border); cursor:pointer;}
         
-        /* 🚑 語音急救教學面板 (加強滾動防溢出) */
+        /* 🚑 語音急救教學面板 */
         .tts-box { background: #1e293b; border: 1px solid var(--border); border-radius: 20px; padding: 25px; max-width: 400px; width: 100%; box-sizing: border-box; text-align: left; box-shadow: 0 20px 50px rgba(0,0,0,0.5); max-height: 85vh; overflow-y: auto; }
-        .tts-title { color: var(--red); font-size: 22px; font-weight: 900; text-align: center; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .tts-title { color: var(--red); font-size: 22px; font-weight: 900; text-align: center; margin-bottom: 10px; }
         .tts-step { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .tts-os { color: var(--blue); font-weight: bold; font-size: 16px; margin-bottom: 8px; border-bottom: 1px solid rgba(59,130,246,0.3); padding-bottom: 5px; }
         .tts-txt { color: #fff; font-size: 14px; line-height: 1.6; }
@@ -87,7 +85,7 @@
 
     <div id="inAppBlocker">
         <div class="b-title">⚠️</div>
-        <div class="b-text">偵測到內部瀏覽器<br><br><span style="color:#94a3b8;font-size:16px;">內部瀏覽器會限制「發音功能」<br>為確保出國正常運作，請切換瀏覽器。</span></div>
+        <div class="b-text">偵測到內部瀏覽器<br><br><span style="color:#94a3b8;font-size:16px;">這會導致網頁「無法發出聲音」<br>為確保出國正常運作，請切換瀏覽器。</span></div>
         <div class="b-hint">👉 請點擊右上角的「⋮」或「⠇」<br><br>👉 選擇「使用預設瀏覽器開啟」<br><span style="font-size:14px;color:#94a3b8;">( 以 Chrome 或 Safari 開啟即可發音 )</span></div>
     </div>
 
@@ -150,8 +148,8 @@
     </div>
 
     <script>
-        // 🚀 高密度壓縮語料庫 (絕對穩定，300+ 句涵蓋量)
-        const D = {
+        // 🚀 完整語料庫
+        var D = {
             "👋 常用": [
                 {z:"你好",j:"こんにちは",r:"Konnichiwa"},{z:"謝謝",j:"ありがとうございます",r:"Arigatou"},{z:"不好意思",j:"すみません",r:"Sumimasen"},{z:"沒關係",j:"大丈夫です",r:"Daijoubu"},{z:"拜託了",j:"お願いします",r:"Onegaishimasu"},{z:"對不起",j:"ごめんなさい",r:"Gomennasai"},{z:"早安",j:"おはようございます",r:"Ohayou"},{z:"晚安",j:"こんばんは",r:"Konbanwa"},{z:"不懂日文",j:"日本語がわかりません",r:"Nihongo ga wakarimasen"},{z:"再說一次",j:"もう一度言ってください",r:"Mou ichido"},{z:"好的",j:"はい",r:"Hai"},{z:"不是",j:"いいえ",r:"Iie"},{z:"幫大忙了",j:"助かりました",r:"Tasukari"},{z:"慢一點",j:"ゆっくり話してください",r:"Yukkuri"},{z:"這是什麼",j:"これは何ですか",r:"Kore wa nan desu ka"}
             ],
@@ -178,150 +176,177 @@
             ]
         };
 
-        const HDN = [
+        var HDN = [
             {z:"笨蛋",j:"馬鹿 (ばか)",r:"Baka"},{z:"白癡",j:"阿呆 (あほう)",r:"Ahou"},{z:"去死",j:"死ね (しね)",r:"Shine"},{z:"混蛋",j:"馬鹿野郎",r:"Bakayarou"},{z:"吵死了",j:"うるさい",r:"Urusai"},{z:"變態",j:"変態 (へんたい)",r:"Hentai"},{z:"畜生",j:"畜生 (ちくしょう)",r:"Chikusho"}
         ];
 
-        let cur = '🌟 全部', favs = [], hist = [], clk = 0;
-        try { 
-            let f = localStorage.getItem('jp_f'); if(f) favs = JSON.parse(f);
-            let h = localStorage.getItem('jp_h'); if(h) hist = JSON.parse(h);
-        } catch(e) {}
+        var cur = '🌟 全部', favs = [], hist = [], clk = 0;
+        
+        // 頁面載入後執行，確保穩定
+        window.onload = function() {
+            try { 
+                var f = localStorage.getItem('jp_f'); if(f) favs = JSON.parse(f);
+                var h = localStorage.getItem('jp_h'); if(h) hist = JSON.parse(h);
+            } catch(e) {}
 
-        // 🚑 呼叫語音急救面板
-        function showTutorial() {
-            document.getElementById('ttsGuideModal').style.display = 'flex';
-        }
+            function showTutorial() { document.getElementById('ttsGuideModal').style.display = 'flex'; }
 
-        function spk(txt, item) {
-            // 防禦1：瀏覽器不支援
-            if (!window.speechSynthesis) {
-                showTutorial();
-                return;
-            }
-
-            // 防禦2：檢查語音包
-            let voices = window.speechSynthesis.getVoices();
-            if (voices.length > 0) {
-                let hasJa = false;
-                for(let i=0; i<voices.length; i++) {
-                    if(voices[i].lang.indexOf('ja') > -1) { hasJa = true; break; }
+            window.spk = function(txt, item) {
+                if (!window.speechSynthesis) { showTutorial(); return; }
+                var voices = window.speechSynthesis.getVoices();
+                if (voices.length > 0) {
+                    var hasJa = false;
+                    for(var i=0; i<voices.length; i++) { if(voices[i].lang.indexOf('ja') > -1) { hasJa = true; break; } }
+                    if(!hasJa) showTutorial();
                 }
-                if(!hasJa) showTutorial();
-            }
 
-            try {
-                window.speechSynthesis.cancel();
-                let u = new SpeechSynthesisUtterance(txt);
-                u.lang = 'ja-JP';
-                u.rate = document.getElementById('spd').checked ? 0.45 : 0.85;
-                u.volume = document.getElementById('vol').checked ? 1.0 : 0.8;
-                
-                // 防禦3：引擎崩潰或權限阻擋
-                u.onerror = function(e) {
-                    console.error('TTS 錯誤', e);
-                    showTutorial();
-                };
+                try {
+                    window.speechSynthesis.cancel();
+                    var u = new SpeechSynthesisUtterance(txt);
+                    u.lang = 'ja-JP';
+                    u.rate = document.getElementById('spd').checked ? 0.45 : 0.85;
+                    u.volume = document.getElementById('vol').checked ? 1.0 : 0.8;
+                    u.onerror = function(e) { showTutorial(); };
+                    window.speechSynthesis.speak(u);
+                } catch(e) { showTutorial(); }
 
-                window.speechSynthesis.speak(u);
-            } catch(e) { 
-                showTutorial(); 
-            }
-
-            if (item) {
-                hist = hist.filter(h => h.j !== item.j);
-                hist.unshift(item);
-                if (hist.length > 20) hist.pop();
-                try { localStorage.setItem('jp_h', JSON.stringify(hist)); } catch(e){}
-            }
-        }
-
-        if (window.speechSynthesis) {
-            window.speechSynthesis.onvoiceschanged = function() {
-                window.speechSynthesis.getVoices(); 
+                if (item) {
+                    var newHist = [];
+                    for(var j=0; j<hist.length; j++) { if(hist[j].j !== item.j) newHist.push(hist[j]); }
+                    newHist.unshift(item);
+                    if (newHist.length > 20) newHist.pop();
+                    hist = newHist;
+                    try { localStorage.setItem('jp_h', JSON.stringify(hist)); } catch(err){}
+                }
             };
-        }
 
-        function draw(cat, q) {
-            let box = document.getElementById('list');
-            box.innerHTML = '';
+            if (window.speechSynthesis) { window.speechSynthesis.onvoiceschanged = function() { window.speechSynthesis.getVoices(); }; }
+
+            window.draw = function(cat, q) {
+                var box = document.getElementById('list');
+                box.innerHTML = '';
+                
+                if (cat === '✏️ 自訂') {
+                    box.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="輸入中文..."></textarea><div id="cres" class="c-res"></div><button class="c-btn" onclick="trans()">🌍 翻譯並發音</button></div>';
+                    return;
+                }
+
+                var arr = [];
+                if (cat === '🌟 全部') { 
+                    for (var k in D) { arr = arr.concat(D[k]); } 
+                }
+                else if (cat === '⭐ 最愛') { 
+                    for (var key in D) {
+                        for(var x=0; x<D[key].length; x++) {
+                            if (favs.indexOf(D[key][x].j) > -1) arr.push(D[key][x]);
+                        }
+                    }
+                }
+                else if (cat === '🕒 最近') { arr = hist; }
+                else if (cat === '🔞 隱藏') { arr = HDN; }
+                else { arr = D[cat] || []; }
+
+                if (q) {
+                    q = q.toLowerCase();
+                    var temp = [];
+                    for(var y=0; y<arr.length; y++) {
+                        if (arr[y].z.indexOf(q) > -1 || arr[y].j.indexOf(q) > -1 || (arr[y].r && arr[y].r.toLowerCase().indexOf(q) > -1)) {
+                            temp.push(arr[y]);
+                        }
+                    }
+                    arr = temp;
+                }
+
+                var uniq = []; var seen = {};
+                for (var z=0; z<arr.length; z++) {
+                    if (!seen[arr[z].j]) { seen[arr[z].j] = true; uniq.push(arr[z]); }
+                }
+
+                if(uniq.length === 0) { box.innerHTML = '<p style="color:#94a3b8;margin-top:30px;">查無資料</p>'; return; }
+
+                for (var i=0; i<uniq.length; i++) {
+                    (function(item) {
+                        var isF = favs.indexOf(item.j) > -1;
+                        var d = document.createElement('div');
+                        d.className = 'card';
+                        d.innerHTML = '<div class="card-in">' +
+                            '<div class="star ' + (isF ? 'active' : '') + '">★</div>' +
+                            '<div class="zh">' + item.z + '</div>' +
+                            '<div class="ja-box"><span class="ja">🔊 ' + item.j + '</span></div>' +
+                            '<div class="ro">' + (item.r||'') + '</div>' +
+                            '</div><button class="bar-btn">🪧 放大顯示</button>';
+                        
+                        d.onclick = function(e) { if(e.target.tagName !== 'BUTTON' && e.target.className.indexOf('star')===-1) spk(item.j, item); };
+                        d.querySelector('.star').onclick = function(e) {
+                            e.stopPropagation();
+                            var idx = favs.indexOf(item.j);
+                            if(idx > -1) favs.splice(idx,1); else favs.push(item.j);
+                            try{ localStorage.setItem('jp_f', JSON.stringify(favs)); }catch(err){}
+                            draw(cur, document.getElementById('search').value);
+                        };
+                        d.querySelector('.bar-btn').onclick = function(e) {
+                            e.stopPropagation();
+                            document.getElementById('m-ja').innerText = item.j;
+                            document.getElementById('m-zh').innerText = item.z;
+                            document.getElementById('mod').style.display = 'flex';
+                        };
+                        box.appendChild(d);
+                    })(uniq[i]);
+                }
+            };
+
+            window.trans = function() {
+                var q = document.getElementById('cin').value, r = document.getElementById('cres');
+                if(!q) return; r.innerText = '⏳ 翻譯中...';
+                fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair=zh-TW|ja')
+                .then(function(res) { return res.json(); })
+                .then(function(data) { r.innerText = data.responseData.translatedText; spk(r.innerText, null); })
+                .catch(function(e) { r.innerText = '❌ 網路錯誤'; });
+            };
+
+            document.getElementById('title').onclick = function() {
+                clk++;
+                if (clk === 10) {
+                    var b = document.createElement('button'); b.className = 'cat-btn'; b.style.color = '#ef4444'; b.style.borderColor = '#ef4444'; b.innerText = '🔞 隱藏';
+                    b.onclick = function() { setC('🔞 隱藏'); };
+                    document.getElementById('cat-box').prepend(b);
+                    setC('🔞 隱藏'); alert("😈 解鎖隱藏髒話模式！");
+                }
+            };
+
+            window.setC = function(c) {
+                cur = c;
+                var btns = document.querySelectorAll('.cat-btn, .btn-top');
+                for(var i=0; i<btns.length; i++) btns[i].classList.remove('active');
+                
+                if(c === '🕒 最近') document.getElementById('b-rec').classList.add('active');
+                else if(c === '⭐ 最愛') document.getElementById('b-fav').classList.add('active');
+                else {
+                    var cbtns = document.querySelectorAll('.cat-btn');
+                    for(var j=0; j<cbtns.length; j++) { if(cbtns[j].innerText === c) cbtns[j].classList.add('active'); }
+                }
+                draw(c, document.getElementById('search').value);
+            };
+
+            var cbox = document.getElementById('cat-box');
+            var baseCats = ['🌟 全部'];
+            for(var k in D) baseCats.push(k);
+            baseCats.push('✏️ 自訂');
+
+            for(var i=0; i<baseCats.length; i++) {
+                (function(c) {
+                    var b = document.createElement('button'); b.className = 'cat-btn' + (c==='🌟 全部'?' active':''); b.innerText = c;
+                    b.onclick = function() { document.getElementById('search').value = ''; setC(c); };
+                    cbox.appendChild(b);
+                })(baseCats[i]);
+            }
+
+            document.getElementById('b-rec').onclick = function() { setC('🕒 最近'); };
+            document.getElementById('b-fav').onclick = function() { setC('⭐ 最愛'); };
+            document.getElementById('search').oninput = function(e) { draw(cur, e.target.value); };
             
-            if (cat === '✏️ 自訂') {
-                box.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="輸入中文..."></textarea><div id="cres" class="c-res"></div><button class="c-btn" onclick="trans()">🌍 翻譯並發音</button></div>';
-                return;
-            }
-
-            let arr = [];
-            if (cat === '🌟 全部') { for (let k in D) arr.push(...D[k]); }
-            else if (cat === '⭐ 最愛') { for (let k in D) arr.push(...D[k].filter(i => favs.includes(i.j))); }
-            else if (cat === '🕒 最近') { arr = hist; }
-            else if (cat === '🔞 隱藏') { arr = HDN; }
-            else { arr = D[cat] || []; }
-
-            if (q) {
-                q = q.toLowerCase();
-                arr = arr.filter(i => i.z.includes(q) || i.j.includes(q) || (i.r && i.r.toLowerCase().includes(q)));
-            }
-
-            let uniq = []; let seen = new Set();
-            for (let i of arr) { if (!seen.has(i.j)) { seen.add(i.j); uniq.push(i); } }
-
-            if(uniq.length === 0) { box.innerHTML = '<p style="color:#94a3b8;margin-top:30px;">查無資料</p>'; return; }
-
-            uniq.forEach(i => {
-                let isF = favs.includes(i.j);
-                let d = document.createElement('div');
-                d.className = 'card';
-                d.innerHTML = `
-                    <div class="card-in">
-                        <div class="star ${isF?'active':''}">★</div>
-                        <div class="zh">${i.z}</div>
-                        <div class="ja-box"><span class="ja">🔊 ${i.j}</span></div>
-                        <div class="ro">${i.r||''}</div>
-                    </div>
-                    <button class="bar-btn">🪧 放大顯示</button>
-                `;
-                d.onclick = (e) => { if(e.target.tagName !== 'BUTTON') spk(i.j, i); };
-                d.querySelector('.star').onclick = (e) => {
-                    e.stopPropagation();
-                    let idx = favs.indexOf(i.j);
-                    if(idx > -1) favs.splice(idx,1); else favs.push(i.j);
-                    try{ localStorage.setItem('jp_f', JSON.stringify(favs)); }catch(err){}
-                    draw(cur, document.getElementById('search').value);
-                };
-                d.querySelector('.bar-btn').onclick = (e) => {
-                    e.stopPropagation();
-                    document.getElementById('m-ja').innerText = i.j;
-                    document.getElementById('m-zh').innerText = i.z;
-                    document.getElementById('mod').style.display = 'flex';
-                };
-                box.appendChild(d);
-            });
-        }
-
-        async function trans() {
-            let q = document.getElementById('cin').value, r = document.getElementById('cres');
-            if(!q) return; r.innerText = '⏳ 翻譯中...';
-            try {
-                let res = await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair=zh-TW|ja');
-                let data = await res.json(); 
-                r.innerText = data.responseData.translatedText; 
-                spk(r.innerText, null);
-            } catch(e) { r.innerText = '❌ 網路錯誤'; }
-        }
-
-        document.getElementById('title').onclick = () => {
-            clk++;
-            if (clk === 10) {
-                let b = document.createElement('button'); b.className = 'cat-btn'; b.style.color = '#ef4444'; b.style.borderColor = '#ef4444'; b.innerText = '🔞 隱藏';
-                b.onclick = function() { setC('🔞 隱藏'); };
-                document.getElementById('cat-box').prepend(b);
-                setC('🔞 隱藏'); alert("😈 解鎖隱藏髒話模式！");
-            }
+            draw('🌟 全部', '');
         };
-
-        function setC(c) {
-            cur = c;
-            document.querySelectorAll('.cat-btn, .btn-top').forEach(btn => btn.classList.remove('active'));
-            if(c === '🕒 最近') document.getElementById('b-rec').classList.add('active');
-            else i
+    </script>
+</body>
+</html>
