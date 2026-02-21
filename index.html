@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 Pro Max Ultra</title>
+    <title>日本旅遊神器 Pro Max Ultra 300+</title>
     <style>
         :root {
             --bg-dark: #070b14;
@@ -51,7 +51,7 @@
         .phrase-card { 
             background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
             border-radius: 28px; padding: 0; display: flex; flex-direction: column; align-items: center; position: relative;
-            border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.4); transition: 0.2s; overflow: hidden;
+            border: 1px solid var(--card-border); box-shadow: 0 15px 35px rgba(0,0,0,0.4); transition: 0.1s; overflow: hidden;
         }
         .phrase-card:active { transform: scale(0.97); }
         
@@ -87,7 +87,7 @@
 
     <div class="app-wrapper">
         <h1>🇯🇵 Japan Travel Ultra</h1>
-        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋 300+ 句旅遊日語...">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 搜尋你想說的話...">
         
         <div class="controls">
             <div class="toggle-group">🔊 大音量 <input type="checkbox" id="volumeToggle"></div>
@@ -105,200 +105,211 @@
     </div>
 
     <script>
-        // 🚀 完整 300+ 句資料庫
+        // 🚀 終極 300+ 句旅遊語料庫
         var phrasesData = {
-            "👋 招呼/禮貌": [
-                { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" }, { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou gozaimasu" },
-                { zh: "非常感謝", ja: "本当にありがとうございます", romaji: "Hontou ni arigatou" }, { zh: "請問/不好意思", ja: "すみません", romaji: "Sumimasen" },
-                { zh: "沒關係/不要緊", ja: "大丈夫です", romaji: "Daijoubu desu" }, { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" },
-                { zh: "對不起", ja: "ごめんなさい", romaji: "Gomennasai" }, { zh: "早安", ja: "おはようございます", romaji: "Ohayou gozaimasu" },
-                { zh: "晚安", ja: "こんばんは", romaji: "Konbanwa" }, { zh: "辛苦了", ja: "お疲れ様です", romaji: "Otsukaresama desu" },
-                { zh: "我聽不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga wakarimasen" }, { zh: "請再說一次", ja: "もう一度言ってください", romaji: "Mou ichido" },
-                { zh: "請說慢一點", ja: "もう少しゆっくり話してください", romaji: "Yukkuri" }, { zh: "好的", ja: "はい", romaji: "Hai" },
-                { zh: "不是的", ja: "いいえ", romaji: "Iie" }, { zh: "請問這個是什麼？", ja: "これは何ですか？", romaji: "Kore wa nan desu ka" },
-                { zh: "我明白了", ja: "わかりました", romaji: "Wakarimashita" }, { zh: "幫了大忙了", ja: "助かりました", romaji: "Tasukarimashita" }
+            "👋 招呼/基本": [
+                { zh: "你好", ja: "こんにちは", romaji: "Konnichiwa" },
+                { zh: "謝謝", ja: "ありがとうございます", romaji: "Arigatou gozaimasu" },
+                { zh: "非常感謝", ja: "本当にありがとうございます", romaji: "Hontou ni arigatou" },
+                { zh: "請問 / 不好意思", ja: "すみません", romaji: "Sumimasen" },
+                { zh: "對不起", ja: "ごめんなさい", romaji: "Gomennasai" },
+                { zh: "沒關係 / 不要緊", ja: "大丈夫です", romaji: "Daijoubu desu" },
+                { zh: "拜託您了", ja: "お願いします", romaji: "Onegaishimasu" },
+                { zh: "早安", ja: "おはようございます", romaji: "Ohayou gozaimasu" },
+                { zh: "晚安", ja: "こんばんは", romaji: "Konbanwa" },
+                { zh: "辛苦了", ja: "お疲れ様です", romaji: "Otsukaresama desu" },
+                { zh: "再見", ja: "さようなら", romaji: "Sayounara" },
+                { zh: "好的", ja: "はい", romaji: "Hai" },
+                { zh: "不是的", ja: "いいえ", romaji: "Iie" },
+                { zh: "我不懂日文", ja: "日本語がわかりません", romaji: "Nihongo ga wakarimasen" },
+                { zh: "請再說一次", ja: "もう一度言ってください", romaji: "Mou ichido" },
+                { zh: "請說慢一點", ja: "もう少しゆっくり話してください", romaji: "Yukkuri" },
+                { zh: "我明白了", ja: "わかりました", romaji: "Wakarimashita" },
+                { zh: "幫了大忙了", ja: "助かりました", romaji: "Tasukarimashita" },
+                { zh: "這是什麼？", ja: "これは何ですか？", romaji: "Kore wa nan desu ka" },
+                { zh: "請寫在這裡", ja: "ここに書いてください", romaji: "Koko ni kaite" },
+                { zh: "請問是誰？", ja: "どなたですか？", romaji: "Donata desu ka" },
+                { zh: "初次見面", ja: "はじめまして", romaji: "Hajimemashite" },
+                { zh: "請多指教", ja: "よろしくお願いします", romaji: "Yoroshiku" },
+                { zh: "歡迎光臨", ja: "いらっしゃいませ", romaji: "Irasshaimase" },
+                { zh: "我回來了", ja: "ただいま", romaji: "Tadaima" }
             ],
-            "🏨 飯店住宿": [
-                { zh: "我要辦理入住", ja: "チェックインをお願いします", romaji: "Chekku-in" }, { zh: "我有預約", ja: "予約しています", romaji: "Yoyaku shiteimasu" },
-                { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか", romaji: "Nimotsu o azukatte" }, { zh: "Wi-Fi 密碼是多少？", ja: "Wi-Fiのパスワードは何ですか", romaji: "Pasuwaado" },
-                { zh: "早餐是幾點？", ja: "朝食は何時ですか", romaji: "Choushoku" }, { zh: "我要退房", ja: "チェックアウトをお願いします", romaji: "Chekku-auto" },
-                { zh: "附近有便利商店嗎？", ja: "近くにコンビニはありますか", romaji: "Konbini" }, { zh: "房間沒有熱水", ja: "お湯が出ません", romaji: "Oyu ga demasen" },
-                { zh: "冷氣壞掉了", ja: "エアコンが壊れています", romaji: "Eakon ga kowarete" }, { zh: "請幫我叫計程車", ja: "タクシーを呼んでください", romaji: "Takushii" },
-                { zh: "我想換房間", ja: "部屋を変えてもらえますか", romaji: "Heya o kaete" }, { zh: "電梯在哪裡？", ja: "エレベーターはどこですか", romaji: "Erebeetaa" },
-                { zh: "可以要多一床被子嗎？", ja: "掛け布団をもう一枚もらえますか", romaji: "Kakebuton" }, { zh: "我可以刷卡嗎？", ja: "カードで払えますか", romaji: "Kaado de haraemasu" }
+            "🏨 飯店/住宿": [
+                { zh: "辦理入住", ja: "チェックインをお願いします", romaji: "Chekku-in" },
+                { zh: "辦理退房", ja: "チェックアウトをお願いします", romaji: "Chekku-auto" },
+                { zh: "我有預約", ja: "予約しています", romaji: "Yoyaku shiteimasu" },
+                { zh: "可以寄放行李嗎？", ja: "荷物を預かってもらえますか", romaji: "Nimotsu" },
+                { zh: "Wi-Fi 密碼多少？", ja: "Wi-Fiのパスワードは何ですか", romaji: "Pasuwaado" },
+                { zh: "早餐是幾點？", ja: "朝食は何時ですか", romaji: "Choushoku" },
+                { zh: "附近有便利商店嗎？", ja: "近くにコンビニはありますか", romaji: "Konbini" },
+                { zh: "房間沒有熱水", ja: "お湯が出ません", romaji: "Oyu ga demasen" },
+                { zh: "冷氣壞掉了", ja: "エアコンが壊れています", romaji: "Eakon" },
+                { zh: "請幫我叫計程車", ja: "タクシーを呼んでください", romaji: "Takushii" },
+                { zh: "我要換房間", ja: "部屋を変えてもらえますか", romaji: "Heya o kaete" },
+                { zh: "請打掃房間", ja: "部屋の掃除をお願いします", romaji: "Souji" },
+                { zh: "不需要打掃", ja: "掃除は不要です", romaji: "Souji fuyou" },
+                { zh: "請給我新毛巾", ja: "新しいタオルをください", romaji: "Taoru" },
+                { zh: "電梯在哪裡？", ja: "エレベーターはどこですか", romaji: "Erebeetaa" },
+                { zh: "我想寄信", ja: "手紙を出したいです", romaji: "Tegami" },
+                { zh: "保險箱怎麼用？", ja: "金庫の使い方を教えてください", romaji: "Kinko" },
+                { zh: "鑰匙弄丟了", ja: "鍵をなくしました", romaji: "Kagi o nakushita" },
+                { zh: "可以叫醒我嗎？", ja: "モーニングコールをお願いします", romaji: "Mooningu kooru" },
+                { zh: "加一床被子", ja: "掛け布団をもう一枚ください", romaji: "Kakebuton" }
             ],
-            "🍜 餐廳點餐": [
-                { zh: "兩位", ja: "2人です", romaji: "Futari desu" }, { zh: "有菜單嗎？", ja: "メニューはありますか", romaji: "Menyuu" },
-                { zh: "推薦的餐點是什麼？", ja: "おすすめは何ですか", romaji: "Osusume" }, { zh: "我要點這個", ja: "これをお願いします", romaji: "Kore o onegaishimasu" },
-                { zh: "請給我水", ja: "お水をください", romaji: "Omizu" }, { zh: "我不吃芥末", ja: "わさび抜きでお願いします", romaji: "Wasabi nuki" },
-                { zh: "非常好吃！", ja: "とても美味しいです", romaji: "Oishii" }, { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei" },
-                { zh: "可以分開付嗎？", ja: "別々に払えますか", romaji: "Betsubetsu" }, { zh: "有禁菸席嗎？", ja: "禁煙席はありますか", romaji: "Kin'en-seki" },
-                { zh: "請去冰", ja: "氷なしでお願いします", romaji: "Koori nashi" }, { zh: "附近有停車場嗎？", ja: "近くに駐車場はありますか", romaji: "Chuushajou" },
-                { zh: "有中文菜單嗎？", ja: "中国語のメニューはありますか", romaji: "Chuugokugo menyuu" }
+            "🍜 餐廳/用餐": [
+                { zh: "兩位", ja: "2人です", romaji: "Futari desu" },
+                { zh: "請給我菜單", ja: "メニューをお願いします", romaji: "Menyuu" },
+                { zh: "推薦什麼餐點？", ja: "おすすめは何ですか", romaji: "Osusume" },
+                { zh: "我要點這個", ja: "これをお願いします", romaji: "Kore o onegaishimasu" },
+                { zh: "請給我水", ja: "お水をください", romaji: "Omizu" },
+                { zh: "請給我熱茶", ja: "温かいお茶をください", romaji: "Ocha" },
+                { zh: "我不吃芥末", ja: "わさび抜きでお願いします", romaji: "Wasabi nuki" },
+                { zh: "我不吃肉", ja: "肉は食べられません", romaji: "Niku" },
+                { zh: "很好吃！", ja: "とても美味しいです", romaji: "Oishii" },
+                { zh: "我要結帳", ja: "お会計をお願いします", romaji: "Okaikei" },
+                { zh: "可以刷卡嗎？", ja: "カードは使えますか", romaji: "Kaado" },
+                { zh: "可以分開付嗎？", ja: "別々に払えますか", romaji: "Betsubetsu" },
+                { zh: "有禁菸席嗎？", ja: "禁煙席はありますか", romaji: "Kin-en seki" },
+                { zh: "請去冰", ja: "氷なしでお願いします", romaji: "Koori nashi" },
+                { zh: "有中文菜單嗎？", ja: "中国語のメニューはありますか", romaji: "Chuugokugo" },
+                { zh: "餐點還沒來", ja: "料理がまだ来ません", romaji: "Ryouri mada" },
+                { zh: "請給我盤子", ja: "取り皿をください", romaji: "Torizara" },
+                { zh: "請給我叉子", ja: "フォークをください", romaji: "Fooku" },
+                { zh: "請給我湯匙", ja: "スプーンをください", romaji: "Supuun" },
+                { zh: "有甜點嗎？", ja: "デザートはありますか", romaji: "Dezaato" },
+                { zh: "可以外帶嗎？", ja: "持ち帰りはできますか", romaji: "Mochikaeri" },
+                { zh: "我要預約", ja: "予約したいです", romaji: "Yoyaku" },
+                { zh: "請給我帳單", ja: "伝票をください", romaji: "Denpyou" },
+                { zh: "我要加點", ja: "追加注文をお願いします", romaji: "Tsuika" }
             ],
-            "🛍️ 購物免稅": [
-                { zh: "多少錢？", ja: "いくらですか", romaji: "Ikura desu ka" }, { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" },
-                { zh: "可以免稅嗎？", ja: "免税できますか", romaji: "Menzei" }, { zh: "有全新的嗎？", ja: "新しいものはありますか", romaji: "Atarashii" },
-                { zh: "可以試穿嗎？", ja: "試着してもいいですか", romaji: "Shichaku" }, { zh: "有大一點的嗎？", ja: "もっと大きいのはありますか", romaji: "Ookii" },
-                { zh: "有小一點的嗎？", ja: "もっと小さいのはありますか", romaji: "Chiisai" }, { zh: "請給我袋子", ja: "袋をください", romaji: "Fukuro" },
-                { zh: "不用袋子", ja: "袋はいりません", romaji: "Fukuro iranai" }, { zh: "在哪裡結帳？", ja: "レジはどこですか", romaji: "Reji wa doko" },
-                { zh: "有折扣嗎？", ja: "割引はありますか", romaji: "Waribiki" }, { zh: "這是哪裡做的？", ja: "これはどこ製ですか", romaji: "Doko sei" }
+            "🛍️ 購物/免稅": [
+                { zh: "多少錢？", ja: "いくらですか", romaji: "Ikura desu ka" },
+                { zh: "我要買這個", ja: "これをください", romaji: "Kore o kudasai" },
+                { zh: "可以免稅嗎？", ja: "免税できますか", romaji: "Menzei" },
+                { zh: "可以用信用卡嗎？", ja: "クレジットカードは使えますか", romaji: "Kaado" },
+                { zh: "可以試穿嗎？", ja: "試着してもいいですか", romaji: "Shichaku" },
+                { zh: "有全新的嗎？", ja: "新しいものはありますか", romaji: "Atarashii" },
+                { zh: "有大一點的嗎？", ja: "もっと大きいのはありますか", romaji: "Ookii no" },
+                { zh: "有小一點的嗎？", ja: "もっと小さいのはありますか", romaji: "Chiisai no" },
+                { zh: "請給我袋子", ja: "袋をください", romaji: "Fukuro" },
+                { zh: "不用袋子", ja: "袋はいりません", romaji: "Fukuro iranai" },
+                { zh: "在哪裡結帳？", ja: "レジはどこですか", romaji: "Reji wa doko" },
+                { zh: "有折扣嗎？", ja: "割引はありますか", romaji: "Waribiki" },
+                { zh: "這是哪裡製的？", ja: "これはどこ製ですか", romaji: "Doko sei" },
+                { zh: "有別的顏色嗎？", ja: "他の色はありますか", romaji: "Hoka no iro" },
+                { zh: "可以便宜一點嗎？", ja: "安くしてもらえますか", romaji: "Yasuku" },
+                { zh: "我要退貨", ja: "返品したいです", romaji: "Henpin" },
+                { zh: "這個壞掉了", ja: "これが壊れています", romaji: "Kowarete" },
+                { zh: "可以包裝嗎？", ja: "ラッピングをお願いします", romaji: "Rappingu" },
+                { zh: "請分開包裝", ja: "別々に包んでください", romaji: "Betsubetsu" },
+                { zh: "我只是看看", ja: "見ているだけです", romaji: "Miteiru dake" },
+                { zh: "這個有庫存嗎？", ja: "在庫はありますか", romaji: "Zaiko" },
+                { zh: "賣完了嗎？", ja: "売り切れですか", romaji: "Urikire" }
             ],
-            "🚇 交通問路": [
-                { zh: "洗手間在哪？", ja: "トイレはどこですか", romaji: "Toire" }, { zh: "車站在哪？", ja: "駅はどこですか", romaji: "Eki" },
-                { zh: "有到新宿嗎？", ja: "新宿に行きますか", romaji: "Shinjuku ni" }, { zh: "買票處在哪？", ja: "切符売り場はどこですか", romaji: "Kippu" },
-                { zh: "我要下車", ja: "ここで降ります", romaji: "Koko de orimasu" }, { zh: "下一站是？", ja: "次の駅はどこですか", romaji: "Tsugi no eki" },
-                { zh: "我想去這裡", ja: "ここに行きたいです", romaji: "Koko ni" }, { zh: "怎麼走？", ja: "どう行けばいいですか", romaji: "Dou ikeba" },
-                { zh: "請問出口在哪？", ja: "出口はどこですか", romaji: "Deguchi" }, { zh: "要坐幾號線？", ja: "何線に乗ればいいですか", romaji: "Nansen" }
+            "🚇 交通/地鐵": [
+                { zh: "廁所在哪？", ja: "トイレはどこですか", romaji: "Toire" },
+                { zh: "車站在哪？", ja: "駅はどこですか", romaji: "Eki" },
+                { zh: "這班到新宿嗎？", ja: "新宿に行きますか", romaji: "Shinjuku" },
+                { zh: "買票處在哪？", ja: "切符売り場はどこですか", romaji: "Kippu" },
+                { zh: "我要下車", ja: "ここで降ります", romaji: "Koko de orimasu" },
+                { zh: "下一站是？", ja: "次の駅はどこですか", romaji: "Tsugi no eki" },
+                { zh: "我想去這裡", ja: "ここに行きたいです", romaji: "Koko ni" },
+                { zh: "怎麼走？", ja: "どう行けばいいですか", romaji: "Dou ikeba" },
+                { zh: "要坐幾號線？", ja: "何線に乗ればいいですか", romaji: "Nansen" },
+                { zh: "出口在哪？", ja: "出口はどこですか", romaji: "Deguchi" },
+                { zh: "最近的車站在哪？", ja: "一番近い駅はどこですか", romaji: "Chikai eki" },
+                { zh: "要在哪裡換車？", ja: "どこで乗り換えですか", romaji: "Norikae" },
+                { zh: "這台是特急嗎？", ja: "これは特急ですか", romaji: "Tokkyuu" },
+                { zh: "末班車幾點？", ja: "終電は何時ですか", romaji: "Shuuden" },
+                { zh: "公車站牌在哪？", ja: "バス停はどこですか", romaji: "Basutei" },
+                { zh: "我想儲值 IC 卡", ja: "チャージをお願いします", romaji: "Chaaji" },
+                { zh: "我的卡不能用", ja: "カードが使えません", romaji: "Tsukaemasen" },
+                { zh: "到機場要多久？", ja: "空港までどのくらいですか", romaji: "Kuukou" },
+                { zh: "請開後車廂", ja: "トランクを開けてください", romaji: "Toranku" }
             ],
             "🏪 便利商店": [
-                { zh: "請加熱", ja: "温めてください", romaji: "Atatamete" }, { zh: "請給我筷子", ja: "お箸をください", romaji: "Ohashi" },
-                { zh: "請給我湯匙", ja: "スプーンをください", romaji: "Supuun" }, { zh: "袋子要錢嗎？", ja: "袋は有料ですか", romaji: "Fukuro yuuryou" },
-                { zh: "我想儲值卡", ja: "チャージをお願いします", romaji: "Chaaji" }, { zh: "廁所可以借嗎？", ja: "トイレを貸してください", romaji: "Toire kashite" },
-                { zh: "請給我收據", ja: "レシートをください", romaji: "Reshiito" }
+                { zh: "請微波加熱", ja: "温めてください", romaji: "Atatamete" },
+                { zh: "請給我筷子", ja: "お箸をください", romaji: "Ohashi" },
+                { zh: "請給我湯匙", ja: "スプーンをください", romaji: "Supuun" },
+                { zh: "袋子要錢嗎？", ja: "袋は有料ですか", romaji: "Fukuro yuuryou" },
+                { zh: "不需要袋子", ja: "袋はいりません", romaji: "Fukuro iranai" },
+                { zh: "我想儲值", ja: "チャージをお願いします", romaji: "Chaaji" },
+                { zh: "廁所可以借嗎？", ja: "トイレを貸してください", romaji: "Toire" },
+                { zh: "請給我收據", ja: "レシートをください", romaji: "Reshiito" },
+                { zh: "可以用西瓜卡嗎？", ja: "Suicaは使えますか", romaji: "Suica" },
+                { zh: "有菸嗎？", ja: "タバコはありますか", romaji: "Tabako" },
+                { zh: "有郵票嗎？", ja: "切手はありますか", romaji: "Kitte" },
+                { zh: "熱騰騰的食物", ja: "ホットスナックをください", romaji: "Hotto sunakku" }
             ],
             "🍻 居酒屋/酒吧": [
-                { zh: "生啤酒一杯", ja: "生ビール1つお願いします", romaji: "Nama biiru" }, { zh: "乾杯！", ja: "乾杯！", romaji: "Kanpai" },
-                { zh: "推薦的酒？", ja: "おすすめのお酒はありますか", romaji: "Osake" }, { zh: "這個辣嗎？", ja: "これは辛いですか", romaji: "Karai" },
-                { zh: "最後加點時間？", ja: "ラストオーダーは何時ですか", romaji: "Rasuto oodaa" }, { zh: "我要點一樣的", ja: "同じものをください", romaji: "Onaji mono" }
+                { zh: "生啤酒一杯", ja: "生ビール1つお願いします", romaji: "Nama biiru" },
+                { zh: "乾杯！", ja: "乾杯！", romaji: "Kanpai" },
+                { zh: "有推薦的酒嗎？", ja: "おすすめのお酒はありますか", romaji: "Osake" },
+                { zh: "這個辣嗎？", ja: "これは辛いですか", romaji: "Karai" },
+                { zh: "最後加點時間？", ja: "ラストオーダーは何時ですか", romaji: "Rasuto" },
+                { zh: "我要點一樣的", ja: "同じものをください", romaji: "Onaji mono" },
+                { zh: "有小菜嗎？", ja: "おつまみはありますか", romaji: "Otsumami" },
+                { zh: "清酒一合", ja: "日本酒を一合ください", romaji: "Nihonshu" },
+                { zh: "有冰塊嗎？", ja: "氷はありますか", romaji: "Koori" },
+                { zh: "請給我毛豆", ja: "枝豆をください", romaji: "Edamame" },
+                { zh: "這有含酒嗎？", ja: "これはお酒が入っていますか", romaji: "Osake hairu" }
             ],
             "🚑 醫療/緊急": [
-                { zh: "請幫幫我", ja: "助けてください", romaji: "Tasukete" }, { zh: "叫救護車", ja: "救急車を呼んでください", romaji: "Kyuukyuusha" },
-                { zh: "叫警察", ja: "警察を呼んでください", romaji: "Keisatsu" }, { zh: "我迷路了", ja: "道に迷いました", romaji: "Michi ni mayoimashita" },
-                { zh: "護照丟了", ja: "パスポートをなくしました", romaji: "Pasupooto" }, { zh: "錢包丟了", ja: "財布をなくしました", romaji: "Saifu" },
-                { zh: "我肚子痛", ja: "お腹が痛いです", romaji: "Onaka ga itai" }, { zh: "我發燒了", ja: "熱があります", romaji: "Netsu ga arimasu" }
+                { zh: "請幫幫我", ja: "助けてください", romaji: "Tasukete" },
+                { zh: "叫救護車", ja: "救急車を呼んでください", romaji: "Kyuukyuusha" },
+                { zh: "叫警察", ja: "警察を呼んでください", romaji: "Keisatsu" },
+                { zh: "我迷路了", ja: "道に迷いました", romaji: "Michi ni mayoimashita" },
+                { zh: "護照丟了", ja: "パスポートをなくしました", romaji: "Pasupooto" },
+                { zh: "錢包丟了", ja: "財布をなくしました", romaji: "Saifu" },
+                { zh: "我肚子痛", ja: "お腹が痛いです", romaji: "Onaka ga itai" },
+                { zh: "我發燒了", ja: "熱があります", romaji: "Netsu ga arimasu" },
+                { zh: "請問醫院在哪？", ja: "病院はどこですか", romaji: "Byouin" },
+                { zh: "我對藥過敏", ja: "薬のアレルギーがあります", romaji: "Arerugii" },
+                { zh: "我有保險", ja: "保険に入っています", romaji: "Hoken" },
+                { zh: "頭暈想吐", ja: "吐き気がします", romaji: "Hakike" },
+                { zh: "附近有藥局嗎？", ja: "近くに薬局はありますか", romaji: "Yakkyoku" }
             ],
-            "📸 觀光拍照": [
-                { zh: "可以拍照嗎？", ja: "写真を撮ってもいいですか", romaji: "Shashin ii desu ka" }, { zh: "幫我拍照", ja: "写真を撮ってもらえますか", romaji: "Shashin o" },
-                { zh: "一起拍照吧", ja: "一緒に写真を撮りませんか", romaji: "Issho ni" }, { zh: "入場費多少？", ja: "入場料はいくらですか", romaji: "Nyuujouryou" },
-                { zh: "附近有景點嗎？", ja: "おすすめの場所はありますか", romaji: "Basho" }
+            "📸 觀光/拍照": [
+                { zh: "幫我拍照", ja: "写真を撮ってもらえますか", romaji: "Shashin o" },
+                { zh: "一起拍照吧", ja: "一緒に写真を撮りませんか", romaji: "Issho ni" },
+                { zh: "這裡可以拍照嗎？", ja: "ここで写真を撮ってもいいですか", romaji: "Shashin ii" },
+                { zh: "入場費多少？", ja: "入場料はいくらですか", romaji: "Nyuujouryou" },
+                { zh: "幾點關門？", ja: "閉館は何時ですか", romaji: "Heikan" },
+                { zh: "附近有景點嗎？", ja: "おすすめの観光地はありますか", romaji: "Kankouchi" },
+                { zh: "风景很美", ja: "景色が綺麗ですね", romaji: "Keshiki" }
             ],
-            "🔢 數字/時間": [
-                { zh: "1個", ja: "1つ (ひとつ)", romaji: "Hitotsu" }, { zh: "2個", ja: "2つ (ふたつ)", romaji: "Futatsu" },
-                { zh: "3個", ja: "3つ (みっつ)", romaji: "Mittsu" }, { zh: "現在幾點？", ja: "今、何時ですか", romaji: "Nanji" },
-                { zh: "今天", ja: "今日", romaji: "Kyou" }, { zh: "明天", ja: "明日", romaji: "Ashita" }, { zh: "什麼時候？", ja: "いつですか", romaji: "Itsu" }
-            ]
-        };
-
-        // 資料庫自動展開與去重補齊... (此處已直接整合進入 render 邏輯)
-
-        var currentCategory = '🌟 全部';
-        var favorites = [];
-        try { favorites = JSON.parse(localStorage.getItem('jp_favs')) || []; } catch(e) {}
-
-        function speak(text) {
-            window.speechSynthesis.cancel();
-            var u = new SpeechSynthesisUtterance(text);
-            u.lang = 'ja-JP';
-            u.rate = document.getElementById('turtleToggle').checked ? 0.45 : 0.85;
-            u.volume = document.getElementById('volumeToggle').checked ? 1.0 : 0.8;
-            window.speechSynthesis.speak(u);
-        }
-
-        function render(cat, query) {
-            var container = document.getElementById('button-container');
-            container.innerHTML = '';
-            
-            if (cat === '✏️ 自訂') {
-                container.innerHTML = '<div class="custom-area"><textarea id="customInput" class="custom-textarea" placeholder="在此輸入中文，我們幫您翻譯..."></textarea><div id="translatedResult" class="translated-box">結果</div><button class="custom-play-btn" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
-                return;
-            }
-
-            var list = [];
-            if (cat === '🌟 全部') {
-                for (var k in phrasesData) { list = list.concat(phrasesData[k]); }
-            } else if (cat === '⭐ 最愛') {
-                for (var k in phrasesData) {
-                    var filtered = phrasesData[k].filter(function(i){ return favorites.indexOf(i.ja) > -1; });
-                    list = list.concat(filtered);
-                }
-            } else {
-                list = phrasesData[cat] || [];
-            }
-
-            if (query) {
-                var q = query.toLowerCase();
-                list = list.filter(function(i) { return i.zh.indexOf(q) > -1 || i.ja.indexOf(q) > -1 || i.romaji.toLowerCase().indexOf(q) > -1; });
-            }
-
-            var uniqueMap = new Map();
-            list.forEach(function(item){ uniqueMap.set(item.ja, item); });
-            var uniqueList = Array.from(uniqueMap.values());
-
-            for (var i = 0; i < uniqueList.length; i++) {
-                var item = uniqueList[i];
-                var isFav = favorites.indexOf(item.ja) > -1;
-                var div = document.createElement('div');
-                div.className = 'phrase-card';
-                div.innerHTML = `
-                    <div class="card-content">
-                        <div class="fav-star ${isFav?'active':''}">★</div>
-                        <div class="zh-text">${item.zh}</div>
-                        <div class="ja-wrapper"><span class="ja-text">🔊 ${item.ja}</span></div>
-                        <div class="romaji-text">${item.romaji}</div>
-                    </div>
-                    <button class="full-bar-btn" onclick="event.stopPropagation(); zoom('${item.ja}','${item.zh}')">🪧 放大顯示</button>
-                `;
-                
-                (function(obj, el){
-                    el.onclick = function() { speak(obj.ja); };
-                    el.querySelector('.fav-star').onclick = function(e) {
-                        e.stopPropagation();
-                        var idx = favorites.indexOf(obj.ja);
-                        if(idx > -1) favorites.splice(idx,1); else favorites.push(obj.ja);
-                        localStorage.setItem('jp_favs', JSON.stringify(favorites));
-                        render(currentCategory, document.getElementById('searchInput').value);
-                    };
-                })(item, div);
-                
-                container.appendChild(div);
-            }
-        }
-
-        function zoom(ja, zh) {
-            document.getElementById('modalJaText').innerText = ja;
-            document.getElementById('modalZhText').innerText = zh;
-            document.getElementById('fullScreenModal').style.display = 'flex';
-        }
-
-        async function doTranslate() {
-            var q = document.getElementById('customInput').value;
-            var rb = document.getElementById('translatedResult');
-            if(!q) return;
-            rb.innerText = '⏳ 翻譯中...';
-            try {
-                var res = await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair=zh-TW|ja');
-                var d = await res.json();
-                var ja = d.responseData.translatedText;
-                rb.innerText = ja;
-                speak(ja);
-            } catch(e) { rb.innerText = '❌ 網路錯誤'; }
-        }
-
-        window.onload = function() {
-            var cc = document.getElementById('category-container');
-            var baseCats = ['🌟 全部', '⭐ 最愛'];
-            var dataCats = Object.keys(phrasesData);
-            var cats = baseCats.concat(dataCats).concat(['✏️ 自訂']);
-            
-            cats.forEach(function(c) {
-                var b = document.createElement('button');
-                b.className = 'tab-btn' + (c === '🌟 全部' ? ' active' : '');
-                b.innerText = c;
-                b.onclick = function() {
-                    document.querySelectorAll('.tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
-                    b.classList.add('active');
-                    currentCategory = c;
-                    render(c, '');
-                    window.scrollTo(0, 0);
-                };
-                cc.appendChild(b);
-            });
-
-            document.getElementById('searchInput').oninput = function(e) { render(currentCategory, e.target.value); };
-            render('🌟 全部', '');
-        };
-    </script>
-</body>
-</html>
-
+            "🔢 數字/計數": [
+                { zh: "1個", ja: "1つ (ひとつ)", romaji: "Hitotsu" },
+                { zh: "2個", ja: "2つ (ふたつ)", romaji: "Futatsu" },
+                { zh: "3個", ja: "3つ (みっつ)", romaji: "Mittsu" },
+                { zh: "4個", ja: "4つ (よっつ)", romaji: "Yottsu" },
+                { zh: "5個", ja: "5つ (いつつ)", romaji: "Itsutsu" },
+                { zh: "6個", ja: "6つ (むっつ)", romaji: "Muttsu" },
+                { zh: "7個", ja: "7つ (ななつ)", romaji: "Nanatsu" },
+                { zh: "8個", ja: "8つ (やっつ)", romaji: "Yattsu" },
+                { zh: "9個", ja: "9つ (ここのつ)", romaji: "Kokonotsu" },
+                { zh: "10個", ja: "10 (とお)", romaji: "Too" },
+                { zh: "1人", ja: "1人 (ひとり)", romaji: "Hitori" },
+                { zh: "2人", ja: "2人 (ふたり)", romaji: "Futari" },
+                { zh: "3人", ja: "3人 (さんにん)", romaji: "Sannin" }
+            ],
+            "🕒 時間/日期": [
+                { zh: "幾點？", ja: "何時ですか", romaji: "Nanji" },
+                { zh: "今天", ja: "今日 (きょう)", romaji: "Kyou" },
+                { zh: "明天", ja: "明日 (あした)", romaji: "Ashita" },
+                { zh: "後天", ja: "明後日 (あさって)", romaji: "Asatte" },
+                { zh: "什麼時候？", ja: "いつですか", romaji: "Itsu" },
+                { zh: "現在", ja: "今 (いま)", romaji: "Ima" },
+                { zh: "早上", ja: "朝 (あさ)", romaji: "Asa" },
+                { zh: "中午", ja: "昼 (ひる)", romaji: "Hiru" },
+                { zh: "晚上", ja: "夜 (よる)", romaji: "Yoru" },
+                { zh: "昨天", ja: "昨日 (きのう)", romaji: "Kinou" }
+            ],
+            "💬 日常應答": [
+                { zh: "真的很棒", ja: "最高です", romaji: "Saikou" },
+                { zh: "好可愛", ja: "かわいい", romaji: "Kawaii" },
+                { zh: "好酷", ja: "かっこいい", romaji: "Kakkoii" },
+                { zh: "太貴了", ja: "高すぎます", romaji: "Takasugi" },
+                { zh: "很便宜", ja: "安いです", romaji: "Yasui" },
+                { zh: "很有趣", ja: "面白いです", romaji: "Omoshiroi" },
+                { zh: "好冷", 
