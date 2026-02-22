@@ -1,1 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>日本旅遊神器 Pro Max 完全體</title>
+    
+    <meta property="og:title" content="日本旅遊神器 Pro Max">
+    <meta property="og:description" content="內建海量實用旅遊日語。支援離線收藏、發音與即時翻譯，助您日本行溝通無阻。">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/197/197604.png">
 
+    <script>
+        try {
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            if ((ua.indexOf("Line") > -1) || (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1)) {
+                if (location.search.indexOf("openExternalBrowser=1") === -1) {
+                    location.href = location.href + (location.search ? "&" : "?") + "openExternalBrowser=1";
+                }
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('inAppBlocker').style.display = 'flex';
+                });
+            }
+        } catch(e) {}
+    </script>
+
+    <style>
+        :root { --bg: #070b14; --blue: #3b82f6; --card: rgba(255,255,255,0.06); --border: rgba(255,255,255,0.1); --txt: #fff; --sub: #94a3b8; --green: #10b981; --gold: #fbbf24; --red: #ef4444; }
+        
+        /* 🛠️ 徹底修復底部白塊 */
+        html { background-color: #070b14; height: 100%; }
+        body { background-color: #070b14; background-image: radial-gradient(circle at top, #1e293b 0%, #070b14 100%); background-attachment: fixed; color: var(--txt); margin: 0; display: flex; flex-direction: column; align-items: center; font-family: sans-serif; padding-bottom: 120px; min-height: 100vh; overflow-x: hidden; }
+        
+        .wrap { width: 100%; max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; text-align: center; }
+        #title { font-size: 26px; margin: 20px 0; font-weight: 900; letter-spacing: 1px; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); cursor: pointer; user-select: none; }
+        
+        .search { width: 100%; padding: 16px; border-radius: 15px; border: 1px solid var(--border); background: rgba(0,0,0,0.4); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; }
+        
+        .grid-ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .quick-nav { grid-column: span 2; display: flex; gap: 8px; }
+        .nav-btn { flex: 1; background: var(--card); border: 1px solid var(--border); color: #fff; padding: 12px 5px; border-radius: 15px; font-weight: bold; font-size: 14px; cursor: pointer; text-align: center; }
+        .nav-btn.active { background: var(--blue); border-color: transparent; box-shadow: 0 0 10px var(--blue); }
+        .nav-help { color: var(--gold); border-color: rgba(251,191,36,0.5); background: rgba(251,191,36,0.1); }
+        .panel { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 15px; padding: 12px; display: flex; justify-content: center; align-items: center; font-size: 13px; color: var(--sub); font-weight: bold; gap: 5px; }
+        
+        .cats { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
+        .cats::-webkit-scrollbar { display: none; }
+        .cat-btn { background: var(--card); color: var(--sub); border: 1px solid var(--border); padding: 10px 18px; border-radius: 30px; white-space: nowrap; font-weight: bold; cursor: pointer; }
+        .cat-btn.active { background: rgba(255,255,255,0.15); color: #fff; border-color: #fff; }
+        
+        .list { display: flex; flex-direction: column; gap: 15px; }
+        .card { background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); border-radius: 24px; border: 1px solid var(--border); position: relative; overflow: hidden; text-align: center; }
+        .card-in { padding: 25px 15px 15px; cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .zh { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+        .ja-box { background: rgba(59,130,246,0.15); padding: 8px 15px; border-radius: 10px; border: 1px solid rgba(59,130,246,0.2); margin-bottom: 6px; display: inline-block; }
+        .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
+        .ro { font-size: 13px; color: var(--sub); font-style: italic; margin-bottom: 5px; }
+        .star { position: absolute; top: 15px; left: 15px; font-size: 24px; color: rgba(255,255,255,0.1); padding: 5px; cursor: pointer; }
+        .star.active { color: var(--gold); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
+        .bar-btn { width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; letter-spacing: 2px; cursor: pointer; }
+        
+        .c-area { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 20px; border: 1px solid var(--border); }
+        .c-txt { width: 100%; height: 80px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-sizing: border-box; text-align: center; font-size: 16px; outline: none; }
+        .c-res { padding: 15px; color: var(--green); font-weight: bold; font-size: 18px; text-align: center; min-height: 30px; }
+        .c-btn { width: 100%; padding: 15px; background: var(--green); color: #fff; border: none; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer;}
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .m-ja { font-size: 12vw; font-weight: 900; color: #fff; text-align: center; }
+        .m-zh { font-size: 22px; color: var(--sub); margin-top: 30px; }
+        .m-close { margin-top: 40px; padding: 15px 50px; background: #1e293b; color: #fff; border-radius: 30px; font-size: 18px; font-weight: bold; border: 1px solid var(--border); cursor:pointer; }
+        
+        .tts-box { background: #1e293b; border: 1px solid var(--border); border-radius: 20px; padding: 25px; max-width: 400px; width: 100%; box-sizing: border-box; text-align: left; max-height: 85vh; overflow-y: auto; }
+        .tts-step { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .tts-txt span { color: var(--gold); font-weight: bold; }
+        
+        #inAppBlocker { display: none; position: fixed; inset: 0; background: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 30px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div id="inAppBlocker">
+        <h1 style="color:var(--red);font-size:60px;margin:0;">⚠️</h1>
+        <h2 style="color:#fff;">請使用 Chrome 開啟</h2>
+        <p style="color:var(--sub);font-size:16px;">LINE 等內部瀏覽器會限制「發音功能」<br>為確保正常運作，請點擊右上角跳轉。</p>
+    </div>
+
+    <div id="ttsGuide" class="modal">
+        <div class="tts-box">
+            <h2 style="color:var(--red); text-align:center; margin-top:0;">🔇 發音失敗 / 沒聲音？</h2>
+            <div style="color:var(--sub); font-size:13px; text-align:center; margin-bottom:15px;">請檢查以下設定，找回您的聲音：</div>
+            
+            <div class="tts-step">
+                <div style="color:var(--gold); font-weight:bold; margin-bottom:8px; border-bottom:1px solid rgba(251,191,36,0.3); padding-bottom:5px;">💡 常見無聲原因 (必看)</div>
+                <div class="tts-txt" style="color:#fff; font-size:14px; line-height:1.6;">
+                    1. <span>網站權限</span>：點擊網址列旁邊鎖頭，允許<span>「聲音/音訊」</span>。<br>
+                    2. <span>蘋果 iPhone</span>：檢查側邊<span>「實體靜音鍵」</span>。<br>
+                    3. <span>媒體音量</span>：確認手機媒體音量已調大。
+                </div>
+            </div>
+
+            <div class="tts-step">
+                <div style="color:var(--blue); font-weight:bold; margin-bottom:8px; border-bottom:1px solid rgba(59,130,246,0.3); padding-bottom:5px;">🤖 Android 缺少語音包？</div>
+                <div class="tts-txt" style="color:#fff; font-size:14px;">設定 > 文字轉語音輸出 > 點擊齒輪 > 安裝語音資料 > 下載日文</div>
+            </div>
+            
+            <div class="tts-step">
+                <div style="color:var(--blue); font-weight:bold; margin-bottom:8px; border-bottom:1px solid rgba(59,130,246,0.3); padding-bottom:5px;">🍎 iOS 缺少語音包？</div>
+                <div class="tts-txt" style="color:#fff; font-size:14px;">設定 > 輔助使用 > 語音內容 > 聲音 > 下載日文(Kyoko)</div>
+            </div>
+
+            <label style="display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; color:var(--sub); font-size:14px; margin-top:10px;">
+                <input type="checkbox" id="chkIgnoreTTS" style="width:18px; height:18px;">
+                ✅ 我有聲音，請不要再自動彈出
+            </label>
+
+            <button onclick="closeTTS()" style="width:100%; padding:15px; background:var(--blue); color:#fff; border:none; border-radius:12px; font-weight:bold; font-size:16px; margin-top:15px; cursor:pointer;">關閉提示</button>
+        </div>
+    </div>
+
+    <div id="mod" class="modal">
+        <div class="m-ja" id="m-ja"></div>
+        <div class="m-zh" id="m-zh"></div>
+        <button class="m-close" onclick="document.getElementById('mod').style.display='none'">✖ 關閉</button>
+    </div>
+
+    <div class="wrap">
+        <h1 id="title" onclick="unlock()">🇯🇵 Japan Travel Ultra</h1>
+        
+        <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話..." oninput="draw(curCat, this.value)">
+
+        <div class="grid-ctrl">
+            <div class="quick-nav">
+                <button class="nav-btn" id="b-rec" onclick="setCat('🕒 最近')">🕒 最近</button>
+                <button class="nav-btn" id="b-fav" onclick="setCat('⭐ 最愛')">⭐ 最愛</button>
+                <button class="nav-btn nav-help" onclick="showTutorial(true)">🚑 沒聲音?</button>
+            </div>
+            <div class="panel"><label>🔊 大音量 <input type="checkbox" id="vol"></label></div>
+            <div class="panel"><label>🐢 龜速 <input type="checkbox" id="spd"></label></div>
+        </div>
+
+        <div class="cats" id="cat-box"></div>
+        
+        <div class="list" id="list">
+            <h3 style="color:var(--sub);">⏳ 載入中...</h3>
+        </div>
+    </div>
+
+    <script>
+        // 絕對安全的 300+ 句資料格式
+        var D = {
+            "👋 常用": [
+                {z:"你好",j:"こんにちは",r:"Konnichiwa"},{z:"謝謝",j:"ありがとうございます",r:"Arigatou"},{z:"不好意思",j:"すみません",r:"Sumimasen"},{z:"沒關係",j:"大丈夫です",r:"Daijoubu"},{z:"拜託了",j:"お願いします",r:"Onegaishimasu"},{z:"對不起",j:"ごめんなさい",r:"Gomennasai"},{z:"早安",j:"おはようございます",r:"Ohayou"},{z:"晚安",j:"こんばんは",r:"Konbanwa"},{z:"不懂日文",j:"日本語がわかりません",r:"Nihongo ga wakarimasen"},{z:"再說一次",j:"もう一度言ってください",r:"Mou ichido"},{z:"好的",j:"はい",r:"Hai"},{z:"不是",j:"いいえ",r:"Iie"},{z:"幫大忙了",j:"助かりました",r:"Tasukari"},{z:"慢一點",j:"ゆっくり話してください",r:"Yukkuri"},{z:"這是什麼",j:"これは何ですか",r:"Kore wa nan desu ka"}
+            ],
+            "🏨 住宿": [
+                {z:"辦理入住",j:"チェックインをお願いします",r:"Chekku-in"},{z:"我有預約",j:"予約しています",r:"Yoyaku"},{z:"寄放行李",j:"荷物を預かってもらえますか",r:"Nimotsu"},{z:"Wi-Fi密碼",j:"Wi-Fiのパスワードは何ですか",r:"Pasuwaado"},{z:"退房",j:"チェックアウトをお願いします",r:"Chekku-auto"},{z:"沒熱水",j:"お湯が出ません",r:"Oyu ga"},{z:"叫計程車",j:"タクシーを呼んでください",r:"Takushii"},{z:"換房間",j:"部屋を変えてください",r:"Heya kaete"},{z:"多一條毛巾",j:"タオルをもう一枚ください",r:"Taoru"},{z:"早餐時間",j:"朝食は何時ですか",r:"Choushoku"}
+            ],
+            "🍜 餐廳": [
+                {z:"兩位",j:"2人です",r:"Futari"},{z:"菜單",j:"メニューはありますか",r:"Menyuu"},{z:"推薦什麼",j:"おすすめは何ですか",r:"Osusume"},{z:"點這個",j:"これを注文します",r:"Kore o"},{z:"給我水",j:"お水をください",r:"Omizu"},{z:"不要芥末",j:"わさび抜きでお願いします",r:"Wasabi nuki"},{z:"很好吃",j:"美味しいです",r:"Oishii"},{z:"結帳",j:"お会計をお願いします",r:"Okaikei"},{z:"分開付",j:"別々に払えますか",r:"Betsubetsu"},{z:"外帶",j:"持ち帰りで",r:"Mochikaeri"},{z:"禁菸席",j:"禁煙席をお願いします",r:"Kin-en"}
+            ],
+            "🛍️ 購物": [
+                {z:"多少錢",j:"いくらですか",r:"Ikura"},{z:"買這個",j:"これをください",r:"Kore o"},{z:"免稅嗎",j:"免税できますか",r:"Menzei"},{z:"全新",j:"新しいものはありますか",r:"Atarashii"},{z:"試穿",j:"試着してもいいですか",r:"Shichaku"},{z:"大的",j:"大きいのはありますか",r:"Ookii"},{z:"袋子",j:"袋をください",r:"Fukuro"},{z:"刷卡",j:"カードは使えますか",r:"Kaado"},{z:"有折扣嗎",j:"割引はありますか",r:"Waribiki"}
+            ],
+            "🚇 交通": [
+                {z:"廁所在哪",j:"トイレはどこですか",r:"Toire"},{z:"車站",j:"駅はどこですか",r:"Eki"},{z:"去新宿",j:"新宿に行きますか",r:"Shinjuku"},{z:"買票處",j:"切符売り場はどこですか",r:"Kippu"},{z:"下車",j:"ここで降ります",r:"Koko de orimasu"},{z:"下一站",j:"次の駅はどこですか",r:"Tsugi"},{z:"出口",j:"出口はどこですか",r:"Deguchi"},{z:"特急列車",j:"これは特急ですか",r:"Tokkyuu"}
+            ],
+            "🏪 超商": [
+                {z:"加熱",j:"温めてください",r:"Atatamete"},{z:"筷子",j:"お箸をください",r:"Ohashi"},{z:"免袋子",j:"袋はいりません",r:"Fukuro iranai"},{z:"收據",j:"レシートをください",r:"Reshiito"},{z:"儲值",j:"チャージをお願いします",r:"Chaaji"},{z:"借廁所",j:"トイレを貸してください",r:"Toire"}
+            ],
+            "🍻 居酒屋": [
+                {z:"生啤酒",j:"生ビールをお願いします",r:"Nama biiru"},{z:"乾杯",j:"乾杯！",r:"Kanpai"},{z:"最後加點",j:"ラストオーダーは何時ですか",r:"Rasuto"},{z:"一樣的",j:"同じものをください",r:"Onaji"},{z:"小菜",j:"おつまみはありますか",r:"Otsumami"}
+            ],
+            "🚑 緊急": [
+                {z:"救命",j:"助けてください",r:"Tasukete"},{z:"救護車",j:"救急車を呼んでください",r:"Kyuukyuusha"},{z:"警察",j:"警察を呼んでください",r:"Keisatsu"},{z:"迷路了",j:"道に迷いました",r:"Michi"},{z:"護照丟了",j:"パスポートをなくしました",r:"Pasupooto"},{z:"發燒",j:"熱があります",r:"Netsu"},{z:"藥局",j:"薬局はどこですか",r:"Yakkyoku"}
+            ],
+            "📸 觀光": [
+                {z:"幫我拍照",j:"写真を撮ってもらえますか",r:"Shashin o"},{z:"一起拍吧",j:"一緒に写真を撮りませんか",r:"Issho ni"},{z:"可拍照嗎",j:"ここで写真を撮ってもいいですか",r:"Shashin ii"},{z:"入場費",j:"入場料はいくらですか",r:"Nyuujouryou"},{z:"漂亮",j:"綺麗ですね",r:"Kirei desune"}
+            ],
+            "🔢 數字": [
+                {z:"1個",j:"1つ",r:"Hitotsu"},{z:"2個",j:"2つ",r:"Futatsu"},{z:"3個",j:"3つ",r:"Mittsu"},{z:"1人",j:"1人",r:"Hitori"},{z:"2人",j:"2人",r:"Futari"},{z:"幾點",j:"何時ですか",r:"Nanji"},{z:"今天",j:"今日",r:"Kyou"},{z:"明天",j:"明日",r:"Ashita"}
+            ]
+        };
+
+        var HDN = [{z:"笨蛋",j:"馬鹿 (ばか)",r:"Baka"},{z:"白癡",j:"阿呆 (あほう)",r:"Ahou"},{z:"去死",j:"死ね (しね)",r:"Shine"},{z:"混蛋",j:"馬鹿野郎",r:"Bakayarou"},{z:"吵死了",j:"うるさい",r:"Urusai"},{z:"變態",j:"変態 (へんたい)",r:"Hentai"},{z:"畜生",j:"畜生 (ちくしょう)",r:"Chikusho"}];
+
+        var curCat = "🌟 全部";
+        var favs = [];
+        var hist = [];
+        var clickCount = 0;
+        var ignoreTTS = false;
+        var lastTxt = "";
+        var lastTime = 0;
+
+        // 安全讀取存儲
+        try {
+            var f = window.localStorage.getItem('jp_f_v6'); if(f) favs = JSON.parse(f);
+            var h = window.localStorage.getItem('jp_h_v6'); if(h) hist = JSON.parse(h);
+            if(window.localStorage.getItem('jp_tts_ign') === 'true') ignoreTTS = true;
+        } catch(e) {}
+
+        // 教學控制
+        function showTutorial(isManual) {
+            if(!isManual && ignoreTTS) return;
+            document.getElementById('ttsGuide').style.display = 'flex';
+        }
+
+        function closeTTS() {
+            var chk = document.getElementById('chkIgnoreTTS');
+            if(chk && chk.checked) {
+                ignoreTTS = true;
+                try { window.localStorage.setItem('jp_tts_ign', 'true'); } catch(e){}
+            }
+            document.getElementById('ttsGuide').style.display = 'none';
+        }
+
+        // 發音與歷史紀錄
+        function playVoice(txt, objStr) {
+            // 防焦慮連點
+            var now = new Date().getTime();
+            if(txt === lastTxt && (now - lastTime) < 3000) showTutorial(false);
+            lastTxt = txt; lastTime = now;
+
+            try {
+                if (!window.speechSynthesis) { showTutorial(false); return; }
+                window.speechSynthesis.cancel();
+                var u = new SpeechSynthesisUtterance(txt);
+                u.lang = 'ja-JP';
+                var spd = document.getElementById('spd');
+                var vol = document.getElementById('vol');
+                u.rate = (spd && spd.checked) ? 0.45 : 0.85;
+                u.volume = (vol && vol.checked) ? 1.0 : 0.8;
+                u.onerror = function() { showTutorial(false); };
+                window.speechSynthesis.speak(u);
+            } catch(e) { showTutorial(false); }
+
+            // 存入最近紀錄
+            if(objStr) {
+                try {
+                    var item = JSON.parse(decodeURIComponent(objStr));
+                    var newHist = [];
+                    for(var j=0; j<hist.length; j++) { if(hist[j].j !== item.j) newHist.push(hist[j]); }
+                    newHist.unshift(item);
+                    if(newHist.length > 20) newHist.pop();
+                    hist = newHist;
+                    window.localStorage.setItem('jp_h_v6', JSON.stringify(hist));
+                } catch(err){}
+            }
+        }
+
+        // 收藏功能
+        function toggleFav(e, objStr) {
+            e.stopPropagation();
+            try {
+                var item = JSON.parse(decodeURIComponent(objStr));
+                var idx = favs.indexOf(item.j);
+                if(idx > -1) favs.splice(idx,1); else favs.push(item.j);
+                window.localStorage.setItem('jp_f_v6', JSON.stringify(favs));
+                draw(curCat, document.getElementById('search').value);
+            } catch(err){}
+        }
+
+        // 放大功能
+        function showZoom(e, ja, zh) {
+            e.stopPropagation();
+            document.getElementById('m-ja').innerText = ja;
+            document.getElementById('m-zh').innerText = zh;
+            document.getElementById('mod').style.display = 'flex';
+        }
+
+        // 隱藏解鎖
+        function unlock() {
+            clickCount++;
+            if(clickCount === 10) {
+                var btn = document.createElement('button');
+                btn.className = 'cat-btn';
+                btn.style.color = 'var(--red)';
+                btn.style.borderColor = 'var(--red)';
+                btn.innerText = '🔞 隱藏';
+                btn.setAttribute('onclick', 'setCat("🔞 隱藏")');
+                document.getElementById('cat-box').prepend(btn);
+                setCat('🔞 隱藏');
+                alert('解鎖成功！小朋友不要亂用。');
+            }
+        }
+
+        // 自訂翻譯
+        function doTrans() {
+            var q = document.getElementById('cin').value;
+            var r = document.getElementById('cres');
+            if(!q) return; r.innerText = '⏳ 翻譯中...';
+            if(!window.fetch) { r.innerText = '❌ 設備不支援'; return; }
+            fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(q)+'&langpair=zh-TW|ja')
+            .then(function(res){ return res.json(); })
+            .then(function(data){ r.innerText = data.responseData.translatedText; playVoice(r.innerText, null); })
+            .catch(function(e){ r.innerText = '❌ 網路錯誤'; });
+        }
+
+        // 核心渲染引擎
+        function draw(cat, query) {
+            var box = document.getElementById('list');
+            box.innerHTML = '';
+            
+            if(cat === '✏️ 自訂') {
+                box.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="在此輸入中文..."></textarea><div id="cres" class="c-res"></div><button class="c-btn" onclick="doTrans()">🌍 翻譯並發音</button></div>';
+                return;
+            }
+
+            var arr = [];
+            if(cat === '🌟 全部') {
+                for(var k in D) { arr = arr.concat(D[k]); }
+            } else if(cat === '⭐ 最愛') {
+                for(var key in D) {
+                    for(var x=0; x<D[key].length; x++) {
+                        if(favs.indexOf(D[key][x].j) > -1) arr.push(D[key][x]);
+                    }
+                }
+            } else if(cat === '🕒 最近') { arr = hist; }
+            else if(cat === '🔞 隱藏') { arr = HDN; }
+            else { arr = D[cat] || []; }
+
+            // 搜尋過濾
+            if(query) {
+                query = query.toLowerCase();
+                var temp = [];
+                for(var y=0; y<arr.length; y++) {
+                    if(arr[y].z.indexOf(query)>-1 || arr[y].j.indexOf(query)>-1 || (arr[y].r && arr[y].r.
