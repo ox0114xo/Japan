@@ -1,16 +1,21 @@
 {
-  "name": "日本旅遊神器",
-  "short_name": "旅遊日語",
-  "start_url": "index.html",
+  "name": "日文常用句發音",
+  "short_name": "日文發音",
+  "description": "幫助你快速翻譯與發音日文常用句",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#121212",
-  "theme_color": "#121212",
+  "background_color": "#f5f5f7",
+  "theme_color": "#0070f3",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/197/197604.png",
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇯🇵</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇯🇵</text></svg>",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/svg+xml"
     }
   ]
 }
-
