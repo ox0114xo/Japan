@@ -276,3 +276,29 @@
             }
 
             dataToRender.forEach(item => {
+                const li = document.createElement('li');
+                // 點擊整塊 li 播放發音
+                li.onclick = () => speak(item.jp);
+                
+                // 處理單引號跳脫避免報錯
+                const safeJp = item.jp.replace(/'/g, "\\'");
+                const safeZh = item.zh.replace(/'/g, "\\'");
+                const safeRomaji = item.romaji.replace(/'/g, "\\'");
+
+                li.innerHTML = `
+                    <div class="text-content">
+                        <span class="jp-text">${item.jp}</span>
+                        ${item.romaji ? `<span class="romaji-text">${item.romaji}</span>` : ''}
+                        <span class="zh-text">${item.zh}</span>
+                    </div>
+                    <button class="fullscreen-btn" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶</button>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        // 初始化
+        loadCSV();
+    </script>
+</body>
+</html>
