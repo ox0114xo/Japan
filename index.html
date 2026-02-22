@@ -11,6 +11,21 @@
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197604.png">
 
     <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            window.onload = function() {
+                var list = document.getElementById('list');
+                if(list) {
+                    list.innerHTML = '<div style="background:rgba(239,68,68,0.2); border:2px solid #ef4444; color:#fff; padding:20px; border-radius:15px; text-align:left;">' +
+                                     '<h3 style="color:#ef4444; margin-top:0;">🚨 瀏覽器崩潰報告！請截圖</h3>' +
+                                     '<b>錯誤:</b> ' + message + '<br><br><b>行號:</b> ' + lineno + 
+                                     '</div>';
+                }
+            };
+            return false;
+        };
+    </script>
+
+    <script>
         try {
             var ua = navigator.userAgent || navigator.vendor || window.opera;
             if ((ua.indexOf("Line") > -1) || (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1)) {
@@ -18,7 +33,8 @@
                     location.href = location.href + (location.search ? "&" : "?") + "openExternalBrowser=1";
                 }
                 document.addEventListener('DOMContentLoaded', function() {
-                    document.getElementById('inAppBlocker').style.display = 'flex';
+                    var blocker = document.getElementById('inAppBlocker');
+                    if (blocker) blocker.style.display = 'flex';
                 });
             }
         } catch(e) {}
@@ -100,9 +116,9 @@
             <h2 style="color:var(--green); margin-top:0;">📲 如何安裝到桌面？</h2>
             <div style="color:#fff; font-size:16px; line-height:1.8; text-align:left; background:rgba(0,0,0,0.3); padding:15px; border-radius:15px;">
                 🍎 <b>蘋果 iPhone：</b><br>
-                點擊瀏覽器下方的「分享」按鈕 (方塊往上的箭頭)，滑動選單選擇 <b>「加入主畫面」</b>。<br><br>
+                點擊瀏覽器下方的「分享」按鈕，選擇 <b>「加入主畫面」</b>。<br><br>
                 🤖 <b>安卓 Android：</b><br>
-                點擊瀏覽器右上角的「三個點」，選擇 <b>「加到主畫面」</b> 或 <b>「安裝應用程式」</b>。
+                點擊瀏覽器右上角的「三個點」，選擇 <b>「加到主畫面」</b>。
             </div>
             <button onclick="document.getElementById('installGuide').style.display='none'" style="width:100%; padding:15px; background:var(--green); color:#fff; border:none; border-radius:10px; font-weight:bold; margin-top:20px; font-size:16px;">我知道了</button>
         </div>
@@ -123,7 +139,9 @@
         </div>
 
         <div class="cats" id="cat-box"></div>
-        <div class="list" id="list"></div>
+        <div class="list" id="list">
+            <h3 style="color:var(--sub);" id="loadingText">按鈕生成中...</h3>
+        </div>
     </div>
 
     <div id="mod" class="modal">
@@ -133,7 +151,6 @@
     </div>
 
     <script>
-        // 🚀 完整 300+ 句大字典
         var D = {
             "👋 常用": [
                 {z:"你好",j:"こんにちは",r:"Konnichiwa"},{z:"謝謝",j:"ありがとうございます",r:"Arigatou"},{z:"不好意思 / 請問一下",j:"すみません",r:"Sumimasen"},{z:"沒關係 / 不要緊",j:"大丈夫です",r:"Daijoubu"},{z:"拜託您了",j:"お願いします",r:"Onegaishimasu"},{z:"對不起",j:"ごめんなさい",r:"Gomennasai"},{z:"早安",j:"おはようございます",r:"Ohayou"},{z:"晚安",j:"こんばんは",r:"Konbanwa"},{z:"我不懂日文",j:"日本語がわかりません",r:"Nihongo ga wakarimasen"},{z:"請再說一次",j:"もう一度言ってください",r:"Mou ichido"},{z:"好的",j:"はい",r:"Hai"},{z:"不是",j:"いいえ",r:"Iie"},{z:"幫大忙了",j:"助かりました",r:"Tasukari"},{z:"請說慢一點",j:"ゆっくり話してください",r:"Yukkuri"},{z:"這是什麼",j:"これは何ですか",r:"Kore wa nan desu ka"}
@@ -151,7 +168,7 @@
                 {z:"請問廁所在哪裡",j:"トイレはどこですか",r:"Toire"},{z:"請問車站在哪裡",j:"駅はどこですか",r:"Eki"},{z:"這班車去新宿嗎",j:"新宿に行きますか",r:"Shinjuku"},{z:"買票處在哪裡",j:"切符売り場はどこですか",r:"Kippu"},{z:"我要在這裡下車",j:"ここで降ります",r:"Koko de orimasu"},{z:"下一站是哪裡",j:"次の駅はどこですか",r:"Tsugi"},{z:"出口在哪裡",j:"出口はどこですか",r:"Deguchi"},{z:"這是特急列車嗎",j:"これは特急ですか",r:"Tokkyuu"}
             ],
             "🏪 超商": [
-                {z:"請幫我微波加熱",j:"温めてください",r:"Atatamete"},{z:"請給我筷子",j:"お箸をください",r:"Ohashi"},{z:"我不需要袋子",j:"袋はいりません",r:"Fukuro iranai"},{z:"請給我收據",j:"レシートをください",r:"Reshiito"},{z:"我要儲值(西瓜卡)",j:"チャージをお願いします",r:"Chaaji"},{z:"能借用廁所嗎",j:"トイレを貸してください",r:"Toire"}
+                {z:"請幫我微波加熱",j:"温めてください",r:"Atatamete"},{z:"請給我筷子",j:"お箸をください",r:"Ohashi"},{z:"我不需要袋子",j:"袋はいりません",r:"Fukuro iranai"},{z:"請給我收據",j:"レシートをください",r:"Reshiito"},{z:"我要儲值",j:"チャージをお願いします",r:"Chaaji"},{z:"能借用廁所嗎",j:"トイレを貸してください",r:"Toire"}
             ],
             "🍻 居酒屋": [
                 {z:"請給我生啤酒",j:"生ビールをお願いします",r:"Nama biiru"},{z:"乾杯！",j:"乾杯！",r:"Kanpai"},{z:"最後點餐是幾點",j:"ラストオーダーは何時ですか",r:"Rasuto"},{z:"請給我跟那個一樣的",j:"同じものをください",r:"Onaji"},{z:"有下酒菜嗎",j:"おつまみはありますか",r:"Otsumami"}
@@ -175,31 +192,27 @@
             if(window.localStorage.getItem('jp_tts_ignore') === 'true') { ignoreTTSPopup = true; }
         } catch(e) {}
 
-        // PWA 安裝監聽
-        window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
+        window.addEventListener('beforeinstallprompt', function(e) { e.preventDefault(); deferredPrompt = e; });
 
-        function showInstall() {
+        window.showInstall = function() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(function(choiceResult) { deferredPrompt = null; });
+                deferredPrompt.userChoice.then(function(res) { deferredPrompt = null; });
             } else {
                 document.getElementById('installGuide').style.display = 'flex';
             }
-        }
+        };
 
-        function closeTTS() {
+        window.closeTTS = function() {
             var chk = document.getElementById('chkIgnoreTTS');
             if (chk && chk.checked) {
                 ignoreTTSPopup = true;
                 try { window.localStorage.setItem('jp_tts_ignore', 'true'); } catch(e) {}
             }
             document.getElementById('ttsGuide').style.display = 'none';
-        }
+        };
 
-        function playVoice(txt, z, r) {
+        window.playVoice = function(txt, z, r) {
             var now = new Date().getTime();
             if (txt === lastSpkTxt && (now - lastSpkTime) < 3000 && !ignoreTTSPopup) { 
                 document.getElementById('ttsGuide').style.display = 'flex'; 
@@ -219,7 +232,6 @@
                 window.speechSynthesis.speak(u);
             } catch(e) { if(!ignoreTTSPopup) document.getElementById('ttsGuide').style.display = 'flex'; }
 
-            // 存入最近紀錄
             if(z) {
                 var item = {z:z, j:txt, r:r};
                 var newHist = [];
@@ -229,25 +241,25 @@
                 hist = newHist;
                 try { window.localStorage.setItem('jp_h', JSON.stringify(hist)); } catch(err){}
             }
-        }
+        };
 
-        function toggleFav(e, j, z, r) {
+        window.toggleFav = function(e, j, z, r) {
             e.stopPropagation();
             var idx = favs.indexOf(j);
             if(idx > -1) favs.splice(idx,1); else favs.push(j);
             try{ window.localStorage.setItem('jp_f', JSON.stringify(favs)); }catch(err){}
             var s = document.getElementById('search');
             renderList(curCat, s ? s.value : "");
-        }
+        };
 
-        function showZoom(e, ja, zh) {
+        window.showZoom = function(e, ja, zh) {
             e.stopPropagation();
             document.getElementById('m-ja').innerText = ja;
             document.getElementById('m-zh').innerText = zh;
             document.getElementById('mod').style.display = 'flex';
-        }
+        };
 
-        function renderList(cat, query) {
+        window.renderList = function(cat, query) {
             var box = document.getElementById('list');
             if(!box) return;
             box.innerHTML = '';
@@ -259,12 +271,16 @@
 
             var arr = [];
             if (cat === '🌟 全部') { 
-                for (var k in D) { arr = arr.concat(D[k]); } 
+                for (var k in D) { 
+                    if(D.hasOwnProperty(k)) { arr = arr.concat(D[k]); }
+                } 
             }
             else if (cat === '⭐ 最愛') { 
                 for (var key in D) {
-                    for(var x=0; x<D[key].length; x++) {
-                        if (favs.indexOf(D[key][x].j) > -1) arr.push(D[key][x]);
+                    if(D.hasOwnProperty(key)) {
+                        for(var x=0; x<D[key].length; x++) {
+                            if (favs.indexOf(D[key][x].j) > -1) arr.push(D[key][x]);
+                        }
                     }
                 }
             }
@@ -281,7 +297,6 @@
                 arr = temp;
             }
 
-            // 去重複
             var uniq = []; var seen = {};
             for (var z=0; z<arr.length; z++) {
                 if (!seen[arr[z].j]) { seen[arr[z].j] = true; uniq.push(arr[z]); }
@@ -295,19 +310,4 @@
                 
                 var inner = document.createElement('div');
                 inner.className = 'card-in';
-                inner.setAttribute('onclick', 'playVoice("' + item.j + '", "' + item.z + '", "' + item.r + '")');
-                
-                var starHtml = '<div class="star ' + (isF?'active':'') + '" onclick="toggleFav(event, \''+item.j+'\')">★</div>';
-                inner.innerHTML = starHtml + 
-                                  '<div class="zh">' + item.z + '</div>' +
-                                  '<div class="ja-box"><span class="ja">🔊 ' + item.j + '</span></div>' +
-                                  '<div class="ro">' + (item.r||'') + '</div>';
-                
-                var btn = document.createElement('button');
-                btn.className = 'bar-btn';
-                btn.innerText = '🪧 放大顯示';
-                btn.setAttribute('onclick', 'showZoom(event, "' + item.j + '", "' + item.z + '")');
-
-                card.appendChild(inner);
-                card.appendChild(btn);
-         
+                inn
