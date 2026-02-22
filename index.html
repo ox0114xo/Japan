@@ -1,29 +1,79 @@
+</body>
+</html>
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日文語音系統 v2.2 (除錯版)</title>
+    <title>日文語音系統 v3.0 (滿血終極版)</title>
     <style>
-        :root { --bg-dark: #0f172a; --neon-blue: #00f0ff; --neon-purple: #b026ff; --neon-green: #39ff14; --btn-depth: #0369a1; --text-main: #e2e8f0; --text-muted: #94a3b8; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-dark); color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 90px; min-height: 100vh; }
-        h1 { text-align: center; color: #fff; text-shadow: 0 0 10px var(--neon-blue); font-size: 26px; margin: 10px 0 20px 0; letter-spacing: 2px;}
-        .search-box { width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-purple); border-radius: 8px; font-size: 16px; color: #fff; box-sizing: border-box; }
+        /* 未來科技感 UI 變數 */
+        :root { 
+            --bg-dark: #0f172a; --neon-blue: #00f0ff; --neon-purple: #b026ff; 
+            --neon-green: #39ff14; --neon-red: #ff3333; --btn-depth: #0369a1; 
+            --text-main: #e2e8f0; --text-muted: #94a3b8; 
+        }
+        
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 70%); color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 90px; min-height: 100vh; }
+        
+        h1 { text-align: center; color: #fff; text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue); font-size: 26px; margin: 10px 0 20px 0; user-select: none; cursor: pointer; letter-spacing: 2px;}
+        
+        /* 搜尋列 */
+        .search-box { width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-purple); border-radius: 8px; font-size: 16px; color: #fff; box-sizing: border-box; transition: 0.3s; }
+        .search-box:focus { outline: none; box-shadow: 0 0 15px var(--neon-purple); }
+        .search-box::placeholder { color: #64748b; }
+
+        /* 分類按鈕區 */
         .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 8px; scrollbar-width: none; }
         .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; }
-        .cat-btn.active { background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); border-color: var(--neon-blue); font-weight: bold; }
+        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; transition: all 0.3s ease; letter-spacing: 1px;}
+        .cat-btn.active { background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); font-weight: bold; }
+        .cat-btn.secret-active { background: rgba(255, 51, 51, 0.1); color: var(--neon-red); border-color: var(--neon-red); box-shadow: 0 0 10px rgba(255, 51, 51, 0.3); }
+
+        /* 語速滑桿 */
         .slider-container { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 25px; }
-        .speed-slider { flex: 1; -webkit-appearance: none; background: #334155; height: 4px; border-radius: 2px; }
-        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--neon-blue); cursor: pointer; }
+        .speed-slider { flex: 1; -webkit-appearance: none; background: #334155; height: 4px; border-radius: 2px; outline: none; }
+        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--neon-blue); cursor: pointer; box-shadow: 0 0 10px var(--neon-blue); }
+
+        /* 機械鍵盤效果列表 */
         ul { list-style: none; padding: 0; margin: 0; }
-        li { background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 12px; margin-bottom: 20px; padding: 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 0 var(--btn-depth), 0 10px 15px rgba(0,0,0,0.5); transform: translateY(0); transition: 0.1s; position: relative; }
-        li:active { transform: translateY(6px); box-shadow: 0 0 0 var(--btn-depth), 0 2px 4px rgba(0,0,0,0.5); border-color: var(--neon-blue); }
-        .play-indicator { font-size: 24px; margin-right: 15px; color: var(--neon-blue); opacity: 0.8; }
+        li { background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 12px; margin-bottom: 20px; padding: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; box-shadow: 0 6px 0 var(--btn-depth), 0 10px 15px rgba(0,0,0,0.5); transform: translateY(0); transition: transform 0.1s, box-shadow 0.1s, background 0.2s; position: relative; }
+        li:active { transform: translateY(6px); box-shadow: 0 0 0 var(--btn-depth), 0 2px 4px rgba(0,0,0,0.5); background: linear-gradient(145deg, #0f172a, #1e293b); border-color: var(--neon-blue); }
+        
+        .play-indicator { font-size: 24px; margin-right: 15px; color: var(--neon-blue); text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); display: flex; align-items: center; opacity: 0.8; }
         .text-content { flex: 1; margin-right: 10px; z-index: 1; }
-        .jp-text { font-size: 18px; font-weight: bold; color: #fff; display: block; margin-bottom: 4px; }
+        .jp-text { font-size: 18px; font-weight: bold; color: #fff; display: block; margin-bottom: 4px; letter-spacing: 0.5px;}
         .romaji-text { font-size: 12px; color: var(--neon-blue); font-family: monospace; display: block; margin-bottom: 6px; }
         .zh-text { font-size: 14px; color: var(--text-muted); display: block; }
+
+        /* 右側動作按鈕 (星星、全螢幕) */
+        .action-group { display: flex; gap: 10px; z-index: 1; align-items: center; }
+        .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 6px; font-size: 18px; color: #64748b; cursor: pointer; padding: 8px; transition: 0.2s; display: flex; justify-content: center; align-items: center;}
+        .icon-btn.star.active { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); text-shadow: 0 0 10px rgba(251, 191, 36, 0.5); background: rgba(251, 191, 36, 0.1); }
+        .icon-btn.fullscreen { color: var(--neon-blue); }
+        .action-group .icon-btn:active { transform: scale(0.9); }
+
+        /* 全螢幕字幕覆蓋層 */
+        #fullscreen-overlay { display: none; position: fixed; inset: 0; background: #000; color: var(--neon-green); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; font-family: monospace; }
+        #fullscreen-jp { font-size: 12vw; font-weight: bold; margin-bottom: 15px; width: 100%; word-wrap: break-word; text-shadow: 0 0 20px var(--neon-green); }
+        #fullscreen-romaji { font-size: 6vw; color: #fff; margin-bottom: 20px; opacity: 0.8; }
+        #fullscreen-zh { font-size: 6vw; color: var(--text-muted); }
+        .close-fullscreen { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; background: none; border: none; cursor: pointer; padding: 10px; z-index: 10001; }
+        .replay-btn-large { margin-top: 40px; background: transparent; border: 2px solid var(--neon-green); color: var(--neon-green); padding: 15px 40px; font-size: 20px; border-radius: 8px; cursor: pointer; font-family: monospace; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;}
+        .replay-btn-large:active { background: var(--neon-green); color: #000; box-shadow: 0 0 20px var(--neon-green); }
+
+        /* 懸浮自定義按鈕 */
+        .fab { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--neon-purple), #4f46e5); color: white; border: none; padding: 16px 32px; border-radius: 30px; font-size: 16px; font-weight: bold; box-shadow: 0 10px 25px rgba(176, 38, 255, 0.4); z-index: 900; width: 90%; max-width: 400px; cursor: pointer; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.3s; }
+        .fab:active { transform: translateX(-50%) scale(0.95); }
+
+        /* 模態框 (翻譯) */
+        #translate-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg-dark); border: 1px solid var(--neon-blue); box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); padding: 25px; border-radius: 16px; width: 90%; max-width: 400px; position: relative; color: #fff;}
+        .modal-content input { width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 16px; box-sizing: border-box; }
+        .modal-content input:focus { outline: none; border-color: var(--neon-blue); }
+        .modal-content button { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+
+        /* 讀取動畫與錯誤 */
         .loader-container { display: flex; justify-content: center; align-items: center; padding: 40px; flex-direction: column; gap: 15px; }
         .tech-spinner { width: 40px; height: 40px; border: 3px solid transparent; border-top-color: var(--neon-blue); border-bottom-color: var(--neon-purple); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -33,6 +83,14 @@
     </style>
 </head>
 <body>
+
+    <div id="fullscreen-overlay">
+        <button class="close-fullscreen" onclick="closeFullscreen()">✕</button>
+        <div id="fullscreen-jp"></div>
+        <div id="fullscreen-romaji"></div>
+        <div id="fullscreen-zh"></div>
+        <button class="replay-btn-large" onclick="replayFullscreen()">► Replay</button>
+    </div>
 
     <h1 id="app-title">NEO_JP_VOICE 🇯🇵</h1>
     <input type="text" id="search-input" class="search-box" placeholder="搜尋中文、日文或羅馬音..." onkeyup="filterData()">
@@ -48,28 +106,46 @@
 
     <div id="loading" class="loader-container">
         <div class="tech-spinner"></div>
-        <span style="color: var(--neon-blue); font-family: monospace;">強制連線資料庫中...</span>
+        <span style="color: var(--neon-blue); font-family: monospace;">資料解密中...</span>
     </div>
 
     <ul id="sentence-list"></ul>
 
+    <button class="fab" onclick="document.getElementById('translate-modal').style.display='flex'">
+        <span>⚡</span> 啟動自譯引擎
+    </button>
+
+    <div id="translate-modal">
+        <div class="modal-content">
+            <button class="close-fullscreen" style="top:5px; right:5px; color:#64748b;" onclick="document.getElementById('translate-modal').style.display='none'">✕</button>
+            <h3 style="margin-top: 0; color: var(--neon-blue);">自譯引擎啟動</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">輸入中文，系統將自動翻譯並進行日文語音合成。</p>
+            <input type="text" id="translate-input" placeholder="請輸入欲翻譯之中文...">
+            <button onclick="translateAndSpeak()" id="translate-btn">執行翻譯與發音</button>
+            <div id="translate-result" style="margin-top: 15px; font-weight: bold; color: var(--neon-green); text-align: center; font-size: 18px;"></div>
+        </div>
+    </div>
+
     <script>
-        // 1. 強制解除所有 Service Worker (解決快取卡死的問題)
+        // 確保不被舊快取綁架
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) {
-                    registration.unregister();
-                }
+                for(let registration of registrations) registration.unregister();
             });
         }
-        
-        // 2. 清除本機舊資料庫
-        localStorage.clear();
 
+        // --- 核心變數 ---
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = [];
         let currentCategory = '全部';
+        let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
+        
+        // 彩蛋變數
+        let clickCount = 0;
+        let isSecretUnlocked = false;
+        const SECRET_KEYWORD = '🤬 隱藏情緒'; // 必須與你試算表的分類名稱一模一樣
 
+        // --- 語音功能 ---
         function updateSpeedVal() {
             document.getElementById('speed-val').innerText = Number(document.getElementById('speed-slider').value).toFixed(1) + 'x';
         }
@@ -83,38 +159,63 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // 顯示錯誤面板的專用函數
+        // --- 我的最愛功能 ---
+        function toggleFavorite(event, jp) {
+            event.stopPropagation();
+            const index = favorites.indexOf(jp);
+            if (index > -1) favorites.splice(index, 1);
+            else favorites.push(jp);
+            localStorage.setItem('jp_favorites', JSON.stringify(favorites));
+            filterData();
+        }
+
+        // --- 全螢幕功能 ---
+        function openFullscreen(event, jp, zh, romaji) {
+            event.stopPropagation();
+            document.getElementById('fullscreen-jp').innerText = jp;
+            document.getElementById('fullscreen-romaji').innerText = romaji || '';
+            document.getElementById('fullscreen-zh').innerText = zh;
+            document.getElementById('fullscreen-overlay').style.display = 'flex';
+            speak(jp);
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreen-overlay').style.display = 'none';
+            window.speechSynthesis.cancel();
+        }
+
+        function replayFullscreen() {
+            const jp = document.getElementById('fullscreen-jp').innerText;
+            if(jp) speak(jp);
+        }
+
+        // --- 彩蛋解鎖系統 ---
+        document.getElementById('app-title').addEventListener('click', () => {
+            if (isSecretUnlocked) return;
+            clickCount++;
+            if (clickCount >= 10) {
+                isSecretUnlocked = true;
+                alert('⚠️ 警告：系統安全協議已覆蓋，隱藏情緒模組解鎖。');
+                currentCategory = SECRET_KEYWORD; // 解鎖後自動跳到該分類
+                renderCategories();
+                filterData();
+            }
+        });
+
+        // --- 資料讀取與處理 ---
         function showError(message) {
             document.getElementById('loading').style.display = 'none';
             const errorBox = document.getElementById('error-box');
             errorBox.style.display = 'block';
-            errorBox.innerHTML = `
-                <h3>❌ 發生致命錯誤</h3>
-                <p>原因：${message}</p>
-                <p style="color: #94a3b8; font-size: 12px; margin-top: 15px;">請將此畫面截圖回報。</p>
-            `;
+            errorBox.innerHTML = `<h3>❌ 發生致命錯誤</h3><p>原因：${message}</p>`;
         }
 
         async function loadCSV() {
             try {
-                // 發送請求
                 const res = await fetch(CSV_URL);
-                if (!res.ok) throw new Error(`Google伺服器拒絕連線 (狀態碼: ${res.status})`);
-
+                if (!res.ok) throw new Error("Google伺服器拒絕連線");
                 const csvText = await res.text();
-                
-                // 檢查是否沒有發布成功，導致抓到 Google 的登入網頁
-                if (csvText.includes('<html') || csvText.includes('<!DOCTYPE')) {
-                    throw new Error("取得的資料是網頁原始碼，而非試算表。請確認 Google 試算表的『發布到網路』是否設定為『所有人皆可存取』。");
-                }
-
-                if (!csvText || csvText.length < 10) {
-                    throw new Error("取得的試算表內容為空。");
-                }
-
-                // 開始解析資料
                 processData(csvText);
-
             } catch(e) {
                 showError(e.message || e.toString());
             }
@@ -123,14 +224,11 @@
         function processData(csvText) {
             try {
                 const rows = csvText.split('\n');
-                const categoriesSet = new Set(['全部']);
                 globalData = [];
 
                 for (let i = 1; i < rows.length; i++) {
                     const row = rows[i].trim();
                     if(!row) continue;
-                    
-                    // 修正可能有雙引號的問題
                     const cols = row.split(',');
                     if (cols.length >= 3) {
                         globalData.push({ 
@@ -139,47 +237,79 @@
                             jp: cols[2], 
                             romaji: cols[3] || '' 
                         });
-                        categoriesSet.add(cols[0] || '未分類');
                     }
                 }
-                
-                if(globalData.length === 0) throw new Error("成功連線，但找不到任何資料行。請檢查試算表欄位是否為 A(分類)、B(中文)、C(日文)、D(羅馬音)。");
-
-                renderCategories(Array.from(categoriesSet));
+                renderCategories();
                 filterData();
                 document.getElementById('loading').style.display = 'none';
-
             } catch(e) {
                 showError("資料解析失敗: " + e.message);
             }
         }
 
-        function renderCategories(cats) {
+        // --- 渲染分類 (結合彩蛋邏輯) ---
+        function renderCategories() {
             const container = document.getElementById('category-container');
             container.innerHTML = '';
-            cats.forEach(cat => {
+            
+            // 找出所有分類，但先排除隱藏分類
+            const cats = new Set(['全部', '⭐最愛']);
+            globalData.forEach(item => {
+                if (item.cat !== SECRET_KEYWORD) cats.add(item.cat);
+            });
+            
+            // 如果解鎖了，才把隱藏分類加進去
+            if (isSecretUnlocked) cats.add(SECRET_KEYWORD);
+
+            Array.from(cats).forEach(cat => {
                 const btn = document.createElement('button');
-                btn.className = `cat-btn ${cat === currentCategory ? 'active' : ''}`;
+                
+                // 設定特殊樣式
+                if (cat === currentCategory) {
+                    if (cat === SECRET_KEYWORD) btn.className = 'cat-btn secret-active';
+                    else btn.className = 'cat-btn active';
+                } else {
+                    btn.className = 'cat-btn';
+                }
+                
                 btn.innerText = cat;
+                if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = '#fbbf24';
+                
                 btn.onclick = () => {
-                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
                     currentCategory = cat;
+                    renderCategories(); // 重新渲染按鈕狀態
                     filterData();
                 };
                 container.appendChild(btn);
             });
         }
 
+        // --- 篩選與渲染列表 ---
         function filterData() {
             const query = document.getElementById('search-input').value.toLowerCase();
+            
             const filteredData = globalData.filter(item => {
-                let matchCat = (currentCategory === '全部') ? true : (item.cat === currentCategory);
+                // 【核心保護機制】如果還沒解鎖，永遠不顯示隱藏資料
+                if (item.cat === SECRET_KEYWORD && !isSecretUnlocked) return false;
+                
+                // 【全部列表保護機制】為了避免在公共場合點「全部」不小心唸出髒話，
+                // 隱藏情緒「永遠不會」出現在「全部」列表裡，只能點專屬分類查看。
+                if (currentCategory === '全部' && item.cat === SECRET_KEYWORD) return false;
+
+                // 一般分類邏輯
+                let matchCat = false;
+                if (currentCategory === '全部') matchCat = true;
+                else if (currentCategory === '⭐最愛') matchCat = favorites.includes(item.jp);
+                else matchCat = item.cat === currentCategory;
+
+                // 搜尋邏輯
                 const matchQuery = (item.zh && item.zh.toLowerCase().includes(query)) || 
                                    (item.jp && item.jp.toLowerCase().includes(query)) || 
                                    (item.romaji && item.romaji.toLowerCase().includes(query));
+                
                 return matchCat && matchQuery;
             });
+            
             renderList(filteredData);
         }
 
@@ -193,22 +323,43 @@
 
             dataToRender.forEach(item => {
                 const li = document.createElement('li');
+                const safeJp = item.jp.replace(/'/g, "\\'");
+                const safeZh = item.zh.replace(/'/g, "\\'");
+                const safeRomaji = item.romaji.replace(/'/g, "\\'");
+                const isFav = favorites.includes(item.jp);
+
+                // 如果是隱藏情緒，把發音圖示變紅色警告
+                const isSecret = item.cat === SECRET_KEYWORD;
+                const iconColor = isSecret ? 'color: var(--neon-red); text-shadow: 0 0 8px rgba(255, 51, 51, 0.5);' : '';
+
                 li.onclick = () => speak(item.jp);
                 
                 li.innerHTML = `
-                    <div class="play-indicator">🔊</div>
+                    <div class="play-indicator" style="${iconColor}">🔊</div>
                     <div class="text-content">
-                        <span class="jp-text">${item.jp || ''}</span>
+                        <span class="jp-text">${item.jp}</span>
                         ${item.romaji ? `<span class="romaji-text">${item.romaji}</span>` : ''}
-                        <span class="zh-text">${item.zh || ''}</span>
+                        <span class="zh-text">${item.zh}</span>
+                    </div>
+                    <div class="action-group">
+                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')">★</button>
+                        <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶</button>
                     </div>
                 `;
                 list.appendChild(li);
             });
         }
 
-        // 啟動程式
-        loadCSV();
-    </script>
-</body>
-</html>
+        // --- 自定義翻譯 ---
+        async function translateAndSpeak() {
+            const input = document.getElementById('translate-input').value.trim();
+            const btn = document.getElementById('translate-btn');
+            const resDiv = document.getElementById('translate-result');
+            if (!input) return;
+
+            btn.innerText = "資料解析中...";
+            btn.style.background = "#4f46e5";
+            btn.disabled = true;
+
+            try {
+                const response = await
