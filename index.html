@@ -3,26 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 保頭防踢版</title>
+    <title>日本旅遊神器 無痕贖罪版</title>
     
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="日語神器">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197604.png">
-
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --blue: #3b82f6; --green: #10b981; --red: #ef4444; --gold: #fbbf24; --text: #f8fafc; --sub: #94a3b8; --border: #334155; }
         body { background-color: var(--bg); color: var(--text); margin: 0; font-family: sans-serif; text-align: center; padding-bottom: 100px; }
         
         .container { max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
-        .title { font-size: 26px; font-weight: 900; margin: 20px 0; color: #fff; cursor: pointer; user-select: none; text-shadow: 0 0 10px rgba(59,130,246,0.5); }
+        .title { font-size: 26px; font-weight: 900; margin: 20px 0; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); }
         
-        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center; box-sizing: border-box; outline: none; }
+        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center; outline: none; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .btn { background: var(--card); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; }
         .btn.active { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 10px rgba(59,130,246,0.5); }
-        .btn-red { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.5); color: var(--red); grid-column: span 2; }
         .chk-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; color: var(--sub); display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; }
         
         .cat-scroll { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; }
@@ -38,49 +32,31 @@
         .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
         .ro { font-size: 13px; color: var(--sub); }
         .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: #334155; padding: 5px; cursor: pointer; }
-        .star.active { color: var(--gold); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
+        .star.active { color: var(--gold); }
         .zoom-btn { width: 100%; background: rgba(255,255,255,0.05); color: var(--sub); border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; cursor: pointer; }
         
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .m-box { background: var(--card); padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; text-align: left; border: 1px solid var(--border); }
-        .m-close { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
+        .m-close { width: 100%; padding: 15px; background: var(--border); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 30px; font-size: 16px; cursor: pointer; max-width: 200px;}
     </style>
 </head>
 <body>
 
-    <div id="modal-tts" class="modal">
-        <div class="m-box">
-            <h2 style="color:var(--red); margin-top:0; text-align:center;">🔇 發音失敗</h2>
-            <p style="color:var(--text); font-size:15px; line-height:1.6;">
-                1. 檢查網址列旁邊鎖頭的<b>聲音權限</b>已允許。<br><br>
-                2. 確認手機未開啟<b>靜音模式</b>。<br><br>
-                3. 前往手機設定下載<b>日文語音包</b>。
-            </p>
-            <label style="display:flex; align-items:center; justify-content:center; color:var(--sub); font-size:14px; margin-top:15px; cursor:pointer;">
-                <input type="checkbox" id="chk-ignore" style="width:18px; height:18px; margin-right:8px;">
-                ✅ 我有聲音，請不要自動彈出
-            </label>
-            <button class="m-close" onclick="document.getElementById('modal-tts').style.display='none'">關閉提示</button>
-        </div>
-    </div>
-
     <div id="modal-zoom" class="modal">
         <div id="z-ja" style="font-size:12vw; font-weight:900; color:#fff; text-align:center;"></div>
         <div id="z-zh" style="font-size:22px; color:var(--sub); margin-top:30px; text-align:center; font-weight:bold;"></div>
-        <button class="m-close" style="background:var(--border);" onclick="document.getElementById('modal-zoom').style.display='none'">✖ 關閉</button>
+        <button class="m-close" onclick="document.getElementById('modal-zoom').style.display='none'">✖ 關閉</button>
     </div>
 
     <div class="container">
-        <div class="title" id="main-title" onclick="unlock()">🇯🇵 Japan Travel 保頭版</div>
+        <div class="title">🇯🇵 Japan Travel 贖罪版</div>
 
         <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話...">
 
         <div class="grid-2">
-            <button class="btn" id="btn-rec" onclick="setCat('🕒 歷史紀錄')">🕒 歷史紀錄</button>
-            <button class="btn" id="btn-fav" onclick="setCat('⭐ 最愛')">⭐ 最愛</button>
+            <button class="btn" id="btn-rec" onclick="setCat('🕒 本次紀錄')">🕒 本次紀錄</button>
+            <button class="btn" id="btn-fav" onclick="setCat('⭐ 本次最愛')">⭐ 本次最愛</button>
             <div class="chk-box"><label>🔊 大音量 <input type="checkbox" id="vol" checked></label></div>
             <div class="chk-box"><label>🐢 龜速 <input type="checkbox" id="spd"></label></div>
-            <button class="btn btn-red" onclick="document.getElementById('modal-tts').style.display='flex'">🚑 沒聲音看這裡</button>
         </div>
 
         <div class="cat-scroll" id="cat-box"></div>
@@ -88,8 +64,12 @@
     </div>
 
     <script>
-        // 💣 絕對安全的二維陣列寫死法！無須連線，無須等待！
-        // 格式：[分類, 中文, 日文, 羅馬拼音]
+        // 絕對不存 LocalStorage！只存在當次記憶體中
+        var favs = [];
+        var hist = [];
+        var curCat = "🌟 全部";
+
+        // 300+ 句資料
         var rawData = [
             ["👋 常用","你好","こんにちは","Konnichiwa"],
             ["👋 常用","謝謝","ありがとうございます","Arigatou gozaimasu"],
@@ -108,7 +88,174 @@
             ["👋 常用","這是什麼？","これは何ですか","Kore wa nan desu ka"],
             ["👋 常用","辛苦了","お疲れ様です","Otsukaresama desu"],
             ["👋 常用","再見","さようなら","Sayounara"],
-            ["👋 常用","初次見面","初めまして","Hajimemashite"],
+            ["👋 常用","請寫下來","書いてください","Kaite kudasai"],
+            ["🏨 住宿","我要辦理入住","チェックインをお願いします","Chekku-in o onegaishimasu"],
+            ["🏨 住宿","我有預約","予約しています","Yoyaku shite imasu"],
+            ["🏨 住宿","能寄放行李嗎？","荷物を預かってもらえますか","Nimotsu o azukatte moraemasu ka"],
+            ["🏨 住宿","我要退房","チェックアウトをお願いします","Chekku-auto o onegaishimasu"],
+            ["🏨 住宿","Wi-Fi密碼是多少？","Wi-Fiのパスワードは何ですか","Wi-Fi no pasuwaado wa nan desu ka"],
+            ["🏨 住宿","沒有熱水","お湯が出ません","Oyu ga demasen"],
+            ["🏨 住宿","請幫我叫計程車","タクシーを呼んでください","Takushii o yonde kudasai"],
+            ["🏨 住宿","早餐是幾點？","朝食は何時ですか","Choushoku wa nanji desu ka"],
+            ["🍜 餐廳","兩位","2人です","Futari desu"],
+            ["🍜 餐廳","有中文菜單嗎？","中国語のメニューはありますか","Chuugokugo no menyuu wa arimasu ka"],
+            ["🍜 餐廳","有推薦的嗎？","おすすめは何ですか","Osusume wa nan desu ka"],
+            ["🍜 餐廳","我要點這個","これを注文します","Kore o chuumon shimasu"],
+            ["🍜 餐廳","請給我水","お水をください","Omizu o kudasai"],
+            ["🍜 餐廳","很好吃","美味しいです","Oishii desu"],
+            ["🍜 餐廳","麻煩結帳","お会計をお願いします","Okaikei o onegaishimasu"],
+            ["🍜 餐廳","我要外帶","持ち帰りでお願いします","Mochikaeri de onegaishimasu"],
+            ["🛍️ 購物","這個多少錢？","いくらですか","Ikura desu ka"],
+            ["🛍️ 購物","我要買這個","これをください","Kore o kudasai"],
+            ["🛍️ 購物","可以免稅嗎？","免税できますか","Menzei dekimasu ka"],
+            ["🛍️ 購物","可以試穿嗎？","試着してもいいですか","Shichaku shite mo ii desu ka"],
+            ["🛍️ 購物","可以刷卡嗎？","カードは使えますか","Kaado wa tsukaemasu ka"],
+            ["🛍️ 購物","可以用西瓜卡嗎？","Suicaは使えますか","Suica wa tsukaemasu ka"],
+            ["🚇 交通","請問車站在哪裡？","駅はどこですか","Eki wa doko desu ka"],
+            ["🚇 交通","這班車去新宿嗎？","新宿に行きますか","Shinjuku ni ikimasu ka"],
+            ["🚇 交通","我要在這裡下車","ここで降ります","Koko de orimasu"],
+            ["🚇 交通","下一站是哪裡？","次の駅はどこですか","Tsugi no eki wa doko desu ka"],
+            ["🚇 交通","出口在哪裡？","出口はどこですか","Deguchi wa doko desu ka"],
+            ["🏪 超商","請幫我微波加熱","温めてください","Atatamete kudasai"],
+            ["🏪 超商","請給我筷子","お箸をください","Ohashi o kudasai"],
+            ["🏪 超商","我不需要袋子","袋はいりません","Fukuro iranai desu"],
+            ["🏪 超商","我要儲值","チャージをお願いします","Chaaji o onegaishimasu"],
+            ["🍻 居酒屋","請給我生啤酒","生ビールをお願いします","Nama biiru o onegaishimasu"],
+            ["🍻 居酒屋","乾杯！","乾杯！","Kanpai!"],
+            ["🍻 居酒屋","最後點餐是幾點？","ラストオーダーは何時ですか","Rasuto oodaa wa nanji desu ka"],
+            ["🚑 緊急","救命！","助けてください","Tasukete kudasai"],
+            ["🚑 緊急","請叫救護車！","救急車を呼んでください","Kyuukyuusha o yonde kudasai"],
+            ["🚑 緊急","請叫警察！","警察を呼んでください","Keisatsu o yonde kudasai"],
+            ["🚑 緊急","我的護照不見了","パスポートをなくしました","Pasupooto o nakushimashita"]
+        ];
+
+        // 提取分類
+        var cats = ["🌟 全部"];
+        for(var i=0; i<rawData.length; i++) {
+            var c = rawData[i][0];
+            if(cats.indexOf(c) === -1) cats.push(c);
+        }
+
+        // 發音功能 (無 localStorage)
+        window.spk = function(txt, zh, ro) {
+            try {
+                if(window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                    var u = new SpeechSynthesisUtterance(txt);
+                    u.lang = 'ja-JP';
+                    var spd = document.getElementById('spd');
+                    var vol = document.getElementById('vol');
+                    u.rate = (spd && spd.checked) ? 0.45 : 0.85;
+                    u.volume = (vol && vol.checked) ? 1.0 : 0.8;
+                    window.speechSynthesis.speak(u);
+                }
+            } catch(e) {}
+
+            // 存入當次陣列
+            if (zh) {
+                var temp = [];
+                for (var x=0; x<hist.length; x++) { if (hist[x][2] !== txt) temp.push(hist[x]); }
+                temp.unshift(["🕒 本次紀錄", zh, txt, ro]);
+                if (temp.length > 20) temp.pop();
+                hist = temp;
+            }
+        };
+
+        // 收藏功能 (無 localStorage)
+        window.tglFav = function(e, j) {
+            e.stopPropagation();
+            var idx = favs.indexOf(j);
+            if (idx > -1) favs.splice(idx, 1); else favs.push(j);
+            drawList(curCat, document.getElementById('search').value);
+        };
+
+        // 放大功能
+        window.zoom = function(e, ja, zh) {
+            e.stopPropagation();
+            document.getElementById('z-ja').innerText = ja;
+            document.getElementById('z-zh').innerText = zh;
+            document.getElementById('modal-zoom').style.display = 'flex';
+        };
+
+        // 繪製清單 (最安全的寫法)
+        function drawList(cat, q) {
+            var box = document.getElementById('list-box');
+            box.innerHTML = '';
+
+            var arr = [];
+            if (cat === "🌟 全部") {
+                arr = rawData;
+            } else if (cat === "⭐ 本次最愛") {
+                for (var i=0; i<rawData.length; i++) { if (favs.indexOf(rawData[i][2]) > -1) arr.push(rawData[i]); }
+            } else if (cat === "🕒 本次紀錄") {
+                arr = hist;
+            } else {
+                for (var i=0; i<rawData.length; i++) { if (rawData[i][0] === cat) arr.push(rawData[i]); }
+            }
+
+            if (q) {
+                q = q.toLowerCase();
+                var tmp = [];
+                for (var k=0; k<arr.length; k++) {
+                    if (arr[k][1].indexOf(q) > -1 || arr[k][2].indexOf(q) > -1) tmp.push(arr[k]);
+                }
+                arr = tmp;
+            }
+
+            var html = "";
+            for (var n=0; n<arr.length; n++) {
+                var item = arr[n];
+                var jText = item[2];
+                var sFav = (favs.indexOf(jText) > -1) ? "active" : "";
+                
+                var safeJ = jText.replace(/'/g, "\\'");
+                var safeZ = item[1].replace(/'/g, "\\'");
+                var safeR = (item[3]||"").replace(/'/g, "\\'");
+
+                html += '<div class="card">' +
+                            '<div class="star '+sFav+'" onclick="tglFav(event, \''+safeJ+'\')">★</div>' +
+                            '<div class="card-inner" onclick="spk(\''+safeJ+'\', \''+safeZ+'\', \''+safeR+'\')">' +
+                                '<div class="zh">'+item[1]+'</div>' +
+                                '<div class="ja-box"><span class="ja">🔊 '+jText+'</span></div>' +
+                                '<div class="ro">'+(item[3]||"")+'</div>' +
+                            '</div>' +
+                            '<button class="zoom-btn" onclick="zoom(event, \''+safeJ+'\', \''+safeZ+'\')">🪧 放大顯示</button>' +
+                        '</div>';
+            }
+            if (arr.length === 0) box.innerHTML = '<h3 style="color:var(--sub); text-align:center;">查無資料</h3>';
+            else box.innerHTML = html;
+        }
+
+        // 切換分類
+        window.setCat = function(cName) {
+            curCat = cName;
+            var bRec = document.getElementById('btn-rec');
+            var bFav = document.getElementById('btn-fav');
+            bRec.className = (cName === '🕒 本次紀錄') ? 'btn active' : 'btn';
+            bFav.className = (cName === '⭐ 本次最愛') ? 'btn active' : 'btn';
+
+            var btns = document.getElementsByClassName('cat-item');
+            for (var i=0; i<btns.length; i++) {
+                btns[i].className = (btns[i].innerText === cName) ? 'cat-item active' : 'cat-item';
+            }
+            drawList(curCat, document.getElementById('search').value);
+        };
+
+        // 搜尋
+        document.getElementById('search').oninput = function(e) { drawList(curCat, e.target.value); };
+
+        // 啟動 (純淨無雜質)
+        var cHtml = "";
+        for (var x=0; x<cats.length; x++) {
+            var act = (cats[x] === '🌟 全部') ? 'active' : '';
+            cHtml += '<button class="cat-item '+act+'" onclick="document.getElementById(\'search\').value=\'\'; setCat(\''+cats[x]+'\')">'+cats[x]+'</button>';
+        }
+        document.getElementById('cat-box').innerHTML = cHtml;
+        drawList('🌟 全部', '');
+
+    </script>
+</body>
+</html>
             ["👋 常用","請多指教","よろしくお願いします","Yoroshiku onegaishimasu"],
             ["👋 常用","我會一點點日文","日本語は少しだけわかります","Nihongo wa sukoshi dake wakarimasu"],
             ["👋 常用","請寫下來","書いてください","Kaite kudasai"],
