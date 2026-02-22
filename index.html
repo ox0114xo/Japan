@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日文語音系統 v2.1</title>
+    <title>日文語音系統 v2.0</title>
     <link rel="manifest" href="manifest.json">
     <style>
         /* 未來科技感 UI 變數 */
@@ -12,15 +12,20 @@
             --neon-blue: #00f0ff; 
             --neon-purple: #b026ff;
             --neon-green: #39ff14;
-            --btn-depth: #0369a1; /* 鍵盤底部陰影顏色 */
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(0, 240, 255, 0.2);
             --text-main: #e2e8f0;
             --text-muted: #94a3b8;
         }
         
         body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 70%); color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 90px; min-height: 100vh; }
         
+        /* 標題與發光效果 */
         h1 { text-align: center; color: #fff; text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-blue); font-size: 26px; margin: 10px 0 20px 0; user-select: none; cursor: pointer; letter-spacing: 2px;}
         
+        /* 毛玻璃共用類別 */
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); }
+
         /* 搜尋列 */
         .search-box { width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-purple); border-radius: 8px; font-size: 16px; color: #fff; box-sizing: border-box; transition: 0.3s; }
         .search-box:focus { outline: none; box-shadow: 0 0 15px var(--neon-purple); }
@@ -32,64 +37,36 @@
         .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; transition: all 0.3s ease; letter-spacing: 1px;}
         .cat-btn.active { background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); font-weight: bold; }
 
-        /* 語速滑桿 (全寬) */
-        .slider-container { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 25px; }
+        /* 科技感控制區 */
+        .controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .control-btn { background: rgba(0,0,0,0.5); border: 1px solid #334155; color: #fff; padding: 12px; border-radius: 8px; font-size: 14px; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .control-btn:active { transform: scale(0.95); }
+        .btn-volume.active { border-color: var(--neon-green); color: var(--neon-green); box-shadow: 0 0 10px rgba(57, 255, 20, 0.2); }
+        .btn-autoplay { border-color: var(--neon-purple); color: var(--neon-purple); }
+        .btn-autoplay.playing { background: var(--neon-purple); color: #fff; box-shadow: 0 0 15px var(--neon-purple); animation: pulse 1.5s infinite; }
+
+        /* 語速滑桿 */
+        .slider-container { grid-column: 1 / -1; display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 12px 15px; border-radius: 8px; border: 1px solid #334155; }
         .speed-slider { flex: 1; -webkit-appearance: none; background: #334155; height: 4px; border-radius: 2px; outline: none; }
-        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--neon-blue); cursor: pointer; box-shadow: 0 0 10px var(--neon-blue); }
+        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--neon-blue); cursor: pointer; box-shadow: 0 0 10px var(--neon-blue); }
 
-        /* 機械鍵盤效果列表 */
+        /* 列表樣式 */
         ul { list-style: none; padding: 0; margin: 0; }
-        li { 
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            border: 1px solid rgba(0, 240, 255, 0.4);
-            border-radius: 12px; 
-            margin-bottom: 20px; 
-            padding: 18px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            cursor: pointer;
-            /* 3D 陰影效果：底部厚度與外掛陰影 */
-            box-shadow: 0 6px 0 var(--btn-depth), 0 10px 15px rgba(0,0,0,0.5);
-            transform: translateY(0);
-            transition: transform 0.1s, box-shadow 0.1s, background 0.2s; 
-            position: relative;
-        }
+        li { background: rgba(15, 23, 42, 0.6); margin-bottom: 12px; padding: 18px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.2s; position: relative; overflow: hidden;}
+        li:active { background: rgba(0, 240, 255, 0.1); border-color: var(--neon-blue); }
         
-        /* 按下時的下壓回饋 */
-        li:active { 
-            transform: translateY(6px); /* 往下壓 6px */
-            box-shadow: 0 0 0 var(--btn-depth), 0 2px 4px rgba(0,0,0,0.5); /* 底部厚度消失 */
-            background: linear-gradient(145deg, #0f172a, #1e293b);
-            border-color: var(--neon-blue);
-        }
-        
-        /* 視覺引導：發聲圖示 */
-        .play-indicator {
-            font-size: 24px;
-            margin-right: 15px;
-            color: var(--neon-blue);
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
-            display: flex;
-            align-items: center;
-            opacity: 0.8;
-        }
-
-        .text-content { flex: 1; margin-right: 10px; z-index: 1; }
+        .text-content { flex: 1; margin-right: 15px; z-index: 1; }
         .jp-text { font-size: 18px; font-weight: bold; color: #fff; display: block; margin-bottom: 4px; letter-spacing: 0.5px;}
         .romaji-text { font-size: 12px; color: var(--neon-blue); font-family: monospace; display: block; margin-bottom: 6px; }
         .zh-text { font-size: 14px; color: var(--text-muted); display: block; }
 
-        /* 右側動作按鈕 */
-        .action-group { display: flex; gap: 10px; z-index: 1; align-items: center; }
-        .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 6px; font-size: 18px; color: #64748b; cursor: pointer; padding: 8px; transition: 0.2s; display: flex; justify-content: center; align-items: center;}
-        .icon-btn.star.active { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); text-shadow: 0 0 10px rgba(251, 191, 36, 0.5); background: rgba(251, 191, 36, 0.1); }
+        /* 動作按鈕群 */
+        .action-group { display: flex; gap: 10px; z-index: 1; }
+        .icon-btn { background: none; border: none; font-size: 20px; color: #64748b; cursor: pointer; padding: 5px; transition: 0.2s; }
+        .icon-btn.star.active { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.5); }
         .icon-btn.fullscreen { color: var(--neon-blue); }
-        
-        /* 避免子按鈕被點擊時，連帶觸發整個 li 的下壓動畫 */
-        .action-group .icon-btn:active { transform: scale(0.9); }
 
-        /* 全螢幕字幕覆蓋層 */
+        /* 全螢幕字幕覆蓋層 (Cyberpunk Terminal Style) */
         #fullscreen-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: var(--neon-green); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; font-family: monospace; }
         #fullscreen-jp { font-size: 12vw; font-weight: bold; margin-bottom: 15px; width: 100%; word-wrap: break-word; text-shadow: 0 0 20px var(--neon-green); }
         #fullscreen-romaji { font-size: 6vw; color: #fff; margin-bottom: 20px; opacity: 0.8; }
@@ -102,10 +79,12 @@
         .fab { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, var(--neon-purple), #4f46e5); color: white; border: none; padding: 16px 32px; border-radius: 30px; font-size: 16px; font-weight: bold; box-shadow: 0 10px 25px rgba(176, 38, 255, 0.4); z-index: 900; width: 90%; max-width: 400px; cursor: pointer; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.3s; }
         .fab:active { transform: translateX(-50%) scale(0.95); }
 
-        /* 讀取動畫 */
+        /* 讀取動畫 (科技環) */
         .loader-container { display: flex; justify-content: center; align-items: center; padding: 40px; flex-direction: column; gap: 15px; }
         .tech-spinner { width: 40px; height: 40px; border: 3px solid transparent; border-top-color: var(--neon-blue); border-bottom-color: var(--neon-purple); border-radius: 50%; animation: spin 1s linear infinite; }
+        
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(176, 38, 255, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(176, 38, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(176, 38, 255, 0); } }
 
         /* 模態框 (Modal) */
         #translate-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; }
@@ -141,23 +120,26 @@
 
     <div class="category-scroll" id="category-container"></div>
 
-    <div class="slider-container">
-        <span style="font-size: 14px; color: var(--text-muted);">⚙️ 系統語速</span>
-        <input type="range" id="speed-slider" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updateSpeedVal()">
-        <span id="speed-val" style="font-family: monospace; color: var(--neon-blue); width: 35px; text-align: right;">1.0x</span>
+    <div class="controls-grid">
+        <button class="control-btn btn-volume" id="volume-btn" onclick="toggleVolume()">
+            <span id="vol-icon">🔉</span> 系統音量鎖定
+        </button>
+        <button class="control-btn btn-autoplay" id="autoplay-btn" onclick="toggleAutoplay()">
+            <span>▶️</span> 連續播放 (關)
+        </button>
+        
+        <div class="slider-container">
+            <span style="font-size: 14px; color: var(--text-muted);">語速</span>
+            <input type="range" id="speed-slider" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updateSpeedVal()">
+            <span id="speed-val" style="font-family: monospace; color: var(--neon-blue); width: 35px;">1.0x</span>
+        </div>
     </div>
 
     <div id="easter-egg">
         <h3 style="color: #ff3333; margin: 0 0 10px 0;">[ 隱藏權限已解鎖 ]</h3>
         <ul id="swear-list">
-            <li onclick="speak('ふざけるな')">
-                <div class="play-indicator">🔊</div>
-                <div class="text-content"><span class="jp-text">ふざけるな</span><span class="zh-text">別開玩笑了</span></div>
-            </li>
-            <li onclick="speak('だまれ')">
-                <div class="play-indicator">🔊</div>
-                <div class="text-content"><span class="jp-text">だまれ</span><span class="zh-text">閉嘴</span></div>
-            </li>
+            <li onclick="speak('ふざけるな')"><div class="text-content"><span class="jp-text">ふざけるな</span><span class="zh-text">別開玩笑了</span></div></li>
+            <li onclick="speak('だまれ')"><div class="text-content"><span class="jp-text">だまれ</span><span class="zh-text">閉嘴</span></div></li>
         </ul>
     </div>
 
@@ -187,7 +169,11 @@
         // --- 核心變數 ---
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = [];
+        let filteredData = []; // 供連續播放使用
         let currentCategory = '全部';
+        let isVolumeMax = false;
+        let isAutoplay = false;
+        let autoplayIndex = 0;
         let clickCount = 0;
         let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
 
@@ -204,29 +190,98 @@
             }
         });
 
-        // --- 語速控制 ---
+        // --- 控制器：音量與語速 ---
+        function toggleVolume() {
+            isVolumeMax = !isVolumeMax;
+            const btn = document.getElementById('volume-btn');
+            btn.classList.toggle('active');
+            document.getElementById('vol-icon').innerText = isVolumeMax ? '🔊' : '🔉';
+            if(isVolumeMax) alert('語音引擎功率已開至 100% (請配合實體音量鍵調整)');
+        }
+
         function updateSpeedVal() {
             const val = document.getElementById('speed-slider').value;
             document.getElementById('speed-val').innerText = Number(val).toFixed(1) + 'x';
         }
 
-        // --- 精簡後的語音核心引擎 ---
-        function speak(text) {
+        // --- 語音核心引擎 ---
+        function speak(text, callback = null) {
             if (!('speechSynthesis' in window)) return alert("引擎不支援");
             window.speechSynthesis.cancel();
             
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
-            // 移除強制最大音量，交還給設備預設
+            utterance.volume = isVolumeMax ? 1.0 : 0.8;
             utterance.rate = parseFloat(document.getElementById('speed-slider').value);
             
             utterance.onerror = (e) => {
                 if(e.error === 'not-allowed') {
+                    isAutoplay = false;
+                    updateAutoplayUI();
                     alert('系統阻擋自動播放，請先手動點擊螢幕任意處。');
                 }
             };
 
+            // 如果有 callback (用於連續播放)
+            if (callback) {
+                utterance.onend = () => {
+                    setTimeout(callback, 1000); // 句與句之間停頓 1 秒
+                };
+            }
+
             window.speechSynthesis.speak(utterance);
+        }
+
+        // --- 連續播放功能 ---
+        function toggleAutoplay() {
+            isAutoplay = !isAutoplay;
+            updateAutoplayUI();
+            
+            if (isAutoplay) {
+                if(filteredData.length === 0) {
+                    isAutoplay = false;
+                    updateAutoplayUI();
+                    return alert("當前列表為空");
+                }
+                autoplayIndex = 0; // 從第一首開始
+                playNextInQueue();
+            } else {
+                window.speechSynthesis.cancel(); // 停止播放
+            }
+        }
+
+        function updateAutoplayUI() {
+            const btn = document.getElementById('autoplay-btn');
+            if(isAutoplay) {
+                btn.classList.add('playing');
+                btn.innerHTML = '<span>⏸️</span> 停止連續播放';
+            } else {
+                btn.classList.remove('playing');
+                btn.innerHTML = '<span>▶️</span> 連續播放 (關)';
+            }
+        }
+
+        function playNextInQueue() {
+            if (!isAutoplay) return;
+            if (autoplayIndex >= filteredData.length) {
+                isAutoplay = false;
+                updateAutoplayUI();
+                alert("✅ 播放完畢！");
+                return;
+            }
+            // 讓列表滾動到正在播放的項目
+            const listItems = document.getElementById('sentence-list').children;
+            if(listItems[autoplayIndex]) {
+                listItems[autoplayIndex].scrollIntoView({ behavior: "smooth", block: "center" });
+                // 產生一個短暫的高亮效果
+                listItems[autoplayIndex].style.background = 'rgba(176, 38, 255, 0.3)';
+                setTimeout(() => listItems[autoplayIndex].style.background = '', 1000);
+            }
+
+            speak(filteredData[autoplayIndex].jp, () => {
+                autoplayIndex++;
+                playNextInQueue();
+            });
         }
 
         // --- 我的最愛 (書籤) 功能 ---
@@ -244,11 +299,15 @@
 
         // --- 全螢幕字幕 ---
         function openFullscreen(event, jp, zh, romaji) {
-            event.stopPropagation(); // 防止觸發整塊發音
+            event.stopPropagation();
             document.getElementById('fullscreen-jp').innerText = jp;
             document.getElementById('fullscreen-romaji').innerText = romaji || '';
             document.getElementById('fullscreen-zh').innerText = zh;
             document.getElementById('fullscreen-overlay').style.display = 'flex';
+            
+            // 全螢幕時暫停連續播放
+            if(isAutoplay) toggleAutoplay(); 
+            
             speak(jp);
         }
 
@@ -264,13 +323,18 @@
 
         // --- 讀取資料庫 (帶有快取機制) ---
         async function loadCSV() {
+            // 先嘗試從本機讀取快取 (瞬間顯示)
             const cachedData = localStorage.getItem('jp_csv_cache');
-            if (cachedData) processData(cachedData);
+            if (cachedData) {
+                processData(cachedData);
+            }
 
             try {
+                // 背景去網路抓最新資料
                 const res = await fetch(CSV_URL);
                 const csvText = await res.text();
                 
+                // 若網路抓到的與快取不同，更新快取並重新渲染
                 if (csvText !== cachedData) {
                     localStorage.setItem('jp_csv_cache', csvText);
                     processData(csvText);
@@ -282,7 +346,7 @@
 
         function processData(csvText) {
             const rows = csvText.split('\n');
-            const categoriesSet = new Set(['全部', '⭐最愛']);
+            const categoriesSet = new Set(['全部', '⭐最愛']); // 加入最愛分類
             globalData = [];
 
             for (let i = 1; i < rows.length; i++) {
@@ -315,77 +379,4 @@
                 if(cat === '⭐最愛') btn.style.color = '#fbbf24';
                 
                 btn.onclick = () => {
-                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentCategory = cat;
-                    filterData();
-                };
-                container.appendChild(btn);
-            });
-        }
-
-        // --- 篩選與渲染列表 ---
-        function filterData() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            
-            const filteredData = globalData.filter(item => {
-                const isFav = favorites.includes(item.jp);
-                let matchCat = false;
-                if (currentCategory === '全部') matchCat = true;
-                else if (currentCategory === '⭐最愛') matchCat = isFav;
-                else matchCat = item.cat === currentCategory;
-
-                const matchQuery = item.zh.toLowerCase().includes(query) || 
-                                   item.jp.toLowerCase().includes(query) || 
-                                   item.romaji.toLowerCase().includes(query);
-                
-                return matchCat && matchQuery;
-            });
-            
-            renderList(filteredData);
-        }
-
-        // --- 渲染成機械鍵盤樣式 ---
-        function renderList(dataToRender) {
-            const list = document.getElementById('sentence-list');
-            list.innerHTML = '';
-            if(dataToRender.length === 0) {
-                list.innerHTML = '<li style="justify-content:center; color:var(--text-muted); box-shadow:none; cursor:default;">無符合之資料</li>';
-                return;
-            }
-
-            dataToRender.forEach(item => {
-                const li = document.createElement('li');
-                const safeJp = item.jp.replace(/'/g, "\\'");
-                const safeZh = item.zh.replace(/'/g, "\\'");
-                const safeRomaji = item.romaji.replace(/'/g, "\\'");
-                const isFav = favorites.includes(item.jp);
-
-                li.onclick = () => speak(item.jp);
-                
-                li.innerHTML = `
-                    <div class="play-indicator">🔊</div>
-                    <div class="text-content">
-                        <span class="jp-text">${item.jp}</span>
-                        ${item.romaji ? `<span class="romaji-text">${item.romaji}</span>` : ''}
-                        <span class="zh-text">${item.zh}</span>
-                    </div>
-                    <div class="action-group">
-                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')">★</button>
-                        <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶</button>
-                    </div>
-                `;
-                list.appendChild(li);
-            });
-        }
-
-        // --- 自定義翻譯引擎 ---
-        async function translateAndSpeak() {
-            const input = document.getElementById('translate-input').value.trim();
-            const btn = document.getElementById('translate-btn');
-            const resDiv = document.getElementById('translate-result');
-            if (!input) return;
-
-            btn.innerText = "資料解析中...";
-            btn.style.background = "#4f46e5";
-            btn.d
+                    document.querySelectorAll('.cat-btn').forEach(b 
