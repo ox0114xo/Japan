@@ -1,23 +1,29 @@
-function getBestVoice() {
-    var voices = window.speechSynthesis.getVoices();
-    var useMale = document.getElementById('voiceGenderToggle').checked;
-    var jaVoices = voices.filter(function(v) { return v.lang.includes('ja'); });
+const CACHE_NAME = 'jp-speech-app-v1';
+const urlsToCache = [
+  '/',
+  '/index.html',
+  '/manifest.json'
+];
 
-    if (jaVoices.length === 0) return null;
+// 安裝 Service Worker 並快取核心檔案
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(urlsToCache);
+      })
+  );
+});
 
-    if (useMale) {
-        // 安卓 Google 語音引擎常見的男聲關鍵代號與關鍵字
-        var maleVoice = jaVoices.find(function(v) {
-            var name = v.name.toLowerCase();
-            return name.includes('male') || 
-                   name.includes('otoya') || 
-                   name.includes('ichiro') ||
-                   name.includes('google-jp-male') ||
-                   // 以下是安卓 Google TTS 常見的男聲代碼特徵
-                   name.includes('x-jdj') || 
-                   name.includes('x-fis');
-        });
-        return maleVoice || jaVoices[0]; // 找不到男聲則回退
-    }
-    return jaVoices[0];
-}
+// 攔截網路請求，若有快取則返回快取，否則發送網路請求
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      })
+  );
+});
