@@ -3,35 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 最終定案版</title>
+    <title>日本旅遊神器 究極無敵版</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="日語神器">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197604.png">
-
-    <script>
-        window.onerror = function(msg, url, line) {
-            var box = document.getElementById('list-box');
-            if(box) box.innerHTML = '<div style="color:red; padding:20px; background:#450a0a; border-radius:10px; margin-top:20px;"><b>系統崩潰:</b><br>' + msg + '<br>行數: ' + line + '</div>';
-            return false;
-        };
-    </script>
-
-    <script>
-        try {
-            var ua = navigator.userAgent || navigator.vendor || window.opera;
-            if (ua.indexOf("Line") > -1 || ua.indexOf("FBAN") > -1 || ua.indexOf("FBAV") > -1 || ua.indexOf("Instagram") > -1) {
-                if (location.search.indexOf("openBrowser=1") === -1) {
-                    location.href = location.href + (location.search ? "&" : "?") + "openBrowser=1";
-                }
-                document.addEventListener("DOMContentLoaded", function() {
-                    var b = document.getElementById("blocker");
-                    if(b) b.style.display = "flex";
-                });
-            }
-        } catch(e) {}
-    </script>
 
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --blue: #3b82f6; --green: #10b981; --red: #ef4444; --gold: #fbbf24; --text: #f8fafc; --sub: #94a3b8; --border: #334155; }
@@ -40,13 +17,13 @@
         .container { max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
         .title { font-size: 26px; font-weight: 900; margin: 20px 0; color: #fff; cursor: pointer; user-select: none; text-shadow: 0 0 10px rgba(59,130,246,0.5); }
         
-        .install-btn { display: none; background: var(--green); color: #fff; padding: 15px; border-radius: 12px; font-weight: bold; margin-bottom: 15px; cursor: pointer; box-shadow: 0 4px 10px rgba(16,185,129,0.3); }
+        .install-btn { display: none; background: var(--green); color: #fff; padding: 15px; border-radius: 12px; font-weight: bold; margin-bottom: 15px; cursor: pointer; }
 
         .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center; box-sizing: border-box; outline: none; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .btn { background: var(--card); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .btn.active { background: var(--blue); border-color: var(--blue); }
+        .btn.active { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 10px rgba(59,130,246,0.5); }
         .btn-red { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.5); color: var(--red); grid-column: span 2; }
         .chk-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; color: var(--sub); display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; }
         
@@ -66,7 +43,6 @@
         .star.active { color: var(--gold); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
         .zoom-btn { width: 100%; background: rgba(255,255,255,0.05); color: var(--sub); border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; cursor: pointer; }
         
-        /* 翻譯區塊 */
         .c-area { background: var(--card); padding: 20px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
         .c-txt { width: 100%; height: 80px; background: rgba(0,0,0,0.3); color: #fff; border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-sizing: border-box; text-align: center; font-size: 16px; margin-bottom: 15px; outline: none; }
         .c-res { padding: 15px; color: var(--green); font-weight: bold; font-size: 18px; min-height: 30px; }
@@ -74,25 +50,17 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .m-box { background: var(--card); padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; text-align: left; border: 1px solid var(--border); }
         .m-close { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
-
-        #blocker { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
     </style>
 </head>
 <body>
-
-    <div id="blocker">
-        <h1 style="color:var(--red); font-size:60px; margin:0;">⚠️</h1>
-        <h2>請切換瀏覽器</h2>
-        <p style="color:var(--sub);">請點擊右上角「使用預設瀏覽器開啟」以確保發音正常。</p>
-    </div>
 
     <div id="modal-tts" class="modal">
         <div class="m-box">
             <h2 style="color:var(--red); margin-top:0; text-align:center;">🔇 發音失敗</h2>
             <p style="color:var(--text); font-size:15px; line-height:1.6;">
-                1. 檢查網址列旁邊鎖頭的<b>「聲音權限」</b>。<br><br>
-                2. 確認手機未開啟<b>「靜音模式」</b>。<br><br>
-                3. 前往手機設定下載<b>「日文語音包」</b>。
+                1. 檢查網址列旁邊鎖頭的<b>聲音權限</b>已允許。<br><br>
+                2. 確認手機未開啟<b>靜音模式</b>。<br><br>
+                3. 前往手機設定下載<b>日文語音包</b>。
             </p>
             <label style="display:flex; align-items:center; justify-content:center; color:var(--sub); font-size:14px; margin-top:15px; cursor:pointer;">
                 <input type="checkbox" id="chk-ignore" style="width:18px; height:18px; margin-right:8px;">
@@ -106,8 +74,8 @@
         <div class="m-box" style="text-align:center;">
             <h2 style="color:var(--green); margin-top:0;">📲 安裝到桌面</h2>
             <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; text-align:left; font-size:15px;">
-                🍎 <b>iPhone：</b><br>點擊下方「分享」按鈕，選擇 <b>「加入主畫面」</b>。<br><br>
-                🤖 <b>Android：</b><br>點擊右上角「⋮」，選擇 <b>「加到主畫面」</b>。
+                🍎 <b>iPhone：</b>點擊下方「分享」按鈕，選擇「加入主畫面」。<br><br>
+                🤖 <b>Android：</b>點擊右上角「⋮」，選擇「加到主畫面」。
             </div>
             <button class="m-close" style="background:var(--green);" onclick="document.getElementById('modal-install').style.display='none'">我知道了</button>
         </div>
@@ -115,16 +83,16 @@
 
     <div id="modal-zoom" class="modal">
         <div id="z-ja" style="font-size:12vw; font-weight:900; color:#fff; text-align:center;"></div>
-        <div id="z-zh" style="font-size:22px; color:var(--sub); margin-top:30px; text-align:center;"></div>
+        <div id="z-zh" style="font-size:22px; color:var(--sub); margin-top:30px; text-align:center; font-weight:bold;"></div>
         <button class="m-close" style="background:var(--border);" onclick="document.getElementById('modal-zoom').style.display='none'">✖ 關閉</button>
     </div>
 
     <div class="container">
-        <div class="title" onclick="unlock()">🇯🇵 Japan Travel 定案版</div>
+        <div class="title" onclick="unlock()">🇯🇵 Japan Travel 究極版</div>
         
         <div id="install-btn" class="install-btn" onclick="doInstall()">📲 點此將神器安裝到手機桌面</div>
 
-        <input type="text" id="search" class="search" placeholder="🔍 搜尋想說的話 (中/日皆可)...">
+        <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話 (中/日皆可)...">
 
         <div class="grid-2">
             <button class="btn" id="btn-rec" onclick="setCat('🕒 歷史紀錄')">🕒 歷史紀錄</button>
@@ -142,7 +110,6 @@
     </div>
 
     <script>
-        // 核心變數 (使用證明過不會出錯的結構)
         var DB = [];
         var HDN = [];
         var cats = ["🌟 全部"];
@@ -153,13 +120,11 @@
         var lastTxt = "";
         var lastTime = 0;
 
-        // 讀取暫存
         try {
-            var f = localStorage.getItem('v9_fav'); if(f) favs = JSON.parse(f);
-            var h = localStorage.getItem('v9_hist'); if(h) hist = JSON.parse(h);
+            var f = localStorage.getItem('v10_fav'); if(f) favs = JSON.parse(f);
+            var h = localStorage.getItem('v10_hist'); if(h) hist = JSON.parse(h);
         } catch(e) {}
 
-        // 基礎 PWA 安裝 (拔除危險的 matchMedia 偵測)
         var promptEvent;
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
@@ -179,11 +144,10 @@
             }
         }
 
-        // 發音功能
         function closeTTS() {
             var chk = document.getElementById('chk-ignore');
             if (chk && chk.checked) {
-                try { localStorage.setItem('v9_igntts', 'true'); } catch(e) {}
+                try { localStorage.setItem('v10_igntts', 'true'); } catch(e) {}
             }
             document.getElementById('modal-tts').style.display = 'none';
         }
@@ -192,7 +156,7 @@
             var ign = false;
             var chk = document.getElementById('chk-ignore');
             if (chk && chk.checked) ign = true;
-            else if (localStorage.getItem('v9_igntts') === 'true') ign = true;
+            else if (localStorage.getItem('v10_igntts') === 'true') ign = true;
 
             var now = new Date().getTime();
             if (txt === lastTxt && (now - lastTime) < 3000 && !ign) {
@@ -213,7 +177,6 @@
                 window.speechSynthesis.speak(u);
             } catch(e) { if(!ign) document.getElementById('modal-tts').style.display = 'flex'; }
 
-            // 歷史紀錄
             if (zh) {
                 var temp = [];
                 for (var i = 0; i < hist.length; i++) {
@@ -222,7 +185,7 @@
                 temp.unshift({c: "🕒 歷史紀錄", z: zh, j: txt, r: ro});
                 if (temp.length > 20) temp.pop();
                 hist = temp;
-                try { localStorage.setItem('v9_hist', JSON.stringify(hist)); } catch(e) {}
+                try { localStorage.setItem('v10_hist', JSON.stringify(hist)); } catch(e) {}
             }
         }
 
@@ -231,7 +194,7 @@
             var idx = favs.indexOf(ja);
             if (idx > -1) favs.splice(idx, 1);
             else favs.push(ja);
-            try { localStorage.setItem('v9_fav', JSON.stringify(favs)); } catch(err) {}
+            try { localStorage.setItem('v10_fav', JSON.stringify(favs)); } catch(err) {}
             renderList(curCat, document.getElementById('search').value);
         }
 
@@ -242,43 +205,49 @@
             document.getElementById('modal-zoom').style.display = 'flex';
         }
 
-        // 翻譯功能 (獨立函數，最安全)
+        // 🛡️ 翻譯功能改用最穩定的 XHR (不會被舊手機吞掉錯誤)
         function doTranslate() {
             var input = document.getElementById('cin');
             var res = document.getElementById('cres');
             if (!input || !res || !input.value) return;
             
             res.innerText = '⏳ 翻譯中...';
-            fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(input.value) + '&langpair=zh-TW|ja')
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                res.innerText = data.responseData.translatedText;
-                spk(res.innerText, null, null);
-            })
-            .catch(function(e) { res.innerText = '❌ 網路錯誤'; });
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(input.value) + "&langpair=zh-TW|ja", true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var data = JSON.parse(xhr.responseText);
+                            res.innerText = data.responseData.translatedText;
+                            spk(res.innerText, null, null);
+                        } catch(e) { res.innerText = '❌ 解析資料錯誤'; }
+                    } else {
+                        res.innerText = '❌ 網路連線錯誤 (' + xhr.status + ')';
+                    }
+                }
+            };
+            xhr.send();
         }
 
         function renderList(cat, q) {
             var box = document.getElementById('list-box');
-            if(!box) return;
+            if (!box) return;
             box.innerHTML = '';
 
-            // 獨立渲染自訂翻譯區塊
             if (cat === "✏️ 自訂") {
-                box.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="輸入你想翻譯的中文 (需網路連線)..."></textarea><div id="cres" class="c-res"></div><button style="background:var(--green); color:#fff; border:none; padding:15px; border-radius:12px; width:100%; font-weight:bold; font-size:16px; cursor:pointer;" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
+                box.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="輸入想翻譯的中文 (需網路)..."></textarea><div id="cres" class="c-res"></div><button style="background:var(--green); color:#fff; border:none; padding:15px; border-radius:12px; width:100%; font-weight:bold; font-size:16px; cursor:pointer;" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
                 return;
             }
 
             var arr = [];
-            if (cat === "🌟 全部") {
-                arr = DB;
-            } else if (cat === "⭐ 最愛") {
+            if (cat === "🌟 全部") { arr = DB; } 
+            else if (cat === "⭐ 最愛") {
                 for (var i=0; i<DB.length; i++) { if (favs.indexOf(DB[i].j) > -1) arr.push(DB[i]); }
-            } else if (cat === "🕒 歷史紀錄") {
-                arr = hist;
-            } else if (cat === "🔞 隱藏") {
-                arr = HDN;
-            } else {
+            } 
+            else if (cat === "🕒 歷史紀錄") { arr = hist; } 
+            else if (cat === "🔞 隱藏") { arr = HDN; } 
+            else {
                 for (var j=0; j<DB.length; j++) { if (DB[j].c === cat) arr.push(DB[j]); }
             }
 
@@ -297,14 +266,11 @@
             var finalArr = [];
             var seen = {};
             for (var m=0; m<arr.length; m++) {
-                if (!seen[arr[m].j]) {
-                    seen[arr[m].j] = true;
-                    finalArr.push(arr[m]);
-                }
+                if (!seen[arr[m].j]) { seen[arr[m].j] = true; finalArr.push(arr[m]); }
             }
 
             if (finalArr.length === 0) {
-                box.innerHTML = '<h3 style="color:var(--sub); text-align:center;">查無資料</h3>';
+                box.innerHTML = '<h3 style="color:var(--sub); text-align:center;">查無資料 🥺</h3>';
                 return;
             }
 
@@ -361,38 +327,53 @@
             renderList(curCat, e.target.value);
         };
 
-        // 與「浴火版」完全相同的 fetch 寫法
+        // 🛡️ 核心 CSV 讀取改用最穩定的 XHR，保證舊手機絕不卡死
         function initApp() {
             var url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv";
+            var cacheBuster = "&t=" + new Date().getTime(); // 強制抓取最新資料
+            var box = document.getElementById('list-box');
             
-            if (!window.fetch) {
-                document.getElementById('list-box').innerHTML = '<h3 style="color:var(--red);">❌ 您的瀏覽器版本過舊，不支援連線。</h3>';
-                return;
-            }
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url + cacheBuster, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        try {
+                            var lines = xhr.responseText.split('\n');
+                            var tempCats = [];
+                            
+                            for (var i=1; i<lines.length; i++) {
+                                var line = lines[i].replace(/\r/g, ''); 
+                                if (!line) continue;
+                                
+                                var cols = line.split(',');
+                                if (cols.length >= 3) {
+                                    var c = cols[0].trim();
+                                    var z = cols[1].trim();
+                                    var j = cols[2].trim();
+                                    var r = (cols.length > 3) ? cols[3].trim() : "";
+                                    
+                                    if (!c || !z || !j) continue;
+                                    
+                                    if (c === "🔞 隱藏") {
+                                        HDN.push({c:c, z:z, j:j, r:r});
+                                    } else {
+                                        DB.push({c:c, z:z, j:j, r:r});
+                                        if (tempCats.indexOf(c) === -1) tempCats.push(c);
+                                    }
+                                }
+                            }
 
-            fetch(url)
-            .then(function(res) {
-                if (!res.ok) throw new Error("網路異常");
-                return res.text();
-            })
-            .then(function(text) {
-                var lines = text.split('\n');
-                var tempCats = [];
-                
-                for (var i=1; i<lines.length; i++) {
-                    var line = lines[i].replace(/\r/g, ''); 
-                    if (!line) continue;
-                    
-                    var cols = line.split(',');
-                    if (cols.length >= 3) {
-                        var c = cols[0].trim();
-                        var z = cols[1].trim();
-                        var j = cols[2].trim();
-                        var r = (cols.length > 3) ? cols[3].trim() : "";
-                        
-                        if (!c || !z || !j) continue;
-                        
-                        if (c === "🔞 隱藏") {
-                            HDN.push({c:c, z:z, j:j, r:r});
-                        } else {
-                            DB.push({c:c,
+                            cats = cats.concat(tempCats);
+                            cats.push("✏️ 自訂");
+
+                            var cHtml = "";
+                            for (var x=0; x<cats.length; x++) {
+                                var act = (cats[x] === '🌟 全部') ? 'active' : '';
+                                cHtml += '<button class="cat-item '+act+'" onclick="document.getElementById(\'search\').value=\'\'; setCat(\''+cats[x]+'\')">'+cats[x]+'</button>';
+                            }
+                            document.getElementById('cat-box').innerHTML = cHtml;
+
+                            renderList('🌟 全部', '');
+                        } catch (e) {
+                            box.innerHTML = '<h3 style="color:var(--red);">❌ 解析資料失敗: ' + e.message + '</h3>'
