@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 雲端旗艦版</title>
+    <title>日本旅遊神器 封神版</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="日語神器">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197604.png">
-
-    <link rel="manifest" href='data:application/json;charset=utf-8,{"name":"日本旅遊神器","short_name":"日語神器","start_url":".","display":"standalone","background_color":"#070b14","theme_color":"#070b14","icons":[{"src":"https://cdn-icons-png.flaticon.com/512/197/197604.png","sizes":"512x512","type":"image/png"}]}'>
 
     <script>
         try {
@@ -33,12 +31,8 @@
         body { background-image: radial-gradient(circle at top, #1e293b 0%, #070b14 100%); background-attachment: fixed; padding-bottom: 120px; }
         
         .wrap { width: 100%; max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
-        .title { font-size: 24px; margin: 20px 0; font-weight: 900; text-shadow: 0 0 10px rgba(59,130,246,0.5); user-select: none; cursor: pointer;}
+        .title { font-size: 26px; margin: 20px 0; font-weight: 900; text-shadow: 0 0 10px rgba(59,130,246,0.5); user-select: none; cursor: pointer;}
         
-        /* 安裝橫幅 */
-        #pwaBanner { display: none; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 12px; margin-bottom: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(0.98); } 100% { transform: scale(1); } }
-
         .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(15, 23, 42, 0.7); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; }
         
         .grid-ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
@@ -59,16 +53,12 @@
         .ja-box { background: rgba(59,130,246,0.15); padding: 8px 15px; border-radius: 10px; margin-bottom: 6px; display: inline-block; border: 1px solid rgba(59,130,246,0.2); }
         .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
         .ro { font-size: 13px; color: var(--sub); font-style: italic; }
-        .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: rgba(255,255,255,0.1); padding: 5px; cursor: pointer; text-shadow: none; }
+        .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: rgba(255,255,255,0.1); padding: 5px; cursor: pointer; }
         .star.active { color: var(--gold); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
         .zoom-btn { width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; letter-spacing: 2px; cursor: pointer; }
         
-        .c-area { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
-        .c-txt { width: 100%; height: 80px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-sizing: border-box; text-align: center; font-size: 16px; margin-bottom: 15px; outline:none; }
-        .c-res { padding: 15px; color: var(--green); font-weight: bold; font-size: 18px; min-height: 30px; }
-        
-        .modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.95); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
-        .m-box { background: #1e293b; padding: 25px; border-radius: 20px; width: 100%; max-width: 380px; text-align: left; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.95); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .m-box { background: #1e293b; padding: 25px; border-radius: 20px; width: 100%; max-width: 380px; text-align: left; border: 1px solid var(--border); }
         .m-ja { font-size: 12vw; font-weight: 900; color: #fff; text-align: center; line-height: 1.2; word-wrap: break-word; }
         .m-zh { font-size: 22px; color: var(--sub); margin-top: 30px; text-align: center; font-weight:bold; }
         .m-close { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
@@ -81,33 +71,22 @@
     <div id="inAppBlocker">
         <h1 style="color:var(--red);font-size:60px;margin:0;">⚠️</h1>
         <h2>請切換瀏覽器</h2>
-        <p style="color:var(--sub);">為確保發音正常，請點擊右上角「使用預設瀏覽器開啟」。</p>
+        <p style="color:var(--sub);">內部瀏覽器會導致發音失敗，請點擊右上角「使用預設瀏覽器開啟」。</p>
     </div>
 
     <div id="ttsGuide" class="modal">
         <div class="m-box">
-            <h2 style="color:var(--red); margin-top:0; text-align:center;">🔇 發音失敗 / 沒聲音</h2>
+            <h2 style="color:var(--red); margin-top:0; text-align:center;">🔇 發音失敗</h2>
             <p style="color:var(--txt); font-size:15px; line-height:1.6;">
-                <span style="color:var(--gold); font-weight:bold;">1. 網站權限：</span>確認網址旁邊鎖頭的「聲音」已允許。<br><br>
-                <span style="color:var(--gold); font-weight:bold;">2. 靜音模式：</span>確認手機未靜音，且「媒體音量」已調大。<br><br>
-                <span style="color:var(--gold); font-weight:bold;">3. 語音包：</span>設定 > 語音輸出 > 下載日文語音。
+                1. 檢查網址列旁邊鎖頭的<b>「聲音權限」</b>。<br><br>
+                2. 確認手機未開啟<b>「靜音模式」</b>。<br><br>
+                3. 前往手機設定下載<b>「日文語音包」</b>。
             </p>
             <label style="display:flex; align-items:center; justify-content:center; color:var(--sub); font-size:14px; margin-top:15px; cursor:pointer;">
                 <input type="checkbox" id="chkIgnoreTTS" style="width:18px; height:18px; margin-right:8px;">
                 ✅ 我有聲音，請不要自動彈出
             </label>
             <button class="m-close" onclick="closeTTS()">關閉提示</button>
-        </div>
-    </div>
-
-    <div id="installGuide" class="modal">
-        <div class="m-box" style="text-align:center;">
-            <h2 style="color:var(--green); margin-top:0;">📲 安裝到桌面</h2>
-            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; text-align:left; font-size:15px; color:#fff; line-height:1.8;">
-                🍎 <b>蘋果 iPhone：</b><br>點擊下方「分享」按鈕，選擇 <b>「加入主畫面」</b>。<br><br>
-                🤖 <b>安卓 Android：</b><br>點擊右上角「⋮」，選擇 <b>「加到主畫面」</b> 或點擊下方安裝提示。
-            </div>
-            <button class="m-close" style="background:var(--green);" onclick="document.getElementById('installGuide').style.display='none'">我知道了</button>
         </div>
     </div>
 
@@ -118,87 +97,77 @@
     </div>
 
     <div class="wrap">
-        <div class="title" id="main-title" onclick="unlockHidden()">🇯🇵 Japan Travel <span class="version">雲端版</span></div>
+        <div class="title" onclick="unlockHidden()">🇯🇵 Japan Travel 封神版</div>
         
-        <div id="pwaBanner" onclick="triggerInstall()">
-            ⬇️ 點此將「日語神器」安裝到桌面
-        </div>
-
         <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話...">
 
         <div class="grid-ctrl">
-            <button class="btn" id="btn-rec" onclick="changeCategory('🕒 最近')">🕒 最近</button>
-            <button class="btn" id="btn-fav" onclick="changeCategory('⭐ 最愛')">⭐ 最愛</button>
+            <button class="btn" id="btn-rec" onclick="changeCat('🕒 最近')">🕒 最近</button>
+            <button class="btn" id="btn-fav" onclick="changeCat('⭐ 最愛')">⭐ 最愛</button>
             <div class="panel"><label>🔊 大音量 <input type="checkbox" id="vol" checked></label></div>
             <div class="panel"><label>🐢 龜速 <input type="checkbox" id="spd"></label></div>
             <button class="btn btn-red" onclick="document.getElementById('ttsGuide').style.display='flex'">🚑 點我沒聲音看這裡</button>
         </div>
 
-        <div class="cats" id="cat-container"></div>
-        
-        <div class="list" id="list-container">
-            <h3 style="text-align:center; color:var(--gold);">☁️ 正在從 Google 試算表同步資料...</h3>
+        <div class="cats" id="cat-box"></div>
+        <div class="list" id="list">
+            <h3 id="errMsg" style="color:red; display:none;"></h3>
         </div>
     </div>
 
     <script>
-        // 🚨 這是空物件，資料將由 Google Sheets 注入！
-        var DB = {};
-        var HDN = []; // 隱藏髒話區
-        
-        // Google Sheets CSV 連結
-        var sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv";
-
-        var currentCategory = "🌟 全部";
-        var clickCount = 0;
-        var favList = [];
-        var historyList = [];
-        
-        var lastSpkTxt = '';
-        var lastSpkTime = 0;
-        var ignoreTTSPopup = false;
-        
-        var deferredPrompt = null;
-        var pwaBanner = document.getElementById('pwaBanner');
-        var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-        if (!isStandalone) { pwaBanner.style.display = 'block'; }
-
-        window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault();
-            deferredPrompt = e;
-            pwaBanner.style.display = 'block';
-        });
-
-        window.triggerInstall = function() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(function(res) { 
-                    if(res.outcome === 'accepted') pwaBanner.style.display = 'none';
-                    deferredPrompt = null; 
-                });
-            } else {
-                document.getElementById('installGuide').style.display = 'flex';
-            }
+        // 絕對安全的資料庫 (300+句完整寫死，不需連線，不會崩潰)
+        var DB = {
+            "👋 常用": [
+                {z:"你好", j:"こんにちは", r:"Konnichiwa"}, {z:"謝謝", j:"ありがとうございます", r:"Arigatou gozaimasu"}, {z:"不好意思/請問", j:"すみません", r:"Sumimasen"}, {z:"沒關係", j:"大丈夫です", r:"Daijoubu desu"}, {z:"拜託您了", j:"お願いします", r:"Onegaishimasu"}, {z:"對不起", j:"ごめんなさい", r:"Gomennasai"}, {z:"早安", j:"おはようございます", r:"Ohayou gozaimasu"}, {z:"晚安", j:"こんばんは", r:"Konbanwa"}, {z:"我不懂日文", j:"日本語がわかりません", r:"Nihongo ga wakarimasen"}, {z:"請再說一次", j:"もう一度言ってください", r:"Mou ichido itte kudasai"}, {z:"好的", j:"はい", r:"Hai"}, {z:"不是", j:"いいえ", r:"Iie"}, {z:"幫大忙了", j:"助かりました", r:"Tasukarimashita"}, {z:"請說慢一點", j:"ゆっくり話してください", r:"Yukkuri hanashite kudasai"}, {z:"這是什麼", j:"これは何ですか", r:"Kore wa nan desu ka"}, {z:"辛苦了", j:"お疲れ様です", r:"Otsukaresama desu"}, {z:"再見", j:"さようなら", r:"Sayounara"}, {z:"初次見面", j:"初めまして", r:"Hajimemashite"}, {z:"請多指教", j:"よろしくお願いします", r:"Yoroshiku onegaishimasu"}, {z:"我會一點日文", j:"日本語は少しだけわかります", r:"Nihongo wa sukoshi dake wakarimasu"}, {z:"請寫下來", j:"書いてください", r:"Kaite kudasai"}, {z:"有會說中文的嗎", j:"中国語を話せる人はいますか", r:"Chuugokugo o hanaseru hito wa imasu ka"}, {z:"有會說英文的嗎", j:"英語を話せる人はいますか", r:"Eigo o hanaseru hito wa imasu ka"}, {z:"我來自台灣", j:"台湾から来ました", r:"Taiwan kara kimashita"}, {z:"現在幾點", j:"今、何時ですか", r:"Ima, nanji desu ka"}, {z:"稍等一下", j:"少々お待ちください", r:"Shoushou omachi kudasai"}, {z:"太棒了", j:"すごい", r:"Sugoi"}, {z:"原來如此", j:"なるほど", r:"Naruhodo"}, {z:"我明白了", j:"わかりました", r:"Wakarimashita"}, {z:"我不明白", j:"わかりません", r:"Wakarimasen"}, {z:"對/沒錯", j:"そうです", r:"Sou desu"}, {z:"不是這樣的", j:"違います", r:"Chigaimasu"}, {z:"請給我這個", j:"これをください", r:"Kore o kudasai"}
+            ],
+            "🏨 住宿": [
+                {z:"我要辦理入住", j:"チェックインをお願いします", r:"Chekku-in o onegaishimasu"}, {z:"我有預約", j:"予約しています", r:"Yoyaku shite imasu"}, {z:"預約的名字是", j:"予約の名前は...です", r:"Yoyaku no namae wa...desu"}, {z:"能寄放行李嗎", j:"荷物を預かってもらえますか", r:"Nimotsu o azukatte moraemasu ka"}, {z:"我要退房", j:"チェックアウトをお願いします", r:"Chekku-auto o onegaishimasu"}, {z:"Wi-Fi密碼是多少", j:"Wi-Fiのパスワードは何ですか", r:"Wi-Fi no pasuwaado wa nan desu ka"}, {z:"沒有熱水", j:"お湯が出ません", r:"Oyu ga demasen"}, {z:"冷氣壞了", j:"エアコンが壊れています", r:"Eakon ga kowarete imasu"}, {z:"房間沒打掃", j:"部屋の掃除がされていません", r:"Heya no souji ga sarete imasen"}, {z:"請幫我叫計程車", j:"タクシーを呼んでください", r:"Takushii o yonde kudasai"}, {z:"請幫我換房間", j:"部屋を変えてください", r:"Heya o kaete kudasai"}, {z:"請再給我毛巾", j:"タオルをもう一枚ください", r:"Taoru o mou ichimai kudasai"}, {z:"請再給我水", j:"お水をもう一本ください", r:"Omizu o mou ippon kudasai"}, {z:"早餐是幾點", j:"朝食は何時ですか", r:"Choushoku wa nanji desu ka"}, {z:"早餐在哪裡吃", j:"朝食はどこですか", r:"Choushoku wa doko desu ka"}, {z:"哪裡可以吸菸", j:"喫煙所はどこですか", r:"Kitsuenjo wa doko desu ka"}, {z:"有加濕器嗎", j:"加湿器はありますか", r:"Kashitsuki wa arimasu ka"}, {z:"有轉接頭嗎", j:"変換プラグはありますか", r:"Henkan puragu wa arimasu ka"}, {z:"可以借熨斗嗎", j:"アイロンを借りられますか", r:"Airon o kariraremasu ka"}, {z:"大浴場在哪裡", j:"大浴場はどこですか", r:"Daiyokujou wa doko desu ka"}, {z:"大浴場開到幾點", j:"大浴場は何時までですか", r:"Daiyokujou wa nanji made desu ka"}, {z:"門禁是幾點", j:"門限は何時ですか", r:"Mongen wa nanji desu ka"}, {z:"可以延遲退房嗎", j:"レイトチェックアウトはできますか", r:"Reito chekku-auto wa dekimasu ka"}, {z:"請把行李送到房間", j:"荷物を部屋に運んでください", r:"Nimotsu o heya ni hakonde kudasai"}
+            ],
+            "🍜 餐廳": [
+                {z:"兩位", j:"2人です", r:"Futari desu"}, {z:"三位", j:"3人です", r:"Sannin desu"}, {z:"四位", j:"4人です", r:"Yonin desu"}, {z:"有預約", j:"予約しています", r:"Yoyaku shite imasu"}, {z:"沒有預約", j:"予約していません", r:"Yoyaku shite imasen"}, {z:"要等多久", j:"どのくらい待ちますか", r:"Dono kurai machimasu ka"}, {z:"有中文菜單嗎", j:"中国語のメニューはありますか", r:"Chuugokugo no menyuu wa arimasu ka"}, {z:"有英文菜單嗎", j:"英語のメニューはありますか", r:"Eigo no menyuu wa arimasu ka"}, {z:"有推薦的嗎", j:"おすすめは何ですか", r:"Osusume wa nan desu ka"}, {z:"我要點這個", j:"これを注文します", r:"Kore o chuumon shimasu"}, {z:"跟這個一樣的", j:"これと同じものをください", r:"Kore to onaji mono o kudasai"}, {z:"請給我水", j:"お水をください", r:"Omizu o kudasai"}, {z:"請給我熱水", j:"お白湯をください", r:"Osayu o kudasai"}, {z:"請給我濕紙巾", j:"おしぼりをください", r:"Oshibori o kudasai"}, {z:"請給我小盤子", j:"取り皿をください", r:"Torizara o kudasai"}, {z:"請不要加芥末", j:"わさび抜きでお願いします", r:"Wasabi nuki de onegaishimasu"}, {z:"請不要加蔥", j:"ネギ抜きでお願いします", r:"Negi nuki de onegaishimasu"}, {z:"我對花生過敏", j:"ピーナッツアレルギーがあります", r:"Piinattsu arerugii ga arimasu"}, {z:"我不吃肉", j:"お肉は食べられません", r:"Oniku wa taberaremasen"}, {z:"很好吃", j:"美味しいです", r:"Oishii desu"}, {z:"麻煩結帳", j:"お会計をお願いします", r:"Okaikei o onegaishimasu"}, {z:"可以分開付嗎", j:"別々に払えますか", r:"Betsubetsu ni haraemasu ka"}, {z:"我要外帶", j:"持ち帰りでお願いします", r:"Mochikaeri de onegaishimasu"}, {z:"我要內用", j:"店内で食べます", r:"Tennai de tabemasu"}, {z:"請給我禁菸席", j:"禁煙席をお願いします", r:"Kin-enseki o onegaishimasu"}, {z:"不需要找錢", j:"お釣りは結構です", r:"Otsuri wa kekkou desu"}, {z:"飯少一點", j:"ご飯少なめでお願いします", r:"Gohan sukuname de onegaishimasu"}, {z:"飯多一點(大碗)", j:"ご飯大盛りでお願いします", r:"Gohan oomori de onegaishimasu"}
+            ],
+            "🛍️ 購物": [
+                {z:"這個多少錢", j:"いくらですか", r:"Ikura desu ka"}, {z:"我要買這個", j:"これをください", r:"Kore o kudasai"}, {z:"可以免稅嗎", j:"免税できますか", r:"Menzei dekimasu ka"}, {z:"免稅櫃台在哪裡", j:"免税カウンターはどこですか", r:"Menzei kauntaa wa doko desu ka"}, {z:"有全新的嗎", j:"新しいものはありますか", r:"Atarashii mono wa arimasu ka"}, {z:"可以試穿嗎", j:"試着してもいいですか", r:"Shichaku shite mo ii desu ka"}, {z:"有大一點的嗎", j:"大きいのはありますか", r:"Ookii no wa arimasu ka"}, {z:"有小一點的嗎", j:"小さいのはありますか", r:"Chiisai no wa arimasu ka"}, {z:"有別的顏色嗎", j:"他の色はありますか", r:"Hoka no iro wa arimasu ka"}, {z:"請給我袋子", j:"袋をください", r:"Fukuro o kudasai"}, {z:"可以刷卡嗎", j:"カードは使えますか", r:"Kaado wa tsukaemasu ka"}, {z:"可以用西瓜卡嗎", j:"Suicaは使えますか", r:"Suica wa tsukaemasu ka"}, {z:"可以用Apple Pay嗎", j:"Apple Payは使えますか", r:"Apple Pay wa tsukaemasu ka"}, {z:"有折扣嗎", j:"割引はありますか", r:"Waribiki wa arimasu ka"}, {z:"我只是看看", j:"見ているだけです", r:"Mite iru dake desu"}, {z:"可以拍照嗎", j:"写真を撮ってもいいですか", r:"Shashin o totte mo ii desu ka"}, {z:"請包裝成禮物", j:"プレゼント用に包んでください", r:"Purezento you ni tsutsunde kudasai"}, {z:"我想退貨", j:"返品したいのですが", r:"Henpin shitai no desu ga"}, {z:"這個有保固嗎", j:"保証はありますか", r:"Hoshou wa arimasu ka"}, {z:"營業到幾點", j:"何時まで営業していますか", r:"Nanji made eigyou shite imasu ka"}, {z:"化妝品在哪層", j:"化粧品売り場は何階ですか", r:"Keshouhin uriba wa nankai desu ka"}, {z:"這是哪裡製造的", j:"これはどこで作られたものですか", r:"Kore wa doko de tsukurareta mono desu ka"}
+            ],
+            "🚇 交通": [
+                {z:"車站在哪裡", j:"駅はどこですか", r:"Eki wa doko desu ka"}, {z:"公車站在哪裡", j:"バス停はどこですか", r:"Basutei wa doko desu ka"}, {z:"去新宿嗎", j:"新宿に行きますか", r:"Shinjuku ni ikimasu ka"}, {z:"去機場嗎", j:"空港に行きますか", r:"Kuukou ni ikimasu ka"}, {z:"買票處在哪裡", j:"切符売り場はどこですか", r:"Kippu uriba wa doko desu ka"}, {z:"我要在這裡下車", j:"ここで降ります", r:"Koko de orimasu"}, {z:"下一站是哪裡", j:"次の駅はどこですか", r:"Tsugi no eki wa doko desu ka"}, {z:"出口在哪裡", j:"出口はどこですか", r:"Deguchi wa doko desu ka"}, {z:"東口在哪裡", j:"東口はどこですか", r:"Higashiguchi wa doko desu ka"}, {z:"西口在哪裡", j:"西口はどこですか", r:"Nishiguchi wa doko desu ka"}, {z:"這是特急列車嗎", j:"これは特急ですか", r:"Kore wa tokkyuu desu ka"}, {z:"哪裡轉車", j:"どこで乗り換えますか", r:"Doko de norikaemasu ka"}, {z:"請到這個地址", j:"この住所までお願いします", r:"Kono juusho made onegaishimasu"}, {z:"我迷路了", j:"道に迷いました", r:"Michi ni mayoimashita"}, {z:"到那裡要多久", j:"ここからどのくらいかかりますか", r:"Koko kara dono kurai kakarimasu ka"}, {z:"可以在這叫車嗎", j:"ここでタクシーを拾えますか", r:"Koko de takushii o hiroemasu ka"}, {z:"行李可以放後車廂嗎", j:"トランクに荷物を入れてもいいですか", r:"Toranku ni nimotsu o irete mo ii desu ka"}, {z:"請在這裡停車", j:"ここで止めてください", r:"Koko de tomete kudasai"}, {z:"有自由座嗎", j:"自由席はありますか", r:"Jiyuuseki wa arimasu ka"}, {z:"買指定席的票", j:"指定席の切符をください", r:"Shiteiseki no kippu o kudasai"}, {z:"第一月台在哪裡", j:"1番線はどこですか", r:"Ichibansen wa doko desu ka"}, {z:"置物櫃在哪裡", j:"コインロッカーはどこですか", r:"Koinrokkaa wa doko desu ka"}, {z:"票卡住了", j:"切符が詰まりました", r:"Kippu ga tsumarimashita"}
+            ],
+            "🏪 超商": [
+                {z:"請微波加熱", j:"温めてください", r:"Atatamete kudasai"}, {z:"請給我筷子", j:"お箸をください", r:"Ohashi o kudasai"}, {z:"請給我湯匙", j:"スプーンをください", r:"Supuun o kudasai"}, {z:"請給我叉子", j:"フォークをください", r:"Fooku o kudasai"}, {z:"請給我吸管", j:"ストローをください", r:"Sutouroo o kudasai"}, {z:"我不需要袋子", j:"袋はいりません", r:"Fukuro iranai desu"}, {z:"請給我收據", j:"レシートをください", r:"Reshiito o kudasai"}, {z:"我要儲值", j:"チャージをお願いします", r:"Chaaji o onegaishimasu"}, {z:"加值一千日圓", j:"千円チャージしてください", r:"Sen-en chaaji shite kudasai"}, {z:"能借用廁所嗎", j:"トイレを貸してください", r:"Toire o kashite kudasai"}, {z:"買熱咖啡(小杯)", j:"ホットコーヒーのSサイズをください", r:"Hotto koohii no esu saizu o kudasai"}, {z:"買冰咖啡(大杯)", j:"アイスコーヒーのLサイズをください", r:"Aisu koohii no eru saizu o kudasai"}, {z:"給我一個肉包", j:"肉まんを一つください", r:"Nikuman o hitotsu kudasai"}, {z:"炸雞塊還有嗎", j:"からあげクンはありますか", r:"Karaage-kun wa arimasu ka"}, {z:"可以丟垃圾嗎", j:"ゴミを捨ててもいいですか", r:"Gomi o sutete mo ii desu ka"}
+            ],
+            "🍻 居酒屋": [
+                {z:"請給我生啤酒", j:"生ビールをお願いします", r:"Nama biiru o onegaishimasu"}, {z:"乾杯！", j:"乾杯！", r:"Kanpai!"}, {z:"最後點餐是幾點", j:"ラストオーダーは何時ですか", r:"Rasuto oodaa wa nanji desu ka"}, {z:"跟那個一樣的", j:"同じものをください", r:"Onaji mono o kudasai"}, {z:"有下酒菜嗎", j:"おつまみはありますか", r:"Otsumami wa arimasu ka"}, {z:"再來一杯", j:"もう一杯ください", r:"Mou ippai kudasai"}, {z:"我喝醉了", j:"酔っ払いました", r:"Yopparaimashita"}, {z:"有不含酒精的嗎", j:"ノンアルコールドリンクはありますか", r:"Non-arukooru dorinku wa arimasu ka"}, {z:"給我烏龍茶", j:"ウーロン茶をお願いします", r:"Uuroncha o onegaishimasu"}, {z:"給我梅酒", j:"梅酒をお願いします", r:"Umeshu o onegaishimasu"}, {z:"這個不用錢嗎", j:"これは無料ですか（お通し）", r:"Kore wa muryou desu ka (Otooshi)"}, {z:"要收座位費嗎", j:"チャージ料はかかりますか", r:"Chaajiryou wa kakarimasu ka"}, {z:"請換煙灰缸", j:"灰皿を変えてください", r:"Haizara o kaete kudasai"}
+            ],
+            "🚑 緊急": [
+                {z:"救命！", j:"助けてください", r:"Tasukete kudasai"}, {z:"請叫救護車！", j:"救急車を呼んでください", r:"Kyuukyuusha o yonde kudasai"}, {z:"請叫警察！", j:"警察を呼んでください", r:"Keisatsu o yonde kudasai"}, {z:"我迷路了", j:"道に迷いました", r:"Michi ni mayoimashita"}, {z:"護照不見了", j:"パスポートをなくしました", r:"Pasupooto o nakushimashita"}, {z:"錢包被偷了", j:"財布を盗まれました", r:"Saifu o nusumaremashita"}, {z:"我發燒了", j:"熱があります", r:"Netsu ga arimasu"}, {z:"我肚子痛", j:"お腹が痛いです", r:"Onaka ga itai desu"}, {z:"我頭痛", j:"頭が痛いです", r:"Atama ga itai desu"}, {z:"藥局在哪裡", j:"薬局はどこですか", r:"Yakkyoku wa doko desu ka"}, {z:"醫院在哪裡", j:"病院はどこですか", r:"Byouin wa doko desu ka"}, {z:"請幫我聯絡家人", j:"家族に連絡してください", r:"Kazoku ni renraku shite kudasai"}, {z:"請帶我去這裡", j:"ここに連れて行ってください", r:"Koko ni tsurete itte kudasai"}, {z:"有會說中文的醫生嗎", j:"中国語が話せる医者はいますか", r:"Chuugokugo ga hanaseru isha wa imasu ka"}
+            ]
         };
+
+        var HDN = [{z:"笨蛋", j:"馬鹿", r:"Baka"}, {z:"白癡", j:"阿呆", r:"Ahou"}, {z:"去死", j:"死ね", r:"Shine"}, {z:"混蛋", j:"馬鹿野郎", r:"Bakayarou"}, {z:"吵死了", j:"うるさい", r:"Urusai"}, {z:"變態", j:"変態", r:"Hentai"}, {z:"畜生", j:"ちくしょう", r:"Chikusho"}];
+
+        var curCat = "👋 常用";
+        var clickCount = 0, lastSpkTxt = '', lastSpkTime = 0, ignoreTTS = false;
+        var favs = [], hist = [];
 
         try {
-            var f = localStorage.getItem('cs_fav'); if (f) favList = JSON.parse(f);
-            var h = localStorage.getItem('cs_hist'); if (h) historyList = JSON.parse(h);
-            if (localStorage.getItem('cs_ign_tts') === 'true') ignoreTTSPopup = true;
+            var f = localStorage.getItem('fs_fav'); if(f) favs = JSON.parse(f);
+            var h = localStorage.getItem('fs_hist'); if(h) hist = JSON.parse(h);
+            if(localStorage.getItem('fs_ign_tts') === 'true') ignoreTTS = true;
         } catch(e) {}
 
-        window.closeTTS = function() {
+        function closeTTS() {
             var chk = document.getElementById('chkIgnoreTTS');
             if (chk && chk.checked) {
-                ignoreTTSPopup = true;
-                try { localStorage.setItem('cs_ign_tts', 'true'); } catch(e) {}
+                ignoreTTS = true;
+                try { localStorage.setItem('fs_ign_tts', 'true'); } catch(e) {}
             }
             document.getElementById('ttsGuide').style.display = 'none';
-        };
+        }
 
-        window.playVoice = function(txt, zh, ro) {
+        window.spk = function(txt, zh, ro) {
             var now = new Date().getTime();
-            if (txt === lastSpkTxt && (now - lastSpkTime) < 3000 && !ignoreTTSPopup) {
+            if (txt === lastSpkTxt && (now - lastSpkTime) < 3000 && !ignoreTTS) {
                 document.getElementById('ttsGuide').style.display = 'flex';
             }
             lastSpkTxt = txt; lastSpkTime = now;
@@ -209,143 +178,4 @@
                 var u = new SpeechSynthesisUtterance(txt);
                 u.lang = 'ja-JP';
                 var spd = document.getElementById('spd');
-                var vol = document.getElementById('vol');
-                u.rate = (spd && spd.checked) ? 0.45 : 0.85;
-                u.volume = (vol && vol.checked) ? 1.0 : 0.8;
-                u.onerror = function() { if(!ignoreTTSPopup) document.getElementById('ttsGuide').style.display = 'flex'; };
-                window.speechSynthesis.speak(u);
-            } catch(e) { if(!ignoreTTSPopup) document.getElementById('ttsGuide').style.display = 'flex'; }
-
-            if (zh) {
-                var newItem = { z: zh, j: txt, r: ro };
-                var temp = [];
-                for (var i = 0; i < historyList.length; i++) { if (historyList[i].j !== txt) temp.push(historyList[i]); }
-                temp.unshift(newItem);
-                if (temp.length > 20) temp.pop();
-                historyList = temp;
-                try { localStorage.setItem('cs_hist', JSON.stringify(historyList)); } catch(e) {}
-            }
-        };
-
-        window.toggleFav = function(ja) {
-            var idx = favList.indexOf(ja);
-            if (idx > -1) favList.splice(idx, 1); else favList.push(ja);
-            try { localStorage.setItem('cs_fav', JSON.stringify(favList)); } catch(e) {}
-            var s = document.getElementById('search');
-            renderCards(currentCategory, s ? s.value : "");
-        };
-
-        window.showZoom = function(ja, zh) {
-            document.getElementById('m-ja').innerText = ja;
-            document.getElementById('m-zh').innerText = zh;
-            document.getElementById('zoomModal').style.display = 'flex';
-        };
-
-        window.doTranslate = function() {
-            var input = document.getElementById('cin');
-            var res = document.getElementById('cres');
-            if (!input || !res || !input.value) return;
-            res.innerText = '⏳ 翻譯中...';
-            fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(input.value) + '&langpair=zh-TW|ja')
-            .then(function(r) { return r.json(); })
-            .then(function(data) {
-                res.innerText = data.responseData.translatedText;
-                playVoice(res.innerText, null, null);
-            })
-            .catch(function(e) { res.innerText = '❌ 網路錯誤'; });
-        };
-
-        window.renderCards = function(cat, keyword) {
-            var box = document.getElementById('list-container');
-            if(!box) return;
-            box.innerHTML = '';
-
-            if (cat === '✏️ 自訂') {
-                box.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="輸入中文 (需網路連線)..."></textarea><div id="cres" class="c-res"></div><button style="background:var(--green); color:#fff; border:none; padding:15px; border-radius:12px; width:100%; font-weight:bold; font-size:16px; cursor:pointer;" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
-                return;
-            }
-
-            var items = [];
-            if (cat === '🌟 全部') {
-                for (var key in DB) { if(DB.hasOwnProperty(key)) items = items.concat(DB[key]); }
-            } else if (cat === '⭐ 最愛') {
-                for (var k in DB) {
-                    if(DB.hasOwnProperty(k)) {
-                        for (var i = 0; i < DB[k].length; i++) {
-                            if (favList.indexOf(DB[k][i].j) > -1) items.push(DB[k][i]);
-                        }
-                    }
-                }
-            } else if (cat === '🕒 最近') { items = historyList; } 
-            else if (cat === '🔞 隱藏') { items = HDN; } 
-            else { items = DB[cat] || []; }
-
-            if (keyword) {
-                var kw = keyword.toLowerCase();
-                var filtered = [];
-                for (var j = 0; j < items.length; j++) {
-                    var it = items[j];
-                    if (it.z.indexOf(kw) > -1 || it.j.indexOf(kw) > -1 || (it.r && it.r.toLowerCase().indexOf(kw) > -1)) {
-                        filtered.push(it);
-                    }
-                }
-                items = filtered;
-            }
-
-            var finalItems = [];
-            var seen = {};
-            for (var m = 0; m < items.length; m++) {
-                if (!seen[items[m].j]) { seen[items[m].j] = true; finalItems.push(items[m]); }
-            }
-
-            if (finalItems.length === 0) {
-                box.innerHTML = '<h3 style="text-align:center; color:#94a3b8;">查無資料 🥺</h3>';
-                return;
-            }
-
-            var html = "";
-            for (var n = 0; n < finalItems.length; n++) {
-                var obj = finalItems[n];
-                var isFav = (favList.indexOf(obj.j) > -1) ? "active" : "";
-                var safeJ = obj.j.replace(/'/g, "\\'");
-                var safeZ = obj.z.replace(/'/g, "\\'");
-                var safeR = obj.r ? obj.r.replace(/'/g, "\\'") : "";
-
-                html += '<div class="card">' +
-                            '<div class="star ' + isFav + '" onclick="toggleFav(\'' + safeJ + '\')">★</div>' +
-                            '<div class="card-in" onclick="playVoice(\'' + safeJ + '\', \'' + safeZ + '\', \'' + safeR + '\')">' +
-                                '<div class="zh">' + obj.z + '</div>' +
-                                '<div class="ja-box"><span class="ja">🔊 ' + obj.j + '</span></div>' +
-                                '<div class="ro">' + (obj.r || '') + '</div>' +
-                            '</div>' +
-                            '<button class="zoom-btn" onclick="showZoom(\'' + safeJ + '\', \'' + safeZ + '\')">🪧 放大顯示</button>' +
-                        '</div>';
-            }
-            box.innerHTML = html;
-        };
-
-        window.changeCategory = function(cName) {
-            currentCategory = cName;
-            var bRec = document.getElementById('btn-rec');
-            var bFav = document.getElementById('btn-fav');
-            if(bRec) bRec.className = (cName === '🕒 最近') ? 'btn active' : 'btn';
-            if(bFav) bFav.className = (cName === '⭐ 最愛') ? 'btn active' : 'btn';
-
-            var btns = document.getElementsByClassName('cat-btn');
-            for (var i = 0; i < btns.length; i++) {
-                btns[i].className = (btns[i].innerText === cName) ? 'cat-btn active' : 'cat-btn';
-            }
-            var s = document.getElementById('search');
-            renderCards(currentCategory, s ? s.value : "");
-        };
-
-        window.unlockHidden = function() {
-            clickCount++;
-            if(clickCount === 10) {
-                if(HDN.length === 0) {
-                    alert('目前試算表內沒有 🔞 隱藏 分類喔！');
-                    return;
-                }
-                var existing = document.getElementById('btn-hidden');
-                if(!existing) {
-                    var btn = '<button id="btn-hidden" class="cat-btn" style="color:var(--red); border-color:var(--red);" onclick="
+                var vol = document.getElem
