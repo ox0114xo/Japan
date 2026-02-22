@@ -7,269 +7,272 @@
     <link rel="manifest" href="manifest.json">
     <style>
         :root { --primary: #0070f3; --bg: #f5f5f7; --text: #333; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); padding: 20px; max-width: 600px; margin: 0 auto; line-height: 1.6; }
-        h1 { text-align: center; color: var(--primary); user-select: none; cursor: pointer; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 80px; }
+        h1 { text-align: center; color: var(--primary); user-select: none; cursor: pointer; font-size: 24px; margin-top: 5px;}
         
-        /* 區塊樣式 */
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        
-        /* 按鈕與輸入框 */
-        input[type="text"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
-        button { background: var(--primary); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-size: 16px; cursor: pointer; width: 100%; margin-bottom: 10px; }
-        button:active { background: #005bb5; }
-        .btn-play { background: #10b981; width: auto; margin: 0; padding: 6px 12px; font-size: 14px; }
-        
-        /* 控制選項 */
-        .controls { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 10px;}
-        .controls button { width: auto; flex: 1; margin: 0; background: #f59e0b; }
-        .controls label { flex: 1; text-align: center; background: white; padding: 10px; border-radius: 6px; border: 1px solid #ccc; }
-        
-        /* 列表樣式 */
-        ul { list-style-type: none; padding: 0; }
-        li { background: white; margin-bottom: 10px; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .text-content { flex: 1; margin-right: 15px; }
-        .jp-text { font-size: 18px; font-weight: bold; color: #111; display: block;}
-        .zh-text { font-size: 14px; color: #666; }
+        /* 搜尋列 */
+        .search-box { width: 100%; padding: 12px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .search-box:focus { outline: none; border-color: var(--primary); }
 
-        /* 特殊區塊隱藏 */
-        #easter-egg { display: none; background: #fee2e2; border-left: 5px solid #ef4444; }
-        #install-container { display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; z-index: 1000; }
-        #install-btn { background: #000; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        /* 分類按鈕區 (橫向捲動) */
+        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 15px; padding-bottom: 5px; scrollbar-width: none; }
+        .category-scroll::-webkit-scrollbar { display: none; }
+        .cat-btn { white-space: nowrap; background: #e0e0e0; color: #333; border: none; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .cat-btn.active { background: var(--primary); color: white; font-weight: bold; box-shadow: 0 2px 4px rgba(0,112,243,0.3); }
 
-        /* 瀏覽器蓋板 */
-        #in-app-blocker { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #333; color: white; z-index: 9999; text-align: center; padding: 40px 20px; box-sizing: border-box; }
-        #in-app-blocker h2 { color: #ffeb3b; }
+        /* 列表與整塊按鈕樣式 */
+        ul { list-style-type: none; padding: 0; margin: 0; }
+        li { background: white; margin-bottom: 12px; padding: 15px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); cursor: pointer; transition: background 0.2s; }
+        li:active { background: #f0f8ff; }
+        .text-content { flex: 1; margin-right: 10px; pointer-events: none; }
+        .jp-text { font-size: 18px; font-weight: bold; color: #111; display: block; margin-bottom: 2px; }
+        .romaji-text { font-size: 13px; color: #0070f3; font-style: italic; display: block; margin-bottom: 4px; }
+        .zh-text { font-size: 14px; color: #666; display: block; }
+
+        /* 全螢幕按鈕 */
+        .fullscreen-btn { background: #f3f4f6; color: #555; border: 1px solid #ccc; padding: 10px; border-radius: 8px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; }
+        .fullscreen-btn:active { background: #e5e7eb; }
+
+        /* 全螢幕字幕覆蓋層 */
+        #fullscreen-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: white; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; }
+        #fullscreen-jp { font-size: 10vw; font-weight: bold; margin-bottom: 20px; width: 100%; word-wrap: break-word;}
+        #fullscreen-romaji { font-size: 5vw; color: #60a5fa; margin-bottom: 20px; }
+        #fullscreen-zh { font-size: 6vw; color: #aaa; }
+        .close-fullscreen { position: absolute; top: 20px; right: 20px; font-size: 30px; color: white; background: none; border: none; cursor: pointer; padding: 10px; }
+
+        /* 控制區與底部自定義按鈕 */
+        .controls { display: flex; gap: 10px; margin-bottom: 15px;}
+        .controls button, .controls label { flex: 1; text-align: center; background: white; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; cursor: pointer; }
+        #volume-btn { background: #f59e0b; color: white; border: none; font-weight: bold; }
+        
+        .bottom-action-btn { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; border: none; padding: 15px 30px; border-radius: 30px; font-size: 16px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 900; width: 90%; max-width: 400px; cursor: pointer; }
+
+        /* 自定義翻譯 Modal */
+        #translate-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; position: relative; }
+        .modal-content input { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px;}
+        .modal-content button { width: 100%; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; font-size: 16px; margin-bottom: 10px; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 24px; cursor: pointer; color: #888; background: none; border: none; }
+
+        /* 瀏覽器蓋板與彩蛋 */
+        #in-app-blocker { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #333; color: white; z-index: 99999; text-align: center; padding: 40px 20px; box-sizing: border-box; }
+        #easter-egg { display: none; background: #fee2e2; border-left: 5px solid #ef4444; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
     <div id="in-app-blocker">
-        <h2>⚠️ 請使用系統瀏覽器開啟</h2>
-        <p>LINE、Facebook 或 Instagram 的內建瀏覽器無法正常播放語音。</p>
-        <p>👉 <b>請點擊右上角（或右下角）選單<br>選擇「以 Safari 開啟」或「以 Chrome 開啟」</b></p>
+        <h2 style="color: #ffeb3b;">⚠️ 請使用系統瀏覽器開啟</h2>
+        <p>LINE 或 Facebook 的內建瀏覽器無法正常播放語音。</p>
+        <p>👉 <b>請點擊右上角選單選擇「以 Safari / Chrome 開啟」</b></p>
     </div>
 
-    <h1 id="app-title">日文常用句發音 🇯🇵</h1>
-
-    <div class="card" id="easter-egg">
-        <h3 style="color: #ef4444; margin-top: 0;">🤬 隱藏模式：強烈情緒用語</h3>
-        <ul id="swear-list">
-            <li><div class="text-content"><span class="jp-text">ふざけるな</span><span class="zh-text">別開玩笑了/搞什麼鬼</span></div><button class="btn-play" onclick="speak('ふざけるな')">播放</button></li>
-            <li><div class="text-content"><span class="jp-text">くそくらえ</span><span class="zh-text">去死吧/吃大便吧</span></div><button class="btn-play" onclick="speak('くそくらえ')">播放</button></li>
-            <li><div class="text-content"><span class="jp-text">だまれ</span><span class="zh-text">閉嘴</span></div><button class="btn-play" onclick="speak('だまれ')">播放</button></li>
-        </ul>
+    <div id="fullscreen-overlay">
+        <button class="close-fullscreen" onclick="closeFullscreen()">✖</button>
+        <div id="fullscreen-jp"></div>
+        <div id="fullscreen-romaji"></div>
+        <div id="fullscreen-zh"></div>
+        <button style="margin-top: 30px; padding: 10px 30px; font-size: 20px; border-radius: 30px; background: #0070f3; color: white; border:none;" onclick="replayFullscreen()">🔊 再聽一次</button>
     </div>
 
-    <div class="card">
-        <h3>自定義中翻日發音</h3>
-        <input type="text" id="translate-input" placeholder="請輸入中文 (例如: 謝謝)">
-        <button onclick="translateAndSpeak()" id="translate-btn">翻譯並發音</button>
-        <div id="translate-result" style="margin-top: 10px; font-weight: bold; color: var(--primary);"></div>
-    </div>
+    <h1 id="app-title">日文發音小幫手 🇯🇵</h1>
+
+    <input type="text" id="search-input" class="search-box" placeholder="🔍 搜尋中文、日文或羅馬拼音..." onkeyup="filterData()">
+
+    <div class="category-scroll" id="category-container">
+        </div>
 
     <div class="controls">
-        <label><input type="checkbox" id="turtle-mode"> 🐢 龜速播放</label>
+        <label><input type="checkbox" id="turtle-mode"> 🐢 龜速</label>
         <button id="volume-btn" onclick="boostVolume()">🔊 音量最大化</button>
     </div>
 
-    <div class="card">
-        <h3 style="margin-top: 0;">常用句列表</h3>
-        <div id="loading">載入資料中...</div>
-        <ul id="sentence-list"></ul>
+    <div id="easter-egg">
+        <h3 style="color: #ef4444; margin: 0 0 10px 0;">🤬 隱藏模式解鎖</h3>
+        <ul id="swear-list">
+            <li onclick="speak('ふざけるな')"><div class="text-content"><span class="jp-text">ふざけるな</span><span class="zh-text">別開玩笑了</span></div></li>
+            <li onclick="speak('だまれ')"><div class="text-content"><span class="jp-text">だまれ</span><span class="zh-text">閉嘴</span></div></li>
+        </ul>
     </div>
 
-    <div id="install-container">
-        <button id="install-btn">📲 安裝至桌面 (App化)</button>
+    <div id="loading" style="text-align: center; color: #666;">載入資料中...</div>
+    <ul id="sentence-list"></ul>
+
+    <button class="bottom-action-btn" onclick="document.getElementById('translate-modal').style.display='flex'">✍️ 開啟自定義翻譯</button>
+
+    <div id="translate-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="document.getElementById('translate-modal').style.display='none'">✖</button>
+            <h3 style="margin-top: 0;">自定義翻譯與發音</h3>
+            <p style="font-size: 12px; color: gray; margin-bottom: 10px;">輸入中文，翻譯後將自動以標準日文語音播放。</p>
+            <input type="text" id="translate-input" placeholder="請輸入中文 (例如: 結帳)">
+            <button onclick="translateAndSpeak()" id="translate-btn">翻譯並發音</button>
+            <div id="translate-result" style="margin-top: 10px; font-weight: bold; color: var(--primary); text-align: center;"></div>
+        </div>
     </div>
 
     <script>
-        // --- 核心變數設定 ---
-        // 替換為你提供的 CSV 網址
+        // --- 核心變數 ---
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
-        let clickCount = 0;
+        let globalData = [];
+        let currentCategory = '全部';
         let isVolumeMax = false;
+        let clickCount = 0;
+        let currentFullscreenJp = '';
 
-        // --- 5. 阻擋 In-App Browser (LINE, FB, IG 等) ---
-        function checkInAppBrowser() {
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-            if (ua.indexOf('Line') > -1 || ua.indexOf('FBAN') > -1 || ua.indexOf('FBAV') > -1 || ua.indexOf('Instagram') > -1) {
-                document.getElementById('in-app-blocker').style.display = 'block';
-            }
+        // --- 阻擋 In-App Browser ---
+        if (/(Line|FBAN|FBAV|Instagram)/i.test(navigator.userAgent)) {
+            document.getElementById('in-app-blocker').style.display = 'block';
         }
-        checkInAppBrowser();
 
-        // --- 3. 點擊標題 10 次解鎖彩蛋 ---
+        // --- 彩蛋：點擊標題 10 次 ---
         document.getElementById('app-title').addEventListener('click', () => {
             clickCount++;
             if (clickCount === 10) {
                 document.getElementById('easter-egg').style.display = 'block';
-                alert('🔓 隱藏模式已解鎖！請謹慎使用。');
+                alert('🔓 隱藏模式已解鎖！');
             }
         });
 
-        // --- 4. 音量放大 200% 與龜速 ---
-        // 提醒：Web Speech API 物理音量極限就是 1.0 (系統音量的 100%)，無法突破硬體極限。
-        // 此處實作為將系統語音設定強制鎖定在 1.0，並給予視覺回饋。
+        // --- 音量與發音引擎 ---
         function boostVolume() {
             isVolumeMax = !isVolumeMax;
             const btn = document.getElementById('volume-btn');
-            if (isVolumeMax) {
-                btn.style.background = '#ef4444';
-                btn.innerText = '🔥 音量已達系統極限';
-                alert('已將網頁發音引擎音量設至最大 (100%)。若需更大聲，請調高手機實體音量鍵！');
-            } else {
-                btn.style.background = '#f59e0b';
-                btn.innerText = '🔊 音量最大化';
-            }
+            btn.style.background = isVolumeMax ? '#ef4444' : '#f59e0b';
+            btn.innerText = isVolumeMax ? '🔥 已強制最大聲' : '🔊 音量最大化';
+            if(isVolumeMax) alert('語音引擎已開至最大！如需更大聲請調高手機實體音量鍵。');
         }
 
-        // --- 6. 語音播放與錯誤辨識 ---
         function speak(text) {
-            if (!('speechSynthesis' in window)) {
-                alert("❌ 你的瀏覽器不支援語音播放，請改用 Chrome 或 Safari。");
-                return;
-            }
-
-            // 確保每次點擊中斷之前的語音，避免卡頓
+            if (!('speechSynthesis' in window)) return alert("❌ 瀏覽器不支援語音播放");
             window.speechSynthesis.cancel();
-
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ja-JP'; // 設定為日文
-            utterance.volume = isVolumeMax ? 1.0 : 0.8; // 音量控制
+            utterance.lang = 'ja-JP';
+            utterance.volume = isVolumeMax ? 1.0 : 0.8;
+            utterance.rate = document.getElementById('turtle-mode').checked ? 0.5 : 1.0;
             
-            // 判斷龜速
-            if(document.getElementById('turtle-mode').checked) {
-                utterance.rate = 0.5; // 龜速 0.5 倍
-            } else {
-                utterance.rate = 1.0; // 正常速度
-            }
-
-            // 錯誤辨識與提示
-            utterance.onerror = function(event) {
-                if (event.error === 'not-allowed') {
-                    alert('⚠️ 播放失敗：iOS/瀏覽器安全機制阻擋。請確保你是手動點擊按鈕，且不要在 LINE 裡面開啟！');
-                } else if (event.error !== 'interrupted') {
-                    alert('⚠️ 播放發生錯誤，原因代碼：' + event.error);
-                }
+            utterance.onerror = (e) => {
+                if (e.error === 'not-allowed') alert('⚠️ 請手動點擊螢幕後再試，iOS 安全機制阻擋了自動播放。');
             };
-
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- 2. 自定義中翻日 (使用免費的 MyMemory API) ---
+        // --- 全螢幕字幕功能 ---
+        function openFullscreen(event, jp, zh, romaji) {
+            event.stopPropagation(); // 阻止觸發外層 li 的發音，因為這裡會自己發音
+            currentFullscreenJp = jp;
+            document.getElementById('fullscreen-jp').innerText = jp;
+            document.getElementById('fullscreen-romaji').innerText = romaji || '';
+            document.getElementById('fullscreen-zh').innerText = zh;
+            document.getElementById('fullscreen-overlay').style.display = 'flex';
+            speak(jp);
+        }
+
+        function closeFullscreen() {
+            document.getElementById('fullscreen-overlay').style.display = 'none';
+            window.speechSynthesis.cancel();
+        }
+
+        function replayFullscreen() {
+            if(currentFullscreenJp) speak(currentFullscreenJp);
+        }
+
+        // --- 自定義翻譯 ---
         async function translateAndSpeak() {
             const input = document.getElementById('translate-input').value.trim();
             const btn = document.getElementById('translate-btn');
-            const resultDiv = document.getElementById('translate-result');
-            
-            if (!input) return alert("請先輸入中文！");
+            const resDiv = document.getElementById('translate-result');
+            if (!input) return alert("請輸入中文");
 
             btn.innerText = "翻譯中...";
             btn.disabled = true;
 
             try {
-                // 使用免費公開的翻譯 API (中翻日)
+                // 使用 MyMemory API (免費)
                 const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=zh-TW|ja`);
                 const data = await response.json();
-                
                 if(data.responseData && data.responseData.translatedText) {
                     const jpText = data.responseData.translatedText;
-                    resultDiv.innerText = `翻譯結果：${jpText}`;
-                    speak(jpText); // 翻譯完自動唸出來
-                } else {
-                    throw new Error("API回傳異常");
+                    resDiv.innerText = `${jpText}`;
+                    speak(jpText);
                 }
-            } catch (error) {
-                alert("翻譯失敗，請稍後再試。");
-                console.error(error);
+            } catch (e) {
+                alert("翻譯失敗，請檢查網路。");
             } finally {
                 btn.innerText = "翻譯並發音";
                 btn.disabled = false;
             }
         }
 
-        // --- 讀取 Google 試算表 CSV ---
+        // --- 讀取 CSV 與渲染 ---
         async function loadCSV() {
             try {
                 const res = await fetch(CSV_URL);
                 const csvText = await res.text();
-                
-                // 簡易的 CSV 解析 (以換行切割，再以逗號切割)
                 const rows = csvText.split('\n');
-                const list = document.getElementById('sentence-list');
-                document.getElementById('loading').style.display = 'none';
+                const categoriesSet = new Set(['全部']);
 
-                // 略過第一行標題列，開始處理資料
                 for (let i = 1; i < rows.length; i++) {
                     const row = rows[i].trim();
                     if(!row) continue;
-                    
-                    // 假設格式是：第一欄中文, 第二欄日文 (依照多數人的表格習慣)
-                    // 若有逗號被雙引號包住的問題，這裡用最簡單的 split 處理
+                    // 假設 CSV 格式: 分類,中文,日文,羅馬拼音
                     const cols = row.split(',');
-                    if (cols.length >= 2) {
-                        const zh = cols[0];
-                        const jp = cols[1];
-
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <div class="text-content">
-                                <span class="jp-text">${jp}</span>
-                                <span class="zh-text">${zh}</span>
-                            </div>
-                            <button class="btn-play" onclick="speak('${jp.replace(/'/g, "\\'")}')">播放</button>
-                        `;
-                        list.appendChild(li);
+                    if (cols.length >= 3) {
+                        const cat = cols[0] || '未分類';
+                        const zh = cols[1];
+                        const jp = cols[2];
+                        const romaji = cols[3] || ''; // 第四欄為羅馬拼音
+                        
+                        categoriesSet.add(cat);
+                        globalData.push({ cat, zh, jp, romaji });
                     }
                 }
+                
+                renderCategories(Array.from(categoriesSet));
+                renderList();
+                document.getElementById('loading').style.display = 'none';
             } catch(e) {
-                document.getElementById('loading').innerText = "載入試算表失敗，請確認網址是否正確公開。";
-                console.error(e);
+                document.getElementById('loading').innerText = "載入失敗，請確認試算表網址。";
             }
         }
-        loadCSV();
 
-        // --- 1. PWA 一鍵安裝功能 ---
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            // 防止瀏覽器自動顯示迷你資訊列
-            e.preventDefault();
-            // 暫存事件以便稍後觸發
-            deferredPrompt = e;
-            // 顯示安裝按鈕 (針對 Android/Chrome)
-            document.getElementById('install-container').style.display = 'block';
-        });
-
-        document.getElementById('install-btn').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    document.getElementById('install-container').style.display = 'none';
-                }
-                deferredPrompt = null;
-            } else {
-                // iOS Safari 不支援 beforeinstallprompt，跳出教學
-                alert("🍎 蘋果 iOS 安裝教學：\n1. 點擊螢幕下方正中央的「分享」圖示 (方塊往上的箭頭)\n2. 往下滑找到並點擊「加入主畫面」\n3. 點擊右上角「新增」即可！");
-            }
-        });
-
-        // 如果在 iOS 的 Safari 內，預設顯示安裝教學按鈕
-        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIos && !window.navigator.standalone) {
-            document.getElementById('install-container').style.display = 'block';
-        }
-
-        // 註冊 Service Worker 以達成 PWA 離線與安裝條件
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('ServiceWorker 註冊成功！');
-                }).catch(err => {
-                    console.log('ServiceWorker 註冊失敗: ', err);
-                });
+        // --- 渲染分類按鈕 ---
+        function renderCategories(cats) {
+            const container = document.getElementById('category-container');
+            container.innerHTML = '';
+            cats.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `cat-btn ${cat === '全部' ? 'active' : ''}`;
+                btn.innerText = cat;
+                btn.onclick = () => {
+                    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentCategory = cat;
+                    filterData();
+                };
+                container.appendChild(btn);
             });
         }
-    </script>
-</body>
-</html>
+
+        // --- 篩選與渲染列表 ---
+        function filterData() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = globalData.filter(item => {
+                const matchCat = currentCategory === '全部' || item.cat === currentCategory;
+                const matchQuery = item.zh.toLowerCase().includes(query) || 
+                                   item.jp.toLowerCase().includes(query) || 
+                                   item.romaji.toLowerCase().includes(query);
+                return matchCat && matchQuery;
+            });
+            renderList(filtered);
+        }
+
+        function renderList(dataToRender = globalData) {
+            const list = document.getElementById('sentence-list');
+            list.innerHTML = '';
+            if(dataToRender.length === 0) {
+                list.innerHTML = '<li style="justify-content:center; color:#888;">找不到相關句子</li>';
+                return;
+            }
+
+            dataToRender.forEach(item => {
