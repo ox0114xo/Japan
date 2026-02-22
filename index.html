@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 最終純粹版</title>
+    <title>日本旅遊神器 雲端旗艦版</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -118,7 +118,7 @@
     </div>
 
     <div class="wrap">
-        <div class="title" id="main-title" onclick="unlockHidden()">🇯🇵 Japan Travel Ultra</div>
+        <div class="title" id="main-title" onclick="unlockHidden()">🇯🇵 Japan Travel <span class="version">雲端版</span></div>
         
         <div id="pwaBanner" onclick="triggerInstall()">
             ⬇️ 點此將「日語神器」安裝到桌面
@@ -137,55 +137,29 @@
         <div class="cats" id="cat-container"></div>
         
         <div class="list" id="list-container">
-            <h3 style="text-align:center; color:#94a3b8;">資料載入中...</h3>
+            <h3 style="text-align:center; color:var(--gold);">☁️ 正在從 Google 試算表同步資料...</h3>
         </div>
     </div>
 
     <script>
-        var DB = {
-            "👋 常用": [
-                {z:"你好", j:"こんにちは", r:"Konnichiwa"}, {z:"謝謝", j:"ありがとうございます", r:"Arigatou"}, {z:"不好意思/請問", j:"すみません", r:"Sumimasen"}, {z:"沒關係", j:"大丈夫です", r:"Daijoubu"}, {z:"拜託您了", j:"お願いします", r:"Onegaishimasu"}, {z:"對不起", j:"ごめんなさい", r:"Gomennasai"}, {z:"早安", j:"おはようございます", r:"Ohayou"}, {z:"晚安", j:"こんばんは", r:"Konbanwa"}, {z:"我不懂日文", j:"日本語がわかりません", r:"Nihongo ga wakarimasen"}, {z:"請再說一次", j:"もう一度言ってください", r:"Mou ichido"}, {z:"好的", j:"はい", r:"Hai"}, {z:"不是", j:"いいえ", r:"Iie"}, {z:"幫大忙了", j:"助かりました", r:"Tasukari"}, {z:"請說慢一點", j:"ゆっくり話してください", r:"Yukkuri"}, {z:"這是什麼", j:"これは何ですか", r:"Kore wa nan desu ka"}
-            ],
-            "🏨 住宿": [
-                {z:"我要辦理入住", j:"チェックインをお願いします", r:"Chekku-in"}, {z:"我有預約", j:"予約しています", r:"Yoyaku"}, {z:"能寄放行李嗎", j:"荷物を預かってもらえますか", r:"Nimotsu"}, {z:"Wi-Fi密碼是多少", j:"Wi-Fiのパスワードは何ですか", r:"Pasuwaado"}, {z:"我要退房", j:"チェックアウトをお願いします", r:"Chekku-auto"}, {z:"沒有熱水", j:"お湯が出ません", r:"Oyu ga"}, {z:"請幫我叫計程車", j:"タクシーを呼んでください", r:"Takushii"}, {z:"請幫我換房間", j:"部屋を変えてください", r:"Heya kaete"}, {z:"請再給我一條毛巾", j:"タオルをもう一枚ください", r:"Taoru"}, {z:"早餐是幾點", j:"朝食は何時ですか", r:"Choushoku"}
-            ],
-            "🍜 餐廳": [
-                {z:"兩位", j:"2人です", r:"Futari"}, {z:"有菜單嗎", j:"メニューはありますか", r:"Menyuu"}, {z:"有推薦的嗎", j:"おすすめは何ですか", r:"Osusume"}, {z:"我要點這個", j:"これを注文します", r:"Kore o"}, {z:"請給我水", j:"お水をください", r:"Omizu"}, {z:"請不要加芥末", j:"わさび抜きでお願いします", r:"Wasabi nuki"}, {z:"很好吃", j:"美味しいです", r:"Oishii"}, {z:"麻煩結帳", j:"お会計をお願いします", r:"Okaikei"}, {z:"可以分開付嗎", j:"別々に払えますか", r:"Betsubetsu"}, {z:"我要外帶", j:"持ち帰りで", r:"Mochikaeri"}, {z:"請給我禁菸席", j:"禁煙席をお願いします", r:"Kin-en"}
-            ],
-            "🛍️ 購物": [
-                {z:"這個多少錢", j:"いくらですか", r:"Ikura"}, {z:"我要買這個", j:"これをください", r:"Kore o"}, {z:"可以免稅嗎", j:"免税できますか", r:"Menzei"}, {z:"有全新的嗎", j:"新しいものはありますか", r:"Atarashii"}, {z:"可以試穿嗎", j:"試着してもいいですか", r:"Shichaku"}, {z:"有大一點的嗎", j:"大きいのはありますか", r:"Ookii"}, {z:"請給我袋子", j:"袋をください", r:"Fukuro"}, {z:"可以刷卡嗎", j:"カードは使えますか", r:"Kaado"}, {z:"有折扣嗎", j:"割引はありますか", r:"Waribiki"}
-            ],
-            "🚇 交通": [
-                {z:"請問車站在哪裡", j:"駅はどこですか", r:"Eki"}, {z:"這班車去新宿嗎", j:"新宿に行きますか", r:"Shinjuku"}, {z:"買票處在哪裡", j:"切符売り場はどこですか", r:"Kippu"}, {z:"我要在這裡下車", j:"ここで降ります", r:"Koko de orimasu"}, {z:"下一站是哪裡", j:"次の駅はどこですか", r:"Tsugi"}, {z:"出口在哪裡", j:"出口はどこですか", r:"Deguchi"}, {z:"這是特急列車嗎", j:"これは特急ですか", r:"Tokkyuu"}
-            ],
-            "🏪 超商": [
-                {z:"請幫我微波加熱", j:"温めてください", r:"Atatamete"}, {z:"請給我筷子", j:"お箸をください", r:"Ohashi"}, {z:"我不需要袋子", j:"袋はいりません", r:"Fukuro iranai"}, {z:"請給我收據", j:"レシートをください", r:"Reshiito"}, {z:"我要儲值", j:"チャージをお願いします", r:"Chaaji"}, {z:"能借用廁所嗎", j:"トイレを貸してください", r:"Toire"}
-            ],
-            "🍻 居酒屋": [
-                {z:"請給我生啤酒", j:"生ビールをお願いします", r:"Nama biiru"}, {z:"乾杯！", j:"乾杯！", r:"Kanpai"}, {z:"最後點餐是幾點", j:"ラストオーダーは何時ですか", r:"Rasuto"}, {z:"請給我跟那個一樣的", j:"同じものをください", r:"Onaji"}, {z:"有下酒菜嗎", j:"おつまみはありますか", r:"Otsumami"}
-            ],
-            "🚑 緊急": [
-                {z:"救命！", j:"助けてください", r:"Tasukete"}, {z:"請叫救護車！", j:"救急車を呼んでください", r:"Kyuukyuusha"}, {z:"請叫警察！", j:"警察を呼んでください", r:"Keisatsu"}, {z:"我迷路了", j:"道に迷いました", r:"Michi"}, {z:"我的護照不見了", j:"パスポートをなくしました", r:"Pasupooto"}, {z:"我發燒了", j:"熱があります", r:"Netsu"}, {z:"請問藥局在哪裡", j:"薬局はどこですか", r:"Yakkyoku"}
-            ]
-        };
-
-        var HDN = [{z:"笨蛋", j:"馬鹿 (ばか)", r:"Baka"}, {z:"白癡", j:"阿呆 (あほう)", r:"Ahou"}, {z:"去死", j:"死ね (しね)", r:"Shine"}, {z:"混蛋", j:"馬鹿野郎", r:"Bakayarou"}, {z:"吵死了", j:"うるさい", r:"Urusai"}, {z:"變態", j:"変態 (へんたい)", r:"Hentai"}, {z:"畜生", j:"畜生 (ちくしょう)", r:"Chikusho"}];
+        // 🚨 這是空物件，資料將由 Google Sheets 注入！
+        var DB = {};
+        var HDN = []; // 隱藏髒話區
+        
+        // Google Sheets CSV 連結
+        var sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv";
 
         var currentCategory = "🌟 全部";
         var clickCount = 0;
         var favList = [];
         var historyList = [];
         
-        // 防焦慮偵測變數
         var lastSpkTxt = '';
         var lastSpkTime = 0;
         var ignoreTTSPopup = false;
         
-        // PWA 安裝變數
         var deferredPrompt = null;
         var pwaBanner = document.getElementById('pwaBanner');
-
-        // 偵測是否已經是從桌面捷徑開啟
         var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
         if (!isStandalone) { pwaBanner.style.display = 'block'; }
 
@@ -195,7 +169,7 @@
             pwaBanner.style.display = 'block';
         });
 
-        function triggerInstall() {
+        window.triggerInstall = function() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then(function(res) { 
@@ -205,25 +179,24 @@
             } else {
                 document.getElementById('installGuide').style.display = 'flex';
             }
-        }
+        };
 
         try {
-            var f = localStorage.getItem('ultra_f'); if (f) favList = JSON.parse(f);
-            var h = localStorage.getItem('ultra_h'); if (h) historyList = JSON.parse(h);
-            if (localStorage.getItem('ultra_ign_tts') === 'true') ignoreTTSPopup = true;
+            var f = localStorage.getItem('cs_fav'); if (f) favList = JSON.parse(f);
+            var h = localStorage.getItem('cs_hist'); if (h) historyList = JSON.parse(h);
+            if (localStorage.getItem('cs_ign_tts') === 'true') ignoreTTSPopup = true;
         } catch(e) {}
 
-        function closeTTS() {
+        window.closeTTS = function() {
             var chk = document.getElementById('chkIgnoreTTS');
             if (chk && chk.checked) {
                 ignoreTTSPopup = true;
-                try { localStorage.setItem('ultra_ign_tts', 'true'); } catch(e) {}
+                try { localStorage.setItem('cs_ign_tts', 'true'); } catch(e) {}
             }
             document.getElementById('ttsGuide').style.display = 'none';
-        }
+        };
 
-        function playVoice(txt, zh, ro) {
-            // 🤖 防焦慮連點偵測
+        window.playVoice = function(txt, zh, ro) {
             var now = new Date().getTime();
             if (txt === lastSpkTxt && (now - lastSpkTime) < 3000 && !ignoreTTSPopup) {
                 document.getElementById('ttsGuide').style.display = 'flex';
@@ -243,7 +216,6 @@
                 window.speechSynthesis.speak(u);
             } catch(e) { if(!ignoreTTSPopup) document.getElementById('ttsGuide').style.display = 'flex'; }
 
-            // 紀錄最近
             if (zh) {
                 var newItem = { z: zh, j: txt, r: ro };
                 var temp = [];
@@ -251,30 +223,28 @@
                 temp.unshift(newItem);
                 if (temp.length > 20) temp.pop();
                 historyList = temp;
-                try { localStorage.setItem('ultra_h', JSON.stringify(historyList)); } catch(e) {}
+                try { localStorage.setItem('cs_hist', JSON.stringify(historyList)); } catch(e) {}
             }
-        }
+        };
 
-        function toggleFav(ja) {
+        window.toggleFav = function(ja) {
             var idx = favList.indexOf(ja);
             if (idx > -1) favList.splice(idx, 1); else favList.push(ja);
-            try { localStorage.setItem('ultra_f', JSON.stringify(favList)); } catch(e) {}
-            
+            try { localStorage.setItem('cs_fav', JSON.stringify(favList)); } catch(e) {}
             var s = document.getElementById('search');
             renderCards(currentCategory, s ? s.value : "");
-        }
+        };
 
-        function showZoom(ja, zh) {
+        window.showZoom = function(ja, zh) {
             document.getElementById('m-ja').innerText = ja;
             document.getElementById('m-zh').innerText = zh;
             document.getElementById('zoomModal').style.display = 'flex';
-        }
+        };
 
-        function doTranslate() {
+        window.doTranslate = function() {
             var input = document.getElementById('cin');
             var res = document.getElementById('cres');
             if (!input || !res || !input.value) return;
-            
             res.innerText = '⏳ 翻譯中...';
             fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(input.value) + '&langpair=zh-TW|ja')
             .then(function(r) { return r.json(); })
@@ -283,9 +253,9 @@
                 playVoice(res.innerText, null, null);
             })
             .catch(function(e) { res.innerText = '❌ 網路錯誤'; });
-        }
+        };
 
-        function renderCards(cat, keyword) {
+        window.renderCards = function(cat, keyword) {
             var box = document.getElementById('list-container');
             if(!box) return;
             box.innerHTML = '';
@@ -306,6 +276,76 @@
                         }
                     }
                 }
-            } else if (cat === '🕒 最近') {
-                items = historyList;
- 
+            } else if (cat === '🕒 最近') { items = historyList; } 
+            else if (cat === '🔞 隱藏') { items = HDN; } 
+            else { items = DB[cat] || []; }
+
+            if (keyword) {
+                var kw = keyword.toLowerCase();
+                var filtered = [];
+                for (var j = 0; j < items.length; j++) {
+                    var it = items[j];
+                    if (it.z.indexOf(kw) > -1 || it.j.indexOf(kw) > -1 || (it.r && it.r.toLowerCase().indexOf(kw) > -1)) {
+                        filtered.push(it);
+                    }
+                }
+                items = filtered;
+            }
+
+            var finalItems = [];
+            var seen = {};
+            for (var m = 0; m < items.length; m++) {
+                if (!seen[items[m].j]) { seen[items[m].j] = true; finalItems.push(items[m]); }
+            }
+
+            if (finalItems.length === 0) {
+                box.innerHTML = '<h3 style="text-align:center; color:#94a3b8;">查無資料 🥺</h3>';
+                return;
+            }
+
+            var html = "";
+            for (var n = 0; n < finalItems.length; n++) {
+                var obj = finalItems[n];
+                var isFav = (favList.indexOf(obj.j) > -1) ? "active" : "";
+                var safeJ = obj.j.replace(/'/g, "\\'");
+                var safeZ = obj.z.replace(/'/g, "\\'");
+                var safeR = obj.r ? obj.r.replace(/'/g, "\\'") : "";
+
+                html += '<div class="card">' +
+                            '<div class="star ' + isFav + '" onclick="toggleFav(\'' + safeJ + '\')">★</div>' +
+                            '<div class="card-in" onclick="playVoice(\'' + safeJ + '\', \'' + safeZ + '\', \'' + safeR + '\')">' +
+                                '<div class="zh">' + obj.z + '</div>' +
+                                '<div class="ja-box"><span class="ja">🔊 ' + obj.j + '</span></div>' +
+                                '<div class="ro">' + (obj.r || '') + '</div>' +
+                            '</div>' +
+                            '<button class="zoom-btn" onclick="showZoom(\'' + safeJ + '\', \'' + safeZ + '\')">🪧 放大顯示</button>' +
+                        '</div>';
+            }
+            box.innerHTML = html;
+        };
+
+        window.changeCategory = function(cName) {
+            currentCategory = cName;
+            var bRec = document.getElementById('btn-rec');
+            var bFav = document.getElementById('btn-fav');
+            if(bRec) bRec.className = (cName === '🕒 最近') ? 'btn active' : 'btn';
+            if(bFav) bFav.className = (cName === '⭐ 最愛') ? 'btn active' : 'btn';
+
+            var btns = document.getElementsByClassName('cat-btn');
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].className = (btns[i].innerText === cName) ? 'cat-btn active' : 'cat-btn';
+            }
+            var s = document.getElementById('search');
+            renderCards(currentCategory, s ? s.value : "");
+        };
+
+        window.unlockHidden = function() {
+            clickCount++;
+            if(clickCount === 10) {
+                if(HDN.length === 0) {
+                    alert('目前試算表內沒有 🔞 隱藏 分類喔！');
+                    return;
+                }
+                var existing = document.getElementById('btn-hidden');
+                if(!existing) {
+                    var btn = '<button id="btn-hidden" class="cat-btn" style="color:var(--red); border-color:var(--red);" onclick="
