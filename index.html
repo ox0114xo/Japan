@@ -3,92 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊神器 純粹版</title>
+    <title>日本旅遊神器 Ultra 黃金版</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="日語神器">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/197/197604.png">
 
+    <script>
+        var manifest = {
+            "name": "日本旅遊神器",
+            "short_name": "日語神器",
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#070b14",
+            "theme_color": "#070b14",
+            "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/197/197604.png", "sizes": "512x512", "type": "image/png"}]
+        };
+        var blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        var manifestURL = URL.createObjectURL(blob);
+        document.write('<link rel="manifest" href="' + manifestURL + '">');
+    </script>
+
+    <script>
+        try {
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            if ((ua.indexOf("Line") > -1) || (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Instagram") > -1)) {
+                if (location.search.indexOf("openExternalBrowser=1") === -1) {
+                    location.href = location.href + (location.search ? "&" : "?") + "openExternalBrowser=1";
+                }
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('inAppBlocker').style.display = 'flex';
+                });
+            }
+        } catch(e) {}
+    </script>
+
     <style>
-        /* 最單純的排版設定，不給瀏覽器任何負擔 */
         :root { --bg: #070b14; --blue: #3b82f6; --card: #1e293b; --border: #334155; --txt: #f8fafc; --sub: #94a3b8; --green: #10b981; --gold: #fbbf24; --red: #ef4444; }
-        body { background-color: var(--bg); color: var(--txt); margin: 0; font-family: sans-serif; padding-bottom: 120px; text-align: center; }
+        html, body { background-color: var(--bg); min-height: 100vh; color: var(--txt); margin: 0; font-family: sans-serif; text-align: center; }
+        body { background-image: radial-gradient(circle at top, #1e293b 0%, #070b14 100%); background-attachment: fixed; padding-bottom: 120px; }
         
         .wrap { width: 100%; max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
-        .title { font-size: 24px; margin: 20px 0; font-weight: 900; }
+        .title { font-size: 24px; margin: 20px 0; font-weight: 900; text-shadow: 0 0 10px rgba(59,130,246,0.5); user-select: none; cursor: pointer;}
         
-        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: #0f172a; color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; }
+        /* 安裝橫幅 */
+        #pwaBanner { display: none; background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 12px; margin-bottom: 15px; border-radius: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(0.98); } 100% { transform: scale(1); } }
+
+        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(15, 23, 42, 0.7); color: #fff; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; text-align: center; outline: none; }
         
         .grid-ctrl { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .btn { background: var(--card); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; }
-        .btn.active { background: var(--blue); border-color: var(--blue); }
-        .btn-green { background: var(--green); border-color: var(--green); grid-column: span 2; }
-        .btn-red { background: rgba(239,68,68,0.2); border-color: var(--red); color: var(--red); grid-column: span 2; }
+        .btn.active { background: var(--blue); border-color: transparent; box-shadow: 0 0 10px rgba(59,130,246,0.5); }
+        .btn-red { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.5); color: var(--red); grid-column: span 2; }
+        .panel { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; color: var(--sub); display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold;}
         
-        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; color: var(--txt); display: flex; justify-content: center; align-items: center; gap: 5px; }
-        
-        .cats { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; }
-        .cat-btn { background: var(--card); color: var(--sub); border: 1px solid var(--border); padding: 10px 18px; border-radius: 20px; white-space: nowrap; font-weight: bold; cursor: pointer; }
-        .cat-btn.active { background: #475569; color: #fff; border-color: #fff; }
+        .cats { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
+        .cats::-webkit-scrollbar { display: none; }
+        .cat-btn { background: var(--card); color: var(--sub); border: 1px solid var(--border); padding: 10px 18px; border-radius: 30px; white-space: nowrap; font-weight: bold; cursor: pointer; }
+        .cat-btn.active { background: rgba(255,255,255,0.15); color: #fff; border-color: #fff; }
 
         .list { display: flex; flex-direction: column; gap: 15px; text-align: left; }
-        .card { background: var(--card); border-radius: 15px; border: 1px solid var(--border); overflow: hidden; position: relative; }
-        .card-in { padding: 20px 15px 15px; text-align: center; }
-        .zh { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-        .ja-box { background: #0f172a; padding: 10px; border-radius: 10px; margin-bottom: 6px; display: inline-block; border: 1px solid #334155; }
+        .card { background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); border-radius: 20px; border: 1px solid var(--border); text-align: center; overflow: hidden; position: relative; }
+        .card-in { padding: 20px 15px 15px; cursor: pointer; }
+        .zh { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+        .ja-box { background: rgba(59,130,246,0.15); padding: 8px 15px; border-radius: 10px; margin-bottom: 6px; display: inline-block; border: 1px solid rgba(59,130,246,0.2); }
         .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
         .ro { font-size: 13px; color: var(--sub); font-style: italic; }
-        .star { position: absolute; top: 10px; left: 10px; font-size: 24px; color: #475569; padding: 5px; cursor: pointer; }
-        .star.active { color: var(--gold); }
-        .zoom-btn { width: 100%; background: #334155; color: #fff; border: none; padding: 12px; font-weight: bold; font-size: 14px; cursor: pointer; }
+        .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: rgba(255,255,255,0.1); padding: 5px; cursor: pointer; text-shadow: none; }
+        .star.active { color: var(--gold); text-shadow: 0 0 10px rgba(251,191,36,0.5); }
+        .zoom-btn { width: 100%; background: rgba(255,255,255,0.05); color: #cbd5e1; border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; letter-spacing: 2px; cursor: pointer; }
         
-        /* 自訂翻譯區塊 */
-        .c-area { background: var(--card); padding: 20px; border-radius: 15px; text-align: center; border: 1px solid var(--border); }
-        .c-txt { width: 100%; height: 80px; background: #0f172a; color: #fff; border: 1px solid var(--border); padding: 10px; border-radius: 8px; box-sizing: border-box; text-align: center; font-size: 16px; margin-bottom: 15px; }
+        .c-area { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 20px; text-align: center; border: 1px solid var(--border); }
+        .c-txt { width: 100%; height: 80px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border); padding: 10px; border-radius: 12px; box-sizing: border-box; text-align: center; font-size: 16px; margin-bottom: 15px; outline:none; }
+        .c-res { padding: 15px; color: var(--green); font-weight: bold; font-size: 18px; min-height: 30px; }
         
-        /* 彈出視窗 */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .m-box { background: var(--card); padding: 25px; border-radius: 15px; width: 100%; max-width: 350px; text-align: left; border: 1px solid var(--border); }
-        .m-ja { font-size: 32px; font-weight: 900; color: #fff; text-align: center; line-height: 1.4; word-wrap: break-word; }
-        .m-zh { font-size: 20px; color: var(--sub); margin-top: 20px; text-align: center; }
-        .m-close { width: 100%; padding: 15px; background: #334155; color: #fff; border: none; border-radius: 10px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.95); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+        .m-box { background: #1e293b; padding: 25px; border-radius: 20px; width: 100%; max-width: 380px; text-align: left; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .m-ja { font-size: 12vw; font-weight: 900; color: #fff; text-align: center; line-height: 1.2; word-wrap: break-word; }
+        .m-zh { font-size: 22px; color: var(--sub); margin-top: 30px; text-align: center; font-weight:bold; }
+        .m-close { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
+
+        #inAppBlocker { display: none; position: fixed; inset: 0; background: #0f172a; z-index: 9999; flex-direction: column; justify-content: center; align-items: center; padding: 30px; }
     </style>
 </head>
 <body>
 
+    <div id="inAppBlocker">
+        <h1 style="color:var(--red);font-size:60px;margin:0;">⚠️</h1>
+        <h2>請切換瀏覽器</h2>
+        <p style="color:var(--sub);">為確保發音正常，請點擊右上角「使用預設瀏覽器開啟」。</p>
+    </div>
+
     <div id="ttsGuide" class="modal">
         <div class="m-box">
-            <h2 style="color:var(--red); margin-top:0; text-align:center;">🔇 發音失敗</h2>
+            <h2 style="color:var(--red); margin-top:0; text-align:center;">🔇 發音失敗 / 沒聲音</h2>
             <p style="color:var(--txt); font-size:15px; line-height:1.6;">
-                1. <b>網站權限：</b>確認網址旁邊鎖頭的「聲音」已允許。<br><br>
-                2. <b>靜音模式：</b>確認手機未靜音，且「媒體音量」已調大。<br><br>
-                3. <b>語音包：</b>設定 > 語音輸出 > 下載日文語音。
+                <span style="color:var(--gold); font-weight:bold;">1. 網站權限：</span>確認網址旁邊鎖頭的「聲音」已允許。<br><br>
+                <span style="color:var(--gold); font-weight:bold;">2. 靜音模式：</span>確認手機未靜音，且「媒體音量」已調大。<br><br>
+                <span style="color:var(--gold); font-weight:bold;">3. 語音包：</span>設定 > 語音輸出 > 下載日文語音。
             </p>
-            <button class="m-close" onclick="document.getElementById('ttsGuide').style.display='none'">我知道了</button>
+            <label style="display:flex; align-items:center; justify-content:center; color:var(--sub); font-size:14px; margin-top:15px; cursor:pointer;">
+                <input type="checkbox" id="chkIgnoreTTS" style="width:18px; height:18px; margin-right:8px;">
+                ✅ 我有聲音，請不要自動彈出
+            </label>
+            <button class="m-close" onclick="closeTTS()">關閉提示</button>
         </div>
     </div>
 
     <div id="installGuide" class="modal">
-        <div class="m-box">
-            <h2 style="color:var(--green); margin-top:0; text-align:center;">📲 安裝到桌面</h2>
-            <p style="color:var(--txt); font-size:15px; line-height:1.6;">
-                🍎 <b>iPhone：</b><br>點擊下方「分享」按鈕，選擇「加入主畫面」。<br><br>
-                🤖 <b>Android：</b><br>點擊右上角「⋮」，選擇「加到主畫面」。
-            </p>
-            <button class="m-close" onclick="document.getElementById('installGuide').style.display='none'">我知道了</button>
+        <div class="m-box" style="text-align:center;">
+            <h2 style="color:var(--green); margin-top:0;">📲 安裝到桌面</h2>
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; text-align:left; font-size:15px; color:#fff; line-height:1.8;">
+                🍎 <b>蘋果 iPhone：</b><br>點擊下方「分享」按鈕，選擇 <b>「加入主畫面」</b>。<br><br>
+                🤖 <b>安卓 Android：</b><br>點擊右上角「⋮」，選擇 <b>「加到主畫面」</b>。
+            </div>
+            <button class="m-close" style="background:var(--green);" onclick="document.getElementById('installGuide').style.display='none'">我知道了</button>
         </div>
     </div>
 
     <div id="zoomModal" class="modal">
         <div class="m-ja" id="m-ja"></div>
         <div class="m-zh" id="m-zh"></div>
-        <button class="m-close" onclick="document.getElementById('zoomModal').style.display='none'">✖ 關閉</button>
+        <button class="m-close" style="background:#1e293b; border:1px solid #334155; margin-top:40px; border-radius:30px;" onclick="document.getElementById('zoomModal').style.display='none'">✖ 關閉</button>
     </div>
 
     <div class="wrap">
-        <div class="title">🇯🇵 Japan Travel 純粹版</div>
+        <div class="title" id="main-title" onclick="unlockHidden()">🇯🇵 Japan Travel Ultra</div>
         
+        <div id="pwaBanner" onclick="triggerInstall()">
+            ⬇️ 點此將「日語神器」一鍵安裝到桌面
+        </div>
+
         <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話...">
 
         <div class="grid-ctrl">
@@ -96,276 +143,177 @@
             <button class="btn" id="btn-fav" onclick="changeCategory('⭐ 最愛')">⭐ 最愛</button>
             <div class="panel"><label>🔊 大音量 <input type="checkbox" id="vol" checked></label></div>
             <div class="panel"><label>🐢 龜速 <input type="checkbox" id="spd"></label></div>
-            <button class="btn btn-green" onclick="showInstall()">📲 將神器安裝到手機桌面</button>
             <button class="btn btn-red" onclick="document.getElementById('ttsGuide').style.display='flex'">🚑 點我沒聲音看這裡</button>
         </div>
 
         <div class="cats" id="cat-container"></div>
+        
         <div class="list" id="list-container">
             <h3 style="text-align:center; color:#94a3b8;">資料讀取中...</h3>
         </div>
     </div>
 
     <script>
-        // 核心資料庫 (擴充至 150+ 句)
         var DB = {
             "👋 常用": [
-                {z:"你好", j:"こんにちは", r:"Konnichiwa"}, {z:"謝謝", j:"ありがとうございます", r:"Arigatou"}, {z:"不好意思/請問", j:"すみません", r:"Sumimasen"}, {z:"沒關係", j:"大丈夫です", r:"Daijoubu"}, {z:"拜託您了", j:"お願いします", r:"Onegaishimasu"}, {z:"對不起", j:"ごめんなさい", r:"Gomennasai"}, {z:"早安", j:"おはようございます", r:"Ohayou"}, {z:"晚安", j:"こんばんは", r:"Konbanwa"}, {z:"我不懂日文", j:"日本語がわかりません", r:"Nihongo ga wakarimasen"}, {z:"請再說一次", j:"もう一度言ってください", r:"Mou ichido"}, {z:"好的", j:"はい", r:"Hai"}, {z:"不是", j:"いいえ", r:"Iie"}, {z:"幫大忙了", j:"助かりました", r:"Tasukari"}, {z:"請說慢一點", j:"ゆっくり話してください", r:"Yukkuri"}, {z:"這是什麼", j:"これは何ですか", r:"Kore wa nan desu ka"}, {z:"辛苦了", j:"お疲れ様です", r:"Otsukaresama desu"}, {z:"再見", j:"さようなら", r:"Sayounara"}
+                {z:"你好", j:"こんにちは", r:"Konnichiwa"}, {z:"謝謝", j:"ありがとうございます", r:"Arigatou"}, {z:"不好意思/請問", j:"すみません", r:"Sumimasen"}, {z:"沒關係", j:"大丈夫です", r:"Daijoubu"}, {z:"拜託您了", j:"お願いします", r:"Onegaishimasu"}, {z:"對不起", j:"ごめんなさい", r:"Gomennasai"}, {z:"早安", j:"おはようございます", r:"Ohayou"}, {z:"晚安", j:"こんばんは", r:"Konbanwa"}, {z:"我不懂日文", j:"日本語がわかりません", r:"Nihongo ga wakarimasen"}, {z:"請再說一次", j:"もう一度言ってください", r:"Mou ichido"}, {z:"好的", j:"はい", r:"Hai"}, {z:"不是", j:"いいえ", r:"Iie"}, {z:"幫大忙了", j:"助かりました", r:"Tasukari"}, {z:"請說慢一點", j:"ゆっくり話してください", r:"Yukkuri"}, {z:"這是什麼", j:"これは何ですか", r:"Kore wa nan desu ka"}, {z:"辛苦了", j:"お疲れ様です", r:"Otsukaresama desu"}
             ],
             "🏨 住宿": [
-                {z:"我要辦理入住", j:"チェックインをお願いします", r:"Chekku-in"}, {z:"我有預約", j:"予約しています", r:"Yoyaku"}, {z:"能寄放行李嗎", j:"荷物を預かってもらえますか", r:"Nimotsu"}, {z:"Wi-Fi密碼是多少", j:"Wi-Fiのパスワードは何ですか", r:"Pasuwaado"}, {z:"我要退房", j:"チェックアウトをお願いします", r:"Chekku-auto"}, {z:"沒有熱水", j:"お湯が出ません", r:"Oyu ga"}, {z:"請幫我叫計程車", j:"タクシーを呼んでください", r:"Takushii"}, {z:"請幫我換房間", j:"部屋を変えてください", r:"Heya kaete"}, {z:"請再給我一條毛巾", j:"タオルをもう一枚ください", r:"Taoru"}, {z:"早餐是幾點", j:"朝食は何時ですか", r:"Choushoku"}, {z:"哪裡可以吸菸", j:"喫煙所はどこですか", r:"Kitsuenjo wa doko desu ka"}, {z:"有加濕器嗎", j:"加湿器はありますか", r:"Kashitsuki wa arimasu ka"}
+                {z:"我要辦理入住", j:"チェックインをお願いします", r:"Chekku-in"}, {z:"我有預約", j:"予約しています", r:"Yoyaku"}, {z:"能寄放行李嗎", j:"荷物を預かってもらえますか", r:"Nimotsu"}, {z:"Wi-Fi密碼是多少", j:"Wi-Fiのパスワードは何ですか", r:"Pasuwaado"}, {z:"我要退房", j:"チェックアウトをお願いします", r:"Chekku-auto"}, {z:"沒有熱水", j:"お湯が出ません", r:"Oyu ga"}, {z:"請幫我叫計程車", j:"タクシーを呼んでください", r:"Takushii"}, {z:"請幫我換房間", j:"部屋を変えてください", r:"Heya kaete"}, {z:"請再給我一條毛巾", j:"タオルをもう一枚ください", r:"Taoru"}, {z:"早餐是幾點", j:"朝食は何時ですか", r:"Choushoku"}
             ],
             "🍜 餐廳": [
-                {z:"兩位", j:"2人です", r:"Futari"}, {z:"有菜單嗎", j:"メニューはありますか", r:"Menyuu"}, {z:"有推薦的嗎", j:"おすすめは何ですか", r:"Osusume"}, {z:"我要點這個", j:"これを注文します", r:"Kore o"}, {z:"請給我水", j:"お水をください", r:"Omizu"}, {z:"請不要加芥末", j:"わさび抜きでお願いします", r:"Wasabi nuki"}, {z:"很好吃", j:"美味しいです", r:"Oishii"}, {z:"麻煩結帳", j:"お会計をお願いします", r:"Okaikei"}, {z:"可以分開付嗎", j:"別々に払えますか", r:"Betsubetsu"}, {z:"我要外帶", j:"持ち帰りで", r:"Mochikaeri"}, {z:"請給我禁菸席", j:"禁煙席をお願いします", r:"Kin-en"}, {z:"請問廁所在哪", j:"トイレはどこですか", r:"Toire wa doko desu ka"}, {z:"不需要找錢", j:"お釣りは結構です", r:"Otsuri wa kekkou desu"}
+                {z:"兩位", j:"2人です", r:"Futari"}, {z:"有菜單嗎", j:"メニューはありますか", r:"Menyuu"}, {z:"有推薦的嗎", j:"おすすめは何ですか", r:"Osusume"}, {z:"我要點這個", j:"これを注文します", r:"Kore o"}, {z:"請給我水", j:"お水をください", r:"Omizu"}, {z:"請不要加芥末", j:"わさび抜きでお願いします", r:"Wasabi nuki"}, {z:"很好吃", j:"美味しいです", r:"Oishii"}, {z:"麻煩結帳", j:"お会計をお願いします", r:"Okaikei"}, {z:"可以分開付嗎", j:"別々に払えますか", r:"Betsubetsu"}, {z:"我要外帶", j:"持ち帰りで", r:"Mochikaeri"}, {z:"請給我禁菸席", j:"禁煙席をお願いします", r:"Kin-en"}
             ],
             "🛍️ 購物": [
-                {z:"這個多少錢", j:"いくらですか", r:"Ikura"}, {z:"我要買這個", j:"これをください", r:"Kore o"}, {z:"可以免稅嗎", j:"免税できますか", r:"Menzei"}, {z:"有全新的嗎", j:"新しいものはありますか", r:"Atarashii"}, {z:"可以試穿嗎", j:"試着してもいいですか", r:"Shichaku"}, {z:"有大一點的嗎", j:"大きいのはありますか", r:"Ookii"}, {z:"有小一點的嗎", j:"小さいのはありますか", r:"Chiisai no wa arimasu ka"}, {z:"請給我袋子", j:"袋をください", r:"Fukuro"}, {z:"可以刷卡嗎", j:"カードは使えますか", r:"Kaado"}, {z:"有折扣嗎", j:"割引はありますか", r:"Waribiki"}, {z:"我只是看看", j:"見ているだけです", r:"Mite iru dake desu"}, {z:"請問可以拍照嗎", j:"写真を撮ってもいいですか", r:"Shashin o totte mo ii desu ka"}
+                {z:"這個多少錢", j:"いくらですか", r:"Ikura"}, {z:"我要買這個", j:"これをください", r:"Kore o"}, {z:"可以免稅嗎", j:"免税できますか", r:"Menzei"}, {z:"有全新的嗎", j:"新しいものはありますか", r:"Atarashii"}, {z:"可以試穿嗎", j:"試着してもいいですか", r:"Shichaku"}, {z:"有大一點的嗎", j:"大きいのはありますか", r:"Ookii"}, {z:"請給我袋子", j:"袋をください", r:"Fukuro"}, {z:"可以刷卡嗎", j:"カードは使えますか", r:"Kaado"}, {z:"有折扣嗎", j:"割引はありますか", r:"Waribiki"}
             ],
             "🚇 交通": [
-                {z:"請問車站在哪裡", j:"駅はどこですか", r:"Eki"}, {z:"這班車去新宿嗎", j:"新宿に行きますか", r:"Shinjuku ni ikimasu ka"}, {z:"買票處在哪裡", j:"切符売り場はどこですか", r:"Kippu"}, {z:"我要在這裡下車", j:"ここで降ります", r:"Koko de orimasu"}, {z:"下一站是哪裡", j:"次の駅はどこですか", r:"Tsugi"}, {z:"出口在哪裡", j:"出口はどこですか", r:"Deguchi"}, {z:"這是特急列車嗎", j:"これは特急ですか", r:"Tokkyuu"}, {z:"請問在哪裡轉車", j:"どこで乗り換えますか", r:"Doko de norikaemasu ka"}, {z:"請到這個地址", j:"この住所までお願いします", r:"Kono juusho made onegaishimasu"}, {z:"我迷路了", j:"道に迷いました", r:"Michi ni mayoimashita"}
+                {z:"請問車站在哪裡", j:"駅はどこですか", r:"Eki"}, {z:"這班車去新宿嗎", j:"新宿に行きますか", r:"Shinjuku"}, {z:"買票處在哪裡", j:"切符売り場はどこですか", r:"Kippu"}, {z:"我要在這裡下車", j:"ここで降ります", r:"Koko de orimasu"}, {z:"下一站是哪裡", j:"次の駅はどこですか", r:"Tsugi"}, {z:"出口在哪裡", j:"出口はどこですか", r:"Deguchi"}, {z:"這是特急列車嗎", j:"これは特急ですか", r:"Tokkyuu"}
             ],
             "🏪 超商": [
-                {z:"請幫我微波加熱", j:"温めてください", r:"Atatamete"}, {z:"請給我筷子", j:"お箸をください", r:"Ohashi"}, {z:"請給我湯匙", j:"スプーンをください", r:"Supuun o kudasai"}, {z:"我不需要袋子", j:"袋はいりません", r:"Fukuro iranai"}, {z:"請給我收據", j:"レシートをください", r:"Reshiito"}, {z:"我要儲值(Suica等)", j:"チャージをお願いします", r:"Chaaji"}, {z:"能借用廁所嗎", j:"トイレを貸してください", r:"Toire o kashite kudasai"}, {z:"我要買熱咖啡", j:"ホットコーヒーをください", r:"Hotto koohii o kudasai"}
+                {z:"請幫我微波加熱", j:"温めてください", r:"Atatamete"}, {z:"請給我筷子", j:"お箸をください", r:"Ohashi"}, {z:"我不需要袋子", j:"袋はいりません", r:"Fukuro iranai"}, {z:"請給我收據", j:"レシートをください", r:"Reshiito"}, {z:"我要儲值", j:"チャージをお願いします", r:"Chaaji"}, {z:"能借用廁所嗎", j:"トイレを貸してください", r:"Toire"}
             ],
             "🍻 居酒屋": [
-                {z:"請給我生啤酒", j:"生ビールをお願いします", r:"Nama biiru"}, {z:"乾杯！", j:"乾杯！", r:"Kanpai"}, {z:"最後點餐是幾點", j:"ラストオーダーは何時ですか", r:"Rasuto oodaa"}, {z:"請給我跟那個一樣的", j:"同じものをください", r:"Onaji mono o kudasai"}, {z:"有下酒菜嗎", j:"おつまみはありますか", r:"Otsumami"}, {z:"再來一杯", j:"もう一杯ください", r:"Mou ippai kudasai"}, {z:"我喝醉了", j:"酔っ払いました", r:"Yopparaimashita"}
+                {z:"請給我生啤酒", j:"生ビールをお願いします", r:"Nama biiru"}, {z:"乾杯！", j:"乾杯！", r:"Kanpai"}, {z:"最後點餐是幾點", j:"ラストオーダーは何時ですか", r:"Rasuto"}, {z:"請給我跟那個一樣的", j:"同じものをください", r:"Onaji"}, {z:"有下酒菜嗎", j:"おつまみはありますか", r:"Otsumami"}
             ],
             "🚑 緊急": [
-                {z:"救命！", j:"助けてください", r:"Tasukete"}, {z:"請叫救護車！", j:"救急車を呼んでください", r:"Kyuukyuusha"}, {z:"請叫警察！", j:"警察を呼んでください", r:"Keisatsu"}, {z:"我的護照不見了", j:"パスポートをなくしました", r:"Pasupooto"}, {z:"我發燒了", j:"熱があります", r:"Netsu ga arimasu"}, {z:"請問藥局在哪裡", j:"薬局はどこですか", r:"Yakkyoku"}, {z:"請問醫院在哪裡", j:"病院はどこですか", r:"Byouin wa doko desu ka"}, {z:"我想要聯絡台灣代表處", j:"台湾の代表処に連絡したいです", r:"Taiwan no daihyousho ni renraku shitai desu"}
+                {z:"救命！", j:"助けてください", r:"Tasukete"}, {z:"請叫救護車！", j:"救急車を呼んでください", r:"Kyuukyuusha"}, {z:"請叫警察！", j:"警察を呼んでください", r:"Keisatsu"}, {z:"我迷路了", j:"道に迷いました", r:"Michi"}, {z:"我的護照不見了", j:"パスポートをなくしました", r:"Pasupooto"}, {z:"我發燒了", j:"熱があります", r:"Netsu"}, {z:"請問藥局在哪裡", j:"薬局はどこですか", r:"Yakkyoku"}
             ]
         };
 
-        // 狀態變數
+        var HDN = [{z:"笨蛋", j:"馬鹿 (ばか)", r:"Baka"}, {z:"白癡", j:"阿呆 (あほう)", r:"Ahou"}, {z:"去死", j:"死ね (しね)", r:"Shine"}, {z:"混蛋", j:"馬鹿野郎", r:"Bakayarou"}, {z:"吵死了", j:"うるさい", r:"Urusai"}, {z:"變態", j:"変態 (へんたい)", r:"Hentai"}, {z:"畜生", j:"畜生 (ちくしょう)", r:"Chikusho"}];
+
+        // 全域變數
         var currentCategory = "🌟 全部";
         var favList = [];
         var historyList = [];
-        var pwaPrompt = null;
+        
+        var lastSpkTxt = '';
+        var lastSpkTime = 0;
+        var ignoreTTSPopup = false;
+        var secretCount = 0;
 
-        // 安全讀取本地儲存
-        try {
-            var savedFav = localStorage.getItem('ultra_fav');
-            if (savedFav) favList = JSON.parse(savedFav);
-            var savedHist = localStorage.getItem('ultra_hist');
-            if (savedHist) historyList = JSON.parse(savedHist);
-        } catch(e) {}
+        // PWA 安裝邏輯
+        var deferredPrompt = null;
+        var pwaBanner = document.getElementById('pwaBanner');
 
-        // PWA 安裝監聽
+        // 檢查是否已安裝 (Standalone 模式)
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        
+        if (!isStandalone) {
+            // 如果還沒安裝，先顯示橫幅 (iOS 會顯示，Android 如果觸發事件也會保留)
+            pwaBanner.style.display = 'block';
+        }
+
         window.addEventListener('beforeinstallprompt', function(e) {
             e.preventDefault();
-            pwaPrompt = e;
+            deferredPrompt = e;
+            pwaBanner.style.display = 'block';
         });
 
-        // 顯示安裝提示
-        function showInstall() {
-            if (pwaPrompt) {
-                pwaPrompt.prompt();
-                pwaPrompt.userChoice.then(function() { pwaPrompt = null; });
+        function triggerInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function(choiceResult) {
+                    if (choiceResult.outcome === 'accepted') { pwaBanner.style.display = 'none'; }
+                    deferredPrompt = null;
+                });
             } else {
                 document.getElementById('installGuide').style.display = 'flex';
             }
         }
 
-        // 發音功能 (無任何自動報錯彈窗)
-        function speakText(ja, zh, ro) {
-            try {
-                if (!window.speechSynthesis) {
-                    document.getElementById('ttsGuide').style.display = 'flex';
-                    return;
-                }
-                window.speechSynthesis.cancel();
-                var utterance = new SpeechSynthesisUtterance(ja);
-                utterance.lang = 'ja-JP';
-                
-                var spdCheck = document.getElementById('spd');
-                var volCheck = document.getElementById('vol');
-                utterance.rate = (spdCheck && spdCheck.checked) ? 0.45 : 0.85;
-                utterance.volume = (volCheck && volCheck.checked) ? 1.0 : 0.8;
-                
-                window.speechSynthesis.speak(utterance);
-            } catch(e) {}
+        // 讀取本地資料
+        try {
+            var f = localStorage.getItem('v_fav'); if (f) favList = JSON.parse(f);
+            var h = localStorage.getItem('v_hist'); if (h) historyList = JSON.parse(h);
+            if (localStorage.getItem('v_ignore_tts') === 'true') ignoreTTSPopup = true;
+        } catch(e) {}
 
-            // 加入歷史紀錄
+        function closeTTS() {
+            var chk = document.getElementById('chkIgnoreTTS');
+            if (chk && chk.checked) {
+                ignoreTTSPopup = true;
+                try { localStorage.setItem('v_ignore_tts', 'true'); } catch(e) {}
+            }
+            document.getElementById('ttsGuide').style.display = 'none';
+        }
+
+        // 發音與防焦慮偵測
+        function playVoice(txt, zh, ro) {
+            var now = new Date().getTime();
+            if (txt === lastSpkTxt && (now - lastSpkTime) < 3000 && !ignoreTTSPopup) {
+                document.getElementById('ttsGuide').style.display = 'flex';
+            }
+            lastSpkTxt = txt; lastSpkTime = now;
+
+            try {
+                if (!window.speechSynthesis) { document.getElementById('ttsGuide').style.display = 'flex'; return; }
+                window.speechSynthesis.cancel();
+                var u = new SpeechSynthesisUtterance(txt);
+                u.lang = 'ja-JP';
+                var spd = document.getElementById('spd');
+                var vol = document.getElementById('vol');
+                u.rate = (spd && spd.checked) ? 0.45 : 0.85;
+                u.volume = (vol && vol.checked) ? 1.0 : 0.8;
+                u.onerror = function() { if(!ignoreTTSPopup) document.getElementById('ttsGuide').style.display = 'flex'; };
+                window.speechSynthesis.speak(u);
+            } catch(e) { if(!ignoreTTSPopup) document.getElementById('ttsGuide').style.display = 'flex'; }
+
             if (zh) {
-                var newItem = { z: zh, j: ja, r: ro };
+                var newItem = { z: zh, j: txt, r: ro };
                 var temp = [];
                 for (var i = 0; i < historyList.length; i++) {
-                    if (historyList[i].j !== ja) temp.push(historyList[i]);
+                    if (historyList[i].j !== txt) temp.push(historyList[i]);
                 }
                 temp.unshift(newItem);
                 if (temp.length > 20) temp.pop();
                 historyList = temp;
-                try { localStorage.setItem('ultra_hist', JSON.stringify(historyList)); } catch(e) {}
+                try { localStorage.setItem('v_hist', JSON.stringify(historyList)); } catch(e) {}
             }
         }
 
-        // 收藏功能
-        function toggleFavorite(ja) {
-            var index = favList.indexOf(ja);
-            if (index > -1) {
-                favList.splice(index, 1);
-            } else {
-                favList.push(ja);
-            }
-            try { localStorage.setItem('ultra_fav', JSON.stringify(favList)); } catch(e) {}
+        function toggleFav(ja) {
+            var idx = favList.indexOf(ja);
+            if (idx > -1) favList.splice(idx, 1);
+            else favList.push(ja);
+            try { localStorage.setItem('v_fav', JSON.stringify(favList)); } catch(e) {}
             
             var s = document.getElementById('search');
             renderCards(currentCategory, s ? s.value : "");
         }
 
-        // 放大顯示
-        function openZoom(ja, zh) {
+        function showZoom(ja, zh) {
             document.getElementById('m-ja').innerText = ja;
             document.getElementById('m-zh').innerText = zh;
             document.getElementById('zoomModal').style.display = 'flex';
         }
 
-        // 翻譯功能
         function doTranslate() {
             var input = document.getElementById('cin');
-            var result = document.getElementById('cres');
-            if (!input || !result || !input.value) return;
+            var res = document.getElementById('cres');
+            if (!input || !res || !input.value) return;
             
-            result.innerText = '翻譯中...';
+            res.innerText = '⏳ 翻譯中...';
             fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(input.value) + '&langpair=zh-TW|ja')
-            .then(function(res) { return res.json(); })
+            .then(function(r) { return r.json(); })
             .then(function(data) {
-                result.innerText = data.responseData.translatedText;
-                speakText(result.innerText, null, null);
+                res.innerText = data.responseData.translatedText;
+                playVoice(res.innerText, null, null);
             })
-            .catch(function(e) {
-                result.innerText = '網路錯誤，請稍後再試';
-            });
+            .catch(function(e) { res.innerText = '❌ 網路錯誤'; });
         }
 
-        // 渲染卡片列表
-        function renderCards(category, keyword) {
-            var container = document.getElementById('list-container');
-            container.innerHTML = '';
+        function renderCards(cat, keyword) {
+            var box = document.getElementById('list-container');
+            box.innerHTML = '';
 
-            if (category === '✏️ 自訂') {
-                container.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="輸入中文 (需要網路)..."></textarea><div id="cres" class="c-res"></div><button class="btn btn-green" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
+            if (cat === '✏️ 自訂') {
+                box.innerHTML = '<div class="c-area"><textarea id="cin" class="c-txt" placeholder="輸入中文 (需網路連線)..."></textarea><div id="cres" class="c-res"></div><button style="background:var(--green); color:#fff; border:none; padding:15px; border-radius:12px; width:100%; font-weight:bold; font-size:16px;" onclick="doTranslate()">🌍 翻譯並發音</button></div>';
                 return;
             }
 
             var items = [];
-            if (category === '🌟 全部') {
-                for (var key in DB) {
-                    if (DB.hasOwnProperty(key)) {
-                        items = items.concat(DB[key]);
-                    }
-                }
-            } else if (category === '⭐ 最愛') {
-                for (var k in DB) {
-                    if (DB.hasOwnProperty(k)) {
-                        for (var i = 0; i < DB[k].length; i++) {
-                            if (favList.indexOf(DB[k][i].j) > -1) items.push(DB[k][i]);
-                        }
-                    }
-                }
-            } else if (category === '🕒 最近') {
-                items = historyList;
-            } else {
-                items = DB[category] || [];
-            }
-
-            // 搜尋過濾
-            if (keyword) {
-                var lowerKeyword = keyword.toLowerCase();
-                var filtered = [];
-                for (var j = 0; j < items.length; j++) {
-                    var it = items[j];
-                    if (it.z.indexOf(lowerKeyword) > -1 || it.j.indexOf(lowerKeyword) > -1 || (it.r && it.r.toLowerCase().indexOf(lowerKeyword) > -1)) {
-                        filtered.push(it);
-                    }
-                }
-                items = filtered;
-            }
-
-            // 去除重複項目
-            var finalItems = [];
-            var seen = {};
-            for (var m = 0; m < items.length; m++) {
-                if (!seen[items[m].j]) {
-                    seen[items[m].j] = true;
-                    finalItems.push(items[m]);
-                }
-            }
-
-            if (finalItems.length === 0) {
-                container.innerHTML = '<h3 style="text-align:center; color:#94a3b8;">查無資料</h3>';
-                return;
-            }
-
-            // 建立卡片 HTML
-            var htmlString = "";
-            for (var n = 0; n < finalItems.length; n++) {
-                var obj = finalItems[n];
-                var isFav = (favList.indexOf(obj.j) > -1) ? "active" : "";
-                
-                // 為了避免引號衝突，安全處理字串
-                var safeJa = obj.j.replace(/'/g, "\\'");
-                var safeZh = obj.z.replace(/'/g, "\\'");
-                var safeRo = obj.r ? obj.r.replace(/'/g, "\\'") : "";
-
-                htmlString += '<div class="card">' +
-                                '<div class="star ' + isFav + '" onclick="toggleFavorite(\'' + safeJa + '\')">★</div>' +
-                                '<div class="card-in" onclick="speakText(\'' + safeJa + '\', \'' + safeZh + '\', \'' + safeRo + '\')">' +
-                                    '<div class="zh">' + obj.z + '</div>' +
-                                    '<div class="ja-box"><span class="ja">🔊 ' + obj.j + '</span></div>' +
-                                    '<div class="ro">' + (obj.r || '') + '</div>' +
-                                '</div>' +
-                                '<button class="zoom-btn" onclick="openZoom(\'' + safeJa + '\', \'' + safeZh + '\')">🪧 放大顯示</button>' +
-                              '</div>';
-            }
-            container.innerHTML = htmlString;
-        }
-
-        // 切換分類
-        function changeCategory(catName) {
-            currentCategory = catName;
-            
-            // 更新頂部按鈕樣式
-            var bRec = document.getElementById('btn-rec');
-            var bFav = document.getElementById('btn-fav');
-            bRec.className = (catName === '🕒 最近') ? 'btn active' : 'btn';
-            bFav.className = (catName === '⭐ 最愛') ? 'btn active' : 'btn';
-
-            // 更新橫向捲動分類樣式
-            var catBtns = document.getElementsByClassName('cat-btn');
-            for (var i = 0; i < catBtns.length; i++) {
-                catBtns[i].className = (catBtns[i].innerText === catName) ? 'cat-btn active' : 'cat-btn';
-            }
-
-            var searchInput = document.getElementById('search');
-            renderCards(currentCategory, searchInput ? searchInput.value : "");
-        }
-
-        // 程式進入點 (直接執行，不等待)
-        var catContainer = document.getElementById('cat-container');
-        var catNames = ['🌟 全部'];
-        for (var key in DB) {
-            if (DB.hasOwnProperty(key)) {
-                catNames.push(key);
-            }
-        }
-        catNames.push('✏️ 自訂');
-
-        var catHtml = "";
-        for (var idx = 0; idx < catNames.length; idx++) {
-            var cName = catNames[idx];
-            var activeClass = (cName === '🌟 全部') ? 'active' : '';
-            catHtml += '<button class="cat-btn ' + activeClass + '" onclick="document.getElementById(\'search\').value=\'\'; changeCategory(\'' + cName + '\')">' + cName + '</button>';
-        }
-        catContainer.innerHTML = catHtml;
-
-        var searchBox = document.getElementById('search');
-        searchBox.oninput = function(e) {
-            renderCards(currentCategory, e.target.value);
-        };
-
-        // 首次渲染
-        renderCards('🌟 全部', '');
-
-    </script>
-</body>
-</html>
+            if (cat === '🌟 全部') {
+                for (var key in DB) { if(DB.hasOwnProperty(key)) items = items.concat(DB[key]); }
+            } else if (cat === '⭐ 最愛
