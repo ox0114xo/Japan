@@ -6,14 +6,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="JP Voice">
-    <title>日文語音終端系統 v7.1</title>
+    <title>日文語音終端系統 v8.0</title>
     <style>
-        /* 系統底層防護與變數 */
-        * { -webkit-tap-highlight-color: transparent; outline: none; }
+        * { -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
 
         :root { 
-            --bg-deep: #050b14; 
-            --primary: #00f0ff; --secondary: #b026ff; 
+            --bg-deep: #050b14; --primary: #00f0ff; --secondary: #b026ff; 
             --success: #39ff14; --danger: #ff2a2a; --warning: #fbbf24;
             --key-top: #152238; --key-side: #060c17; --key-border: #1e3a5f;
             --text-main: #ffffff; --text-muted: #94a3b8; 
@@ -27,38 +25,63 @@
             background-size: 20px 20px; overflow-x: hidden;
         }
 
-        /* 標題 */
-        h1 { 
-            text-align: center; font-size: 30px; font-weight: 900; letter-spacing: 4px;
-            margin: 15px 0 25px 0; user-select: none; cursor: pointer;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3); border-bottom: 2px solid rgba(0, 240, 255, 0.2); padding-bottom: 12px;
+        /* 內建瀏覽器警告牆 */
+        #inapp-warning {
+            display: none; position: fixed; inset: 0; background: #050b14; z-index: 9999999;
+            flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px;
         }
-        h1::before { content: 'SYS.V7.1 // '; font-size: 16px; color: var(--secondary); -webkit-text-fill-color: initial; text-shadow: none; vertical-align: middle;}
+        #inapp-warning h1 { color: var(--danger); font-size: 28px; margin-bottom: 15px; text-shadow: 0 0 20px rgba(255,42,42,0.5); border: none;}
+        #inapp-warning p { font-size: 18px; line-height: 1.6; margin-bottom: 20px; color: #fff;}
+        #inapp-warning .highlight { color: var(--primary); font-weight: bold; font-size: 20px;}
 
-        /* 搜尋與翻譯列 */
-        .search-container { display: flex; gap: 12px; margin-bottom: 25px; width: 100%; }
+        /* 標題與 SOS 區域 */
+        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid rgba(0, 240, 255, 0.2); padding-bottom: 12px;}
+        h1 { 
+            font-size: 24px; font-weight: 900; letter-spacing: 2px; margin: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+        .sos-btn {
+            background: rgba(255,42,42,0.15); color: var(--danger); border: 1px solid var(--danger);
+            padding: 8px 15px; border-radius: 8px; font-weight: 900; font-size: 16px; cursor: pointer;
+            box-shadow: 0 0 15px rgba(255,42,42,0.3); animation: pulseRed 2s infinite;
+        }
+        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255,42,42,0.6); } 70% { box-shadow: 0 0 0 10px rgba(255,42,42,0); } 100% { box-shadow: 0 0 0 0 rgba(255,42,42,0); } }
+
+        /* 搜尋、語音輸入與翻譯列 */
+        .search-container { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
+        .input-wrapper { position: relative; flex: 1; display: flex; }
         .search-box { 
-            flex: 1; padding: 18px 20px; font-size: 18px; color: #fff; font-weight: bold;
+            width: 100%; padding: 18px 50px 18px 20px; font-size: 16px; color: #fff; font-weight: bold;
             background: rgba(0,0,0,0.6); border: 2px solid var(--secondary); 
             border-radius: 8px; transition: 0.3s; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5);
         }
         .search-box:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0,240,255,0.4), inset 0 2px 10px rgba(0,0,0,0.5); }
-        .search-box::placeholder { color: #475569; font-weight: normal; }
         
+        .mic-btn {
+            position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
+            background: rgba(0,240,255,0.1); border: 1px solid var(--primary); color: var(--primary);
+            width: 40px; height: 40px; border-radius: 50%; font-size: 18px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; transition: 0.3s;
+        }
+        .mic-btn.recording { background: var(--danger); color: #fff; border-color: var(--danger); animation: pulseRed 1s infinite; }
+
         .translate-btn-inline { 
             background: linear-gradient(180deg, var(--secondary) 0%, #6b21a8 100%);
             color: white; border: 1px solid #d8b4fe; border-bottom: 6px solid #4c1d95; 
-            padding: 0 25px; border-radius: 8px; font-size: 18px; font-weight: 900; 
-            cursor: pointer; transition: all 0.1s; white-space: nowrap; 
+            padding: 0 20px; border-radius: 8px; font-size: 18px; font-weight: 900; cursor: pointer; transition: all 0.1s; white-space: nowrap; 
         }
         .translate-btn-inline:active { transform: translateY(6px); border-bottom-width: 0px; background: #6b21a8; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+
+        /* 禮貌模式開關 */
+        .polite-toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-muted); margin-bottom: 20px; font-weight: bold; cursor: pointer;}
+        .polite-toggle input { width: 18px; height: 18px; accent-color: var(--primary); }
 
         /* 翻譯結果顯示區 */
         #inline-translate-result { 
             display: none; margin-bottom: 25px; padding: 25px 20px; text-align: center; position: relative;
-            background: rgba(0, 240, 255, 0.05); border: 1px solid var(--primary); border-radius: 12px; box-shadow: inset 0 0 20px rgba(0,240,255,0.1);
+            background: rgba(0, 240, 255, 0.05); border: 1px solid var(--primary); border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0,240,255,0.1);
         }
         .trans-badge { position: absolute; top: -12px; left: 20px; font-size: 14px; font-weight: bold; color: #000; background: var(--primary); padding: 4px 12px; border-radius: 4px; }
         #inline-jp-text { font-size: 28px; font-weight: 900; color: var(--success); margin: 15px 0; letter-spacing: 2px; }
@@ -69,8 +92,7 @@
         .cat-btn { 
             white-space: nowrap; background: #0f172a; color: var(--text-muted); 
             border: 1px solid #334155; border-bottom: 4px solid #020617;
-            padding: 12px 26px; border-radius: 8px; font-size: 16px; font-weight: bold;
-            cursor: pointer; transition: all 0.1s; letter-spacing: 1px;
+            padding: 12px 26px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.1s; letter-spacing: 1px;
         }
         .cat-btn:active { transform: translateY(4px); border-bottom-width: 0px; }
         .cat-btn.active { background: rgba(0, 240, 255, 0.15); color: var(--primary); border-color: var(--primary); border-bottom-color: #008b99; }
@@ -88,16 +110,24 @@
         .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); cursor: pointer; box-shadow: 0 0 10px var(--primary); }
         .slider-val { font-family: monospace; font-size: 16px; font-weight: bold; color: var(--primary); width: 45px; text-align: right; }
 
-        /* ====== 立體機械按鍵 ====== */
+        /* ====== 【防抖動黑科技】立體機械按鍵 ====== */
         ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        
         li.cyber-key { 
             background: linear-gradient(180deg, var(--key-top) 0%, #0d1627 100%);
-            border: 1px solid var(--key-border); border-bottom: 10px solid var(--key-side); 
-            border-radius: 12px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;
-            cursor: pointer; position: relative; transition: transform 0.08s ease, border-bottom-width 0.08s ease, box-shadow 0.08s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 2px 2px rgba(255,255,255,0.05); 
+            border: 1px solid var(--key-border); border-radius: 12px; padding: 22px; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            cursor: pointer; position: relative; 
+            transition: transform 0.08s ease, box-shadow 0.08s ease;
+            /* 關鍵修復：用 shadow 代替 border-bottom，並預留空間 */
+            box-shadow: 0 10px 0 var(--key-side), 0 15px 20px rgba(0,0,0,0.6); 
+            margin-bottom: 10px; /* 預留按下時的空間，確保不擠壓下方元素 */
         }
-        li.cyber-key:active { transform: translateY(10px); border-bottom-width: 0px; box-shadow: 0 2px 5px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 240, 255, 0.2); background: linear-gradient(180deg, #0d1627 0%, var(--key-top) 100%); }
+        
+        li.cyber-key:active { 
+            transform: translateY(10px); /* 物理下陷 */
+            box-shadow: 0 0px 0 var(--key-side), 0 2px 5px rgba(0,0,0,0.8); /* 陰影縮小，版面高度不變！ */
+        }
 
         .key-indicator { position: absolute; top: 18px; right: 18px; font-size: 13px; font-weight: bold; color: var(--text-muted); background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 6px; border: 1px solid #1e3a5f; }
         .key-content { z-index: 1; pointer-events: none; margin-bottom: 15px; margin-top: 15px;}
@@ -112,52 +142,55 @@
         .icon-btn.fullscreen { color: var(--primary); border-color: rgba(0, 240, 255, 0.3);}
         .icon-btn.copy { color: var(--success); border-color: rgba(57, 255, 20, 0.3);}
         
-        /* 錯誤與讀取 */
-        .loader-container { display: flex; justify-content: center; align-items: center; padding: 50px; flex-direction: column; gap: 15px; }
-        .spinner { width: 40px; height: 40px; border: 4px solid rgba(0,240,255,0.2); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        /* 全螢幕覆蓋 */
+        /* SOS 緊急求助面板 */
+        #sos-modal { display: none; position: fixed; inset: 0; background: rgba(255, 0, 0, 0.95); z-index: 100000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;}
+        #sos-modal h2 { color: #fff; font-size: 35px; font-weight: 900; margin-bottom: 30px; letter-spacing: 5px; animation: flashText 1s infinite;}
+        @keyframes flashText { 0% { opacity: 1; } 50% { opacity: 0.5; text-shadow: 0 0 20px #fff; } 100% { opacity: 1; } }
+        .sos-option { width: 100%; max-width: 400px; background: #fff; color: var(--danger); font-size: 24px; font-weight: 900; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: none; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.2s; }
+        .sos-option:active { transform: scale(0.95); }
+        .sos-close { margin-top: 30px; background: none; border: 2px solid #fff; color: #fff; padding: 10px 40px; font-size: 20px; border-radius: 30px; cursor: pointer; font-weight: bold;}
+
+        /* 其他覆蓋層與彈窗 */
         #fullscreen-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
         #fullscreen-jp { font-size: 12vw; font-weight: 900; color: var(--primary); margin-bottom: 20px; width: 100%; word-wrap: break-word; text-shadow: 0 0 30px rgba(0, 240, 255, 0.5); }
         #fullscreen-romaji { font-size: 6vw; font-weight: bold; color: var(--success); margin-bottom: 40px; }
         #fullscreen-zh { font-size: 7vw; font-weight: bold; color: #fff; }
         .close-fullscreen { position: absolute; top: 30px; right: 30px; font-size: 40px; color: #fff; background: none; border: none; cursor: pointer; }
-        .replay-btn-large { margin-top: 50px; background: rgba(0, 240, 255, 0.1); border: 2px solid var(--primary); color: var(--primary); padding: 15px 40px; font-size: 22px; font-weight: 900; border-radius: 12px; cursor: pointer; transition: 0.2s;}
-        .replay-btn-large:active { background: var(--primary); color: #000; }
+        .replay-btn-large { margin-top: 50px; background: rgba(0, 240, 255, 0.1); border: 2px solid var(--primary); color: var(--primary); padding: 15px 40px; font-size: 22px; font-weight: 900; border-radius: 12px; cursor: pointer;}
+        
+        .loader-container { display: flex; justify-content: center; align-items: center; padding: 50px; flex-direction: column; gap: 15px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(0,240,255,0.2); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* ====== PWA 安裝提示 Popup ====== */
-        .install-popup {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 450px; background: rgba(11, 20, 38, 0.95);
-            border: 1px solid var(--primary); border-radius: 12px; padding: 16px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 240, 255, 0.2);
-            z-index: 9999; display: none; align-items: center; justify-content: space-between;
-            backdrop-filter: blur(10px); animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        @keyframes slideUp { from { bottom: -100px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
-        .install-content { display: flex; align-items: center; width: 100%; gap: 15px; }
-        .install-icon { font-size: 32px; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 10px;}
-        .install-text { flex: 1; line-height: 1.5; }
-        .install-title { font-size: 16px; font-weight: bold; color: #fff; }
-        .install-desc { font-size: 13px; color: var(--text-muted); }
-        .install-btn { background: var(--primary); color: #000; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 900; font-size: 15px; cursor: pointer; white-space: nowrap; box-shadow: 0 0 15px rgba(0,240,255,0.4); }
-        .install-btn:active { transform: scale(0.95); }
-        .install-close { background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 0 5px; margin-left: 5px;}
+        /* PWA 安裝提示 */
+        .install-popup { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 450px; background: rgba(11, 20, 38, 0.95); border: 1px solid var(--primary); border-radius: 12px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 9999; display: none; align-items: center; justify-content: space-between; }
+        .install-btn { background: var(--primary); color: #000; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 900; font-size: 15px; cursor: pointer; white-space: nowrap;}
     </style>
 </head>
 <body>
 
+    <div id="inapp-warning">
+        <h1>⚠️ 系統功能受限</h1>
+        <p>檢測到您正在使用 LINE/FB 的內建瀏覽器，這將導致**語音辨識**與**發音功能**失效！</p>
+        <p>👉 請點擊右上角 (或右下角) 的「⋮」圖示，<br>選擇 <span class="highlight">「以預設瀏覽器開啟」</span><br> (使用 Safari 或 Chrome)。</p>
+    </div>
+
+    <div id="sos-modal">
+        <h2>🚨 緊急求助 (SOS) 🚨</h2>
+        <button class="sos-option" onclick="triggerSOS('我需要叫救護車', '救急車を呼んでください')">🚑 叫救護車</button>
+        <button class="sos-option" onclick="triggerSOS('請幫我報警', '警察を呼んでください')">🚓 請幫我報警</button>
+        <button class="sos-option" onclick="triggerSOS('我迷路了，請幫我', '道に迷いました。助けてください')">🗺️ 我迷路了</button>
+        <button class="sos-option" onclick="triggerSOS('我弄丟了護照/錢包', 'パスポートと財布をなくしました')">🛂 遺失護照/錢包</button>
+        <button class="sos-close" onclick="closeSOS()">取消 (✕)</button>
+    </div>
+
     <div id="install-popup" class="install-popup">
-        <div class="install-content">
-            <div class="install-icon">📱</div>
-            <div class="install-text">
-                <div class="install-title">安裝「日文語音」APP</div>
-                <div class="install-desc" id="install-desc">一鍵直達桌面，離線全螢幕體驗！</div>
-            </div>
-            <button id="install-btn" class="install-btn">一鍵安裝</button>
-            <button id="install-close" class="install-close">✕</button>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 32px;">📱</div>
+            <div><div style="font-weight: bold; color: #fff;">安裝至桌面</div><div id="install-desc" style="font-size: 13px; color: var(--text-muted);">一鍵直達，離線體驗！</div></div>
         </div>
+        <button id="install-btn" class="install-btn">一鍵安裝</button>
+        <button id="install-close" style="background:none; border:none; color:#fff; font-size:20px;">✕</button>
     </div>
 
     <div id="fullscreen-overlay">
@@ -168,12 +201,22 @@
         <button class="replay-btn-large" onclick="replayFullscreen()">🔊 重新發音</button>
     </div>
 
-    <h1 id="app-title">日文語音終端系統</h1>
+    <div class="header-area">
+        <h1 id="app-title">日文語音終端系統</h1>
+        <button class="sos-btn" onclick="document.getElementById('sos-modal').style.display='flex'; triggerHaptic(50);">🚨 SOS</button>
+    </div>
     
     <div class="search-container">
-        <input type="text" id="search-input" class="search-box" placeholder="搜尋中文/日文，或輸入新句按 Enter" onkeyup="filterData()" onkeypress="if(event.key === 'Enter') translateAndSpeak()">
+        <div class="input-wrapper">
+            <input type="text" id="search-input" class="search-box" placeholder="輸入中文/日文，或點擊麥克風" onkeyup="filterData()" onkeypress="if(event.key === 'Enter') translateAndSpeak()">
+            <button id="mic-btn" class="mic-btn" onclick="startVoiceInput()" title="語音輸入">🎤</button>
+        </div>
         <button class="translate-btn-inline" id="main-translate-btn" onclick="translateAndSpeak()">⚡ 翻譯</button>
     </div>
+
+    <label class="polite-toggle">
+        <input type="checkbox" id="polite-mode"> 🌸 翻譯時自動加上禮貌用語 (不好意思...)
+    </label>
 
     <div id="inline-translate-result">
         <div class="trans-badge">翻譯結果</div>
@@ -209,85 +252,79 @@
 
     <script>
         // ==========================================
-        // PWA 核心黑科技 (單檔動態生成 Manifest & SW)
+        // 1. 內建瀏覽器 (In-App Browser) 偵測防護
         // ==========================================
-        (function setupPWA() {
-            // 1. 動態注入 Manifest (讓瀏覽器承認這是 APP)
-            const manifestJSON = {
-                "name": "日文語音終端系統",
-                "short_name": "JP Voice",
-                "start_url": ".",
-                "display": "standalone",
-                "background_color": "#050b14",
-                "theme_color": "#00f0ff",
-                "icons": [{
-                    "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzA1MGIxNCIvPjx0ZXh0IHk9Ii45ZW0iIGZvbnQtc2l6ZT0iOTAiPvCfh7Twn4e3PC90ZXh0Pjwvc3ZnPg==",
-                    "sizes": "192x192", "type": "image/svg+xml"
-                }]
-            };
-            const manifestBlob = new Blob([JSON.stringify(manifestJSON)], {type: 'application/json'});
-            const link = document.createElement('link');
-            link.rel = 'manifest'; link.href = URL.createObjectURL(manifestBlob);
-            document.head.appendChild(link);
-
-            // 2. 動態註冊虛擬 Service Worker (Android Chrome 安裝必備條件)
-            if ('serviceWorker' in navigator) {
-                const swCode = `self.addEventListener('fetch', ()=>{});`;
-                const swBlob = new Blob([swCode], {type: 'application/javascript'});
-                navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
-            }
-        })();
-
-        // ==========================================
-        // 安裝提示 Popup 邏輯
-        // ==========================================
-        let deferredPrompt;
-        const installPopup = document.getElementById('install-popup');
-        const installBtn = document.getElementById('install-btn');
-        const installClose = document.getElementById('install-close');
-        const installDesc = document.getElementById('install-desc');
-
-        // 偵測裝置與狀態
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-        const hidePrompt = localStorage.getItem('hideInstallPrompt') === 'true';
-
-        if (!isStandalone && !hidePrompt) {
-            // Android / Windows Chrome 觸發安裝事件
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault(); deferredPrompt = e;
-                installPopup.style.display = 'flex';
-            });
-
-            // iOS Safari 不支援原生 API，改顯示圖文教學
-            if (isIOS && isSafari) {
-                setTimeout(() => {
-                    installPopup.style.display = 'flex';
-                    installBtn.style.display = 'none'; // 隱藏按鈕，改為純文字教學
-                    installDesc.innerHTML = '點擊底部 <b>[分享 ⍐]</b> 圖示<br>選擇 <b>[加入主畫面 ➕]</b> 即可安裝。';
-                    installDesc.style.color = 'var(--primary)';
-                }, 1500); // 延遲一下彈出
-            }
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        // 偵測 LINE, FB, Messenger, IG 等
+        const isInApp = /Line|FBAN|FBAV|Instagram|MicroMessenger/i.test(ua);
+        if (isInApp) {
+            document.getElementById('inapp-warning').style.display = 'flex';
         }
 
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') installPopup.style.display = 'none';
-                deferredPrompt = null;
-            }
-        });
+        // ==========================================
+        // 2. PWA 動態生成與安裝邏輯
+        // ==========================================
+        (function setupPWA() {
+            const manifestJSON = {
+                "name": "日文語音終端", "short_name": "JP Voice", "start_url": ".", "display": "standalone",
+                "background_color": "#050b14", "theme_color": "#00f0ff",
+                "icons": [{"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzA1MGIxNCIvPjx0ZXh0IHk9Ii45ZW0iIGZvbnQtc2l6ZT0iOTAiPvCfh7Twn4e3PC90ZXh0Pjwvc3ZnPg==", "sizes": "192x192", "type": "image/svg+xml"}]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifestJSON)], {type: 'application/json'});
+            const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(manifestBlob); document.head.appendChild(link);
+            if ('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob(["self.addEventListener('fetch', ()=>{});"], {type: 'application/javascript'}))).catch(()=>{});
+        })();
 
-        installClose.addEventListener('click', () => {
-            installPopup.style.display = 'none';
-            localStorage.setItem('hideInstallPrompt', 'true'); // 關閉後不再打擾
-        });
-
+        let deferredPrompt; const installPopup = document.getElementById('install-popup');
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        
+        if (!isStandalone && localStorage.getItem('hideInstall') !== 'true' && !isInApp) {
+            window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installPopup.style.display = 'flex'; });
+            if (isIOS) { setTimeout(() => { installPopup.style.display = 'flex'; document.getElementById('install-btn').style.display = 'none'; document.getElementById('install-desc').innerHTML = '點底部 <b>[分享 ⍐]</b> ➔ <b>[加入主畫面 ➕]</b>'; document.getElementById('install-desc').style.color = 'var(--primary)'; }, 2000); }
+        }
+        document.getElementById('install-btn').addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; installPopup.style.display = 'none'; }});
+        document.getElementById('install-close').addEventListener('click', () => { installPopup.style.display = 'none'; localStorage.setItem('hideInstall', 'true'); });
 
         // ==========================================
-        // 原有核心功能 (翻譯、語音、分類)
+        // 3. 語音辨識 (Voice Input)
+        // ==========================================
+        function startVoiceInput() {
+            triggerHaptic(20);
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return alert("您的設備或瀏覽器不支援語音輸入功能！(請使用 Chrome/Safari)");
+            
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'zh-TW';
+            recognition.interimResults = false;
+            
+            const micBtn = document.getElementById('mic-btn');
+            const searchInput = document.getElementById('search-input');
+
+            recognition.onstart = () => {
+                micBtn.classList.add('recording');
+                searchInput.value = '';
+                searchInput.placeholder = '🎤 正在聆聽，請說話...';
+            };
+            
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+                translateAndSpeak(); // 辨識完直接幫你翻譯發音！
+            };
+            
+            recognition.onerror = (e) => { alert("語音辨識失敗，請檢查麥克風權限。"); };
+            
+            recognition.onend = () => {
+                micBtn.classList.remove('recording');
+                searchInput.placeholder = '輸入中文/日文，或點擊麥克風';
+            };
+            
+            recognition.start();
+        }
+
+        // ==========================================
+        // 4. 基礎功能與資料渲染
         // ==========================================
         function triggerHaptic(duration = 15) { if (navigator.vibrate) navigator.vibrate(duration); }
         function triggerHapticSuccess() { if (navigator.vibrate) navigator.vibrate([20, 50, 20]); }
@@ -297,18 +334,13 @@
         catContainer.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - catContainer.offsetLeft; scrollLeft = catContainer.scrollLeft; });
         catContainer.addEventListener('mouseleave', () => { isDown = false; });
         catContainer.addEventListener('mouseup', () => { isDown = false; });
-        catContainer.addEventListener('mousemove', (e) => {
-            if (!isDown) return; e.preventDefault();
-            catContainer.scrollLeft = scrollLeft - ((e.pageX - catContainer.offsetLeft) - startX) * 2; 
-        });
+        catContainer.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); catContainer.scrollLeft = scrollLeft - ((e.pageX - catContainer.offsetLeft) - startX) * 2; });
 
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
-        let globalData = [];
-        let currentCategory = '全部';
+        let globalData = []; let currentCategory = '全部';
         let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
         let customTranslations = JSON.parse(localStorage.getItem('jp_custom_translations')) || [];
-        let clickCount = 0; let isSecretUnlocked = false;
-        const SECRET_KEYWORD = '🤬 隱藏情緒'; const CUSTOM_KEYWORD = '🗂️ 自訂翻譯';
+        let clickCount = 0; let isSecretUnlocked = false; const SECRET_KEYWORD = '🤬 隱藏情緒'; const CUSTOM_KEYWORD = '🗂️ 自訂翻譯';
 
         window.onload = () => { loadCSV(); if ('speechSynthesis' in window) window.speechSynthesis.getVoices(); };
 
@@ -317,60 +349,48 @@
             document.getElementById('pitch-val').innerText = Number(document.getElementById('pitch-slider').value).toFixed(1);
         }
 
-        function speak(text) {
-            if (!('speechSynthesis' in window)) return alert("設備不支援語音引擎");
+        function speak(text, forceLoudAndSlow = false) {
+            if (!('speechSynthesis' in window)) return alert("設備不支援發音引擎");
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
-            utterance.rate = parseFloat(document.getElementById('speed-slider').value);
-            utterance.pitch = parseFloat(document.getElementById('pitch-slider').value);
+            
+            if (forceLoudAndSlow) {
+                // SOS 模式：強制慢速、高音量
+                utterance.rate = 0.7; utterance.pitch = 1.0; utterance.volume = 1.0;
+            } else {
+                utterance.rate = parseFloat(document.getElementById('speed-slider').value);
+                utterance.pitch = parseFloat(document.getElementById('pitch-slider').value);
+            }
+            
             const voices = window.speechSynthesis.getVoices();
             const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
             if(jpVoice) utterance.voice = jpVoice;
             window.speechSynthesis.speak(utterance);
         }
 
-        function toggleFavorite(event, jp) {
-            event.stopPropagation(); triggerHaptic(20);
-            const index = favorites.indexOf(jp);
-            if (index > -1) favorites.splice(index, 1); else favorites.push(jp);
-            localStorage.setItem('jp_favorites', JSON.stringify(favorites)); filterData();
+        // ==========================================
+        // 5. SOS 緊急求助模式
+        // ==========================================
+        function triggerSOS(zh, jp) {
+            triggerHaptic([50, 100, 50, 100, 50]); // 緊急震動
+            document.getElementById('sos-modal').style.display = 'none';
+            openFullscreen({stopPropagation:()=>{}}, jp, zh, '[緊急事態]');
+            speak(jp, true); // 強制用最清晰的方式發音
         }
+        function closeSOS() { document.getElementById('sos-modal').style.display = 'none'; }
 
-        function copyText(event, text) {
-            event.stopPropagation(); triggerHapticSuccess();
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = event.currentTarget; const originalHTML = btn.innerHTML;
-                btn.innerHTML = '✔ 成功'; btn.style.color = 'var(--success)'; btn.style.borderColor = 'var(--success)';
-                setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; btn.style.borderColor = ''; }, 1500);
-            });
-        }
-
-        function openFullscreen(event, jp, zh, romaji) {
-            event.stopPropagation(); triggerHaptic(30);
-            document.getElementById('fullscreen-jp').innerText = jp;
-            document.getElementById('fullscreen-romaji').innerText = romaji || '';
-            document.getElementById('fullscreen-zh').innerText = zh;
-            document.getElementById('fullscreen-overlay').style.display = 'flex'; speak(jp);
-        }
-
+        // 其他基礎函式
+        function toggleFavorite(event, jp) { event.stopPropagation(); triggerHaptic(20); const index = favorites.indexOf(jp); if (index > -1) favorites.splice(index, 1); else favorites.push(jp); localStorage.setItem('jp_favorites', JSON.stringify(favorites)); filterData(); }
+        function copyText(event, text) { event.stopPropagation(); triggerHapticSuccess(); navigator.clipboard.writeText(text).then(() => { const btn = event.currentTarget; const originalHTML = btn.innerHTML; btn.innerHTML = '✔ 成功'; btn.style.color = 'var(--success)'; btn.style.borderColor = 'var(--success)'; setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; btn.style.borderColor = ''; }, 1500); }); }
+        
+        function openFullscreen(event, jp, zh, romaji) { event.stopPropagation(); triggerHaptic(30); document.getElementById('fullscreen-jp').innerText = jp; document.getElementById('fullscreen-romaji').innerText = romaji || ''; document.getElementById('fullscreen-zh').innerText = zh; document.getElementById('fullscreen-overlay').style.display = 'flex'; speak(jp); }
         function closeFullscreen() { triggerHaptic(15); document.getElementById('fullscreen-overlay').style.display = 'none'; window.speechSynthesis.cancel(); }
         function replayFullscreen() { triggerHaptic(20); const jp = document.getElementById('fullscreen-jp').innerText; if(jp) speak(jp); }
 
-        document.getElementById('app-title').addEventListener('click', () => {
-            if (isSecretUnlocked) return; clickCount++;
-            if (clickCount >= 10) {
-                isSecretUnlocked = true; triggerHapticSuccess(); alert('⚠️ 系統警告：安全限制解除，隱藏模組開啟。');
-                currentCategory = SECRET_KEYWORD; renderCategories(); filterData();
-            }
-        });
+        document.getElementById('app-title').addEventListener('click', () => { if (isSecretUnlocked) return; clickCount++; if (clickCount >= 10) { isSecretUnlocked = true; triggerHapticSuccess(); alert('⚠️ 隱藏模組開啟。'); currentCategory = SECRET_KEYWORD; renderCategories(); filterData(); }});
 
-        async function loadCSV() {
-            try {
-                const res = await fetch(CSV_URL); if (!res.ok) throw new Error("連線失敗");
-                const csvText = await res.text(); processData(csvText);
-            } catch(e) { document.getElementById('loading').innerHTML = `<span style="color:var(--danger)">讀取失敗：${e.message}</span>`; }
-        }
+        async function loadCSV() { try { const res = await fetch(CSV_URL); if (!res.ok) throw new Error("連線失敗"); const csvText = await res.text(); processData(csvText); } catch(e) { document.getElementById('loading').innerHTML = `<span style="color:var(--danger)">讀取失敗：${e.message}</span>`; } }
 
         function processData(csvText) {
             const rows = csvText.split('\n'); globalData = [];
@@ -382,9 +402,7 @@
                     if (char === '"') inQuotes = !inQuotes; else if (char === ',' && !inQuotes) { cols.push(currentVal.trim()); currentVal = ''; } else currentVal += char;
                 }
                 cols.push(currentVal.trim()); 
-                if (cols.length >= 3) {
-                    globalData.push({ cat: (cols[0] || '未分類').replace(/"/g, ''), zh: (cols[1] || '').replace(/"/g, ''), jp: (cols[2] || '').replace(/"/g, ''), romaji: (cols[3] || '').replace(/"/g, '') });
-                }
+                if (cols.length >= 3) globalData.push({ cat: (cols[0] || '未分類').replace(/"/g, ''), zh: (cols[1] || '').replace(/"/g, ''), jp: (cols[2] || '').replace(/"/g, ''), romaji: (cols[3] || '').replace(/"/g, '') });
             }
             if(customTranslations.length > 0) globalData = [...globalData, ...customTranslations];
             renderCategories(); filterData(); document.getElementById('loading').style.display = 'none';
@@ -392,21 +410,15 @@
 
         function renderCategories() {
             catContainer.innerHTML = ''; let baseCats = [];
-            if (isSecretUnlocked) baseCats.push(SECRET_KEYWORD);
-            baseCats.push('全部', '⭐最愛');
-            if (customTranslations.length > 0) baseCats.push(CUSTOM_KEYWORD);
-            const otherCats = new Set();
-            globalData.forEach(item => { if (!item.cat.includes('隱藏') && !item.cat.includes('🤬') && item.cat !== CUSTOM_KEYWORD) otherCats.add(item.cat); });
+            if (isSecretUnlocked) baseCats.push(SECRET_KEYWORD); baseCats.push('全部', '⭐最愛'); if (customTranslations.length > 0) baseCats.push(CUSTOM_KEYWORD);
+            const otherCats = new Set(); globalData.forEach(item => { if (!item.cat.includes('隱藏') && !item.cat.includes('🤬') && item.cat !== CUSTOM_KEYWORD) otherCats.add(item.cat); });
             const allCats = [...baseCats, ...Array.from(otherCats)];
 
             allCats.forEach(cat => {
                 const btn = document.createElement('button');
-                if (cat === currentCategory) {
-                    if (cat === SECRET_KEYWORD) btn.className = 'cat-btn secret-active'; else if (cat === CUSTOM_KEYWORD) btn.className = 'cat-btn custom-active'; else btn.className = 'cat-btn active';
-                } else btn.className = 'cat-btn';
+                if (cat === currentCategory) { if (cat === SECRET_KEYWORD) btn.className = 'cat-btn secret-active'; else if (cat === CUSTOM_KEYWORD) btn.className = 'cat-btn custom-active'; else btn.className = 'cat-btn active'; } else btn.className = 'cat-btn';
                 btn.innerText = cat;
-                if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = 'var(--warning)';
-                if(cat === CUSTOM_KEYWORD && cat !== currentCategory) btn.style.color = 'var(--success)';
+                if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = 'var(--warning)'; if(cat === CUSTOM_KEYWORD && cat !== currentCategory) btn.style.color = 'var(--success)';
                 btn.onclick = () => { if (isDown) return; triggerHaptic(15); currentCategory = cat; renderCategories(); filterData(); };
                 catContainer.appendChild(btn);
             });
@@ -418,12 +430,9 @@
 
             const filteredData = globalData.filter(item => {
                 const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
-                if (isSecretItem && !isSecretUnlocked) return false;
-                if (currentCategory === '全部' && isSecretItem) return false;
+                if (isSecretItem && !isSecretUnlocked) return false; if (currentCategory === '全部' && isSecretItem) return false;
                 let matchCat = false;
-                if (currentCategory === '全部') matchCat = true;
-                else if (currentCategory === '⭐最愛') matchCat = favorites.includes(item.jp);
-                else matchCat = item.cat === currentCategory;
+                if (currentCategory === '全部') matchCat = true; else if (currentCategory === '⭐最愛') matchCat = favorites.includes(item.jp); else matchCat = item.cat === currentCategory;
                 const matchQuery = (item.zh && item.zh.toLowerCase().includes(query)) || (item.jp && item.jp.toLowerCase().includes(query)) || (item.romaji && item.romaji.toLowerCase().includes(query));
                 return matchCat && matchQuery;
             });
@@ -432,14 +441,13 @@
 
         function renderList(dataToRender) {
             const list = document.getElementById('sentence-list'); list.innerHTML = '';
-            if(dataToRender.length === 0) { list.innerHTML = '<li style="background:transparent; border:none; box-shadow:none; text-align:center; color:var(--text-muted); font-size:18px;">[ 無資料，請使用上方翻譯 ]</li>'; return; }
+            if(dataToRender.length === 0) { list.innerHTML = '<li style="background:transparent; border:none; box-shadow:none; text-align:center; color:var(--text-muted); font-size:18px;">[ 無資料，請使用語音辨識或輸入翻譯 ]</li>'; return; }
 
             dataToRender.forEach(item => {
                 const li = document.createElement('li'); li.className = 'cyber-key'; 
                 const safeJp = item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeZh = item.zh.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeRomaji = item.romaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
                 const isFav = favorites.includes(item.jp); const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
-                if(isSecretItem) { li.style.borderColor = 'rgba(255, 42, 42, 0.5)'; li.style.borderBottomColor = '#4a0000'; }
-
+                
                 let indicatorName = `[ ${item.cat} ]`; if(isSecretItem) indicatorName = '[ DANGER ]'; else if(item.cat === CUSTOM_KEYWORD) indicatorName = '[ 自訂 ]';
                 li.onclick = (e) => { if(e.target.tagName !== 'BUTTON') { triggerHaptic(25); speak(item.jp); } };
                 li.innerHTML = `
@@ -460,20 +468,38 @@
         }
 
         async function translateAndSpeak() {
-            const input = document.getElementById('search-input').value.trim(); if (!input) return;
-            triggerHaptic(20); const resContainer = document.getElementById('inline-translate-result'); const resJp = document.getElementById('inline-jp-text'); const btn = document.getElementById('main-translate-btn'); const saveBtn = document.getElementById('save-custom-btn');
-            resContainer.style.display = 'block'; resJp.style.color = 'var(--text-muted)'; resJp.innerText = "解析中..."; btn.disabled = true; btn.innerText = "處理中"; saveBtn.style.display = 'none'; 
+            let input = document.getElementById('search-input').value.trim(); if (!input) return;
+            triggerHaptic(20); 
+
+            // 6. 禮貌濾鏡檢查
+            const isPolite = document.getElementById('polite-mode').checked;
+            const originalZh = input;
+            if (isPolite) {
+                input = "不好意思請問，" + input + "，謝謝。"; // 讓 Google 翻譯翻出更禮貌的日文
+            }
+
+            const resContainer = document.getElementById('inline-translate-result'); const resJp = document.getElementById('inline-jp-text'); const btn = document.getElementById('main-translate-btn'); const saveBtn = document.getElementById('save-custom-btn');
+            resContainer.style.display = 'block'; resJp.style.color = 'var(--text-muted)'; resJp.innerText = "神經網路解析中..."; btn.disabled = true; btn.innerText = "處理中"; saveBtn.style.display = 'none'; 
+            
             try {
                 const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=ja&dt=t&q=${encodeURIComponent(input)}`;
                 const response = await fetch(url); if (!response.ok) throw new Error("伺服器斷線");
                 const data = await response.json(); const translatedText = data[0][0][0]; 
-                resJp.style.color = 'var(--success)'; resJp.innerText = translatedText; saveBtn.style.display = 'flex'; triggerHapticSuccess(); speak(translatedText);
+                resJp.style.color = 'var(--success)'; resJp.innerText = translatedText; saveBtn.style.display = 'flex'; 
+                
+                // 把原始中文存起來供「保存功能」使用
+                resContainer.setAttribute('data-zh', originalZh);
+
+                triggerHapticSuccess(); speak(translatedText);
             } catch (error) { resJp.style.color = 'var(--danger)'; resJp.innerText = "[ 解析失敗 ]"; } finally { btn.disabled = false; btn.innerText = "⚡ 翻譯"; }
         }
 
         function saveCustomTranslation() {
-            const zh = document.getElementById('search-input').value.trim(); const jp = document.getElementById('inline-jp-text').innerText.trim();
-            if (!zh || !jp || jp === "解析中..." || jp === "[ 解析失敗 ]") return;
+            // 從 data-zh 屬性抓取沒有加上禮貌詞的原始中文
+            const zh = document.getElementById('inline-translate-result').getAttribute('data-zh') || document.getElementById('search-input').value.trim(); 
+            const jp = document.getElementById('inline-jp-text').innerText.trim();
+            if (!zh || !jp || jp === "神經網路解析中..." || jp === "[ 解析失敗 ]") return;
+
             const exists = customTranslations.some(item => item.jp === jp && item.zh === zh); if (exists) return alert('這句已經在您的自訂清單中囉！');
             triggerHapticSuccess(); const newItem = { cat: CUSTOM_KEYWORD, zh: zh, jp: jp, romaji: '' };
             customTranslations.push(newItem); localStorage.setItem('jp_custom_translations', JSON.stringify(customTranslations)); globalData.push(newItem);
