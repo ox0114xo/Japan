@@ -5,67 +5,95 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>日本旅遊常用句</title>
     <style>
+        :root {
+            --primary: #007bff;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+        }
         body {
             font-family: "Microsoft JhengHei", Arial, sans-serif;
-            padding: 20px;
+            padding: 15px;
             max-width: 600px;
             margin: 0 auto;
+            background-color: var(--bg);
+            padding-bottom: 80px;
         }
-        
-        h1 {
-            text-align: center;
-            font-size: 24px;
-            color: #333;
-        }
+        h1 { text-align: center; color: #333; font-size: 22px; }
 
-        /* 拉桿區塊樣式 */
+        /* 設定區塊 */
         .settings-panel {
-            background-color: #f5f5f5;
+            background-color: var(--card-bg);
             padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
         }
-        .slider-group {
+        .slider-group, .toggle-group {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 10px 0;
+            margin: 8px 0;
+            font-size: 14px;
         }
-        .slider-group label {
-            width: 80px;
-        }
-        .slider-group input[type="range"] {
-            flex-grow: 1;
-            margin: 0 15px;
-        }
-        .slider-value {
-            width: 30px;
-            text-align: right;
-        }
+        .slider-group label { width: 60px; }
+        .slider-group input[type="range"] { flex-grow: 1; margin: 0 10px; }
+        .slider-value { width: 25px; text-align: right; }
+        
+        /* 切換開關樣式 */
+        .switch { position: relative; display: inline-block; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
-        /* 分類按鈕區塊樣式 */
-        .category-container {
-            margin-bottom: 20px;
-        }
+        /* 分類按鈕（兩排設計） */
+        .category-container { margin-bottom: 15px; }
         .category-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;
         }
         .category-btn {
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            background-color: white;
-            cursor: pointer;
-            transition: 0.2s;
+            padding: 6px 14px; border: 1px solid #ddd; border-radius: 20px;
+            background-color: white; cursor: pointer; font-size: 14px; transition: 0.2s;
         }
-        .category-btn:hover, .category-btn.active {
-            background-color: #007bff;
-            color: white;
-            border-color: #007bff;
+        .category-btn.active { background-color: var(--primary); color: white; border-color: var(--primary); }
+
+        /* 新增自訂句子區塊 */
+        #custom-input-area {
+            display: none; background: white; padding: 15px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
+        .custom-input { width: 100%; padding: 8px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;}
+        .save-btn { width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; }
+
+        /* 句子卡片 */
+        .phrase-card {
+            background-color: var(--card-bg); padding: 15px; border-radius: 10px;
+            margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .zh-text { font-size: 14px; color: #666; margin-bottom: 5px; }
+        .jp-text { font-size: 18px; font-weight: bold; color: #111; margin-bottom: 5px; }
+        .romaji-text { font-size: 12px; color: #888; display: none; }
+        .show-romaji .romaji-text { display: block; }
+        
+        /* 卡片按鈕列 */
+        .card-actions {
+            display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px;
+        }
+        .action-btn { background: none; border: none; font-size: 20px; cursor: pointer; padding: 5px; transition: transform 0.1s;}
+        .action-btn:active { transform: scale(0.9); }
+        .fav-btn.active { color: gold; text-shadow: 0 0 2px #d4af37; }
+
+        /* 大字報全螢幕模式 */
+        #fullscreen-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: white; z-index: 1000; flex-direction: column;
+            justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
+            text-align: center;
+        }
+        #fs-jp { font-size: 40px; font-weight: bold; margin-bottom: 20px; color: #000; word-break: keep-all;}
+        #fs-zh { font-size: 24px; color: #666; }
+        #close-fs { position: absolute; top: 20px; right: 20px; font-size: 40px; background: none; border: none; cursor: pointer; color: #333;}
     </style>
 </head>
 <body>
@@ -74,63 +102,202 @@
 
     <div class="settings-panel">
         <div class="slider-group">
-            <label for="rate">語速</label>
+            <label>語速</label>
             <input type="range" id="rate" min="0" max="2" step="0.1" value="1.0">
             <span class="slider-value" id="rate-val">1.0</span>
         </div>
         <div class="slider-group">
-            <label for="pitch">音調</label>
+            <label>音調</label>
             <input type="range" id="pitch" min="0" max="2" step="0.1" value="1.0">
             <span class="slider-value" id="pitch-val">1.0</span>
+        </div>
+        <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+        <div class="toggle-group">
+            <span>加禮貌用語 (すみません)</span>
+            <label class="switch"><input type="checkbox" id="polite-toggle"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-group">
+            <span>顯示羅馬拼音</span>
+            <label class="switch"><input type="checkbox" id="romaji-toggle"><span class="slider"></span></label>
         </div>
     </div>
 
     <div class="category-container">
-        <div class="category-row">
-            <button class="category-btn active">全部</button>
-            <button class="category-btn">最愛</button>
-            <button class="category-btn">自訂</button>
+        <div class="category-row" id="cat-row-1">
+            <button class="category-btn active" data-cat="全部">全部</button>
+            <button class="category-btn" data-cat="最愛">最愛</button>
+            <button class="category-btn" data-cat="自訂">自訂</button>
         </div>
-        <div class="category-row">
-            <button class="category-btn">機場</button>
-            <button class="category-btn">交通</button>
-            <button class="category-btn">住宿</button>
-            <button class="category-btn">餐廳</button>
-            <button class="category-btn">購物</button>
-            <button class="category-btn">求助</button>
+        <div class="category-row" id="cat-row-2">
+            <button class="category-btn" data-cat="機場">機場</button>
+            <button class="category-btn" data-cat="交通">交通</button>
+            <button class="category-btn" data-cat="住宿">住宿</button>
+            <button class="category-btn" data-cat="餐廳">餐廳</button>
+            <button class="category-btn" data-cat="購物">購物</button>
+            <button class="category-btn" style="color:red; border-color:red;" data-cat="求助">求助</button>
         </div>
     </div>
 
-    <div id="phrase-list">
-        </div>
+    <div id="custom-input-area">
+        <input type="text" id="custom-zh" class="custom-input" placeholder="輸入中文 (例: 請給我水)">
+        <input type="text" id="custom-jp" class="custom-input" placeholder="輸入日文 (例: 水をお願いします)">
+        <button class="save-btn" onclick="addCustomPhrase()">儲存自訂句子</button>
+    </div>
+
+    <div id="phrase-list"></div>
+
+    <div id="fullscreen-modal">
+        <button id="close-fs" onclick="closeFullScreen()">×</button>
+        <div id="fs-jp"></div>
+        <div id="fs-zh"></div>
+    </div>
 
     <script>
-        // 更新拉桿數值顯示與防呆機制
-        const rateSlider = document.getElementById('rate');
-        const pitchSlider = document.getElementById('pitch');
-        const rateVal = document.getElementById('rate-val');
-        const pitchVal = document.getElementById('pitch-val');
+        // 核心資料庫
+        let phrases = [
+            { id: 1, cat: '機場', zh: '我要領行李', jp: '荷物を受け取りたいです', romaji: 'Nimotsu o uketoritai desu' },
+            { id: 2, cat: '交通', zh: '請問車站怎麼走？', jp: '駅はどこですか？', romaji: 'Eki wa doko desu ka?' },
+            { id: 3, cat: '交通', zh: '這班車有到新宿嗎？', jp: 'この電車は新宿に行きますか？', romaji: 'Kono densha wa Shinjuku ni ikimasu ka?' },
+            { id: 4, cat: '住宿', zh: '我要退房', jp: 'チェックアウトをお願いします', romaji: 'Chekku-auto o onegaishimasu' },
+            { id: 5, cat: '餐廳', zh: '請給我英文菜單', jp: '英語のメニューをお願いします', romaji: 'Eigo no menyū o onegaishimasu' },
+            { id: 6, cat: '購物', zh: '可以免稅嗎？', jp: '免稅できますか？', romaji: 'Menzei dekimasu ka?' },
+            { id: 7, cat: '求助', zh: '我迷路了，請幫幫我', jp: '道に迷いました。助けてください', romaji: 'Michi ni mayoimashita. Tasukete kudasai' }
+        ];
 
-        rateSlider.addEventListener('input', function() {
-            // 讓畫面上顯示一位小數，例如 1.0
-            rateVal.textContent = parseFloat(this.value).toFixed(1);
-        });
+        let favorites = JSON.parse(localStorage.getItem('jp_favs')) || [];
+        let customPhrases = JSON.parse(localStorage.getItem('jp_customs')) || [];
+        let currentCat = '全部';
 
-        pitchSlider.addEventListener('input', function() {
-            pitchVal.textContent = parseFloat(this.value).toFixed(1);
-        });
-
-        // 當需要發音 (TTS) 時，獲取語速的範例函數
-        function getSpeechRate() {
-            let val = parseFloat(rateSlider.value);
-            // 語音 API (SpeechSynthesis) 的 rate 如果是 0 會報錯或無聲
-            // 所以在背景幫它設定一個極小值，但 UI 依然維持置中好看
-            return val === 0 ? 0.1 : val; 
-        }
+        // 監聽拉桿與開關
+        document.getElementById('rate').addEventListener('input', e => document.getElementById('rate-val').innerText = parseFloat(e.target.value).toFixed(1));
+        document.getElementById('pitch').addEventListener('input', e => document.getElementById('pitch-val').innerText = parseFloat(e.target.value).toFixed(1));
         
-        function getSpeechPitch() {
-            return parseFloat(pitchSlider.value);
+        document.getElementById('polite-toggle').addEventListener('change', renderList);
+        document.getElementById('romaji-toggle').addEventListener('change', function() {
+            document.getElementById('phrase-list').classList.toggle('show-romaji', this.checked);
+        });
+
+        // 分類切換邏輯
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentCat = e.target.dataset.cat;
+                
+                // 控制自訂輸入框的顯示與隱藏
+                document.getElementById('custom-input-area').style.display = (currentCat === '自訂') ? 'block' : 'none';
+                renderList();
+            });
+        });
+
+        // 渲染列表
+        function renderList() {
+            const listDiv = document.getElementById('phrase-list');
+            listDiv.innerHTML = '';
+            const isPolite = document.getElementById('polite-toggle').checked;
+
+            let allData = [...phrases, ...customPhrases];
+            let filtered = allData;
+
+            if (currentCat === '最愛') {
+                filtered = allData.filter(p => favorites.includes(p.id));
+            } else if (currentCat === '自訂') {
+                filtered = customPhrases;
+            } else if (currentCat !== '全部') {
+                filtered = allData.filter(p => p.cat === currentCat);
+            }
+
+            if (filtered.length === 0) {
+                listDiv.innerHTML = '<p style="text-align:center; color:#999; margin-top:20px;">這裡目前沒有句子喔！</p>';
+                return;
+            }
+
+            filtered.forEach(p => {
+                // 處理禮貌用語前綴
+                let displayZh = isPolite ? `不好意思，${p.zh}` : p.zh;
+                let displayJp = isPolite ? `すみません、${p.jp}` : p.jp;
+                let displayRomaji = isPolite ? `Sumimasen, ${p.romaji || ''}` : (p.romaji || '無拼音');
+                let isFav = favorites.includes(p.id);
+
+                const card = document.createElement('div');
+                card.className = 'phrase-card';
+                card.innerHTML = `
+                    <div class="zh-text">${displayZh}</div>
+                    <div class="jp-text">${displayJp}</div>
+                    <div class="romaji-text">${displayRomaji}</div>
+                    <div class="card-actions">
+                        <button class="action-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(${p.id})" title="加入最愛">⭐</button>
+                        <button class="action-btn" onclick="copyText('${displayJp}')" title="複製日文">📋</button>
+                        <button class="action-btn" onclick="openFullScreen('${displayJp}', '${displayZh}')" title="大字報模式">📱</button>
+                        <button class="action-btn" onclick="speakText('${displayJp}')" title="發音">🔊</button>
+                    </div>
+                `;
+                listDiv.appendChild(card);
+            });
         }
+
+        // 發音功能 (包含防呆)
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return alert('你的瀏覽器不支援語音功能');
+            window.speechSynthesis.cancel(); 
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ja-JP';
+            let rate = parseFloat(document.getElementById('rate').value);
+            utterance.rate = rate === 0 ? 0.1 : rate; 
+            utterance.pitch = parseFloat(document.getElementById('pitch').value);
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // 複製功能
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // 簡單的視覺回饋，不會跳出干擾人的 alert
+                let msg = document.createElement('div');
+                msg.textContent = '已複製！';
+                msg.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.7); color:white; padding:8px 16px; border-radius:20px; z-index:9999;';
+                document.body.appendChild(msg);
+                setTimeout(() => msg.remove(), 1500);
+            });
+        }
+
+        // 大字報模式
+        function openFullScreen(jp, zh) {
+            document.getElementById('fs-jp').innerText = jp;
+            document.getElementById('fs-zh').innerText = zh;
+            document.getElementById('fullscreen-modal').style.display = 'flex';
+        }
+        function closeFullScreen() {
+            document.getElementById('fullscreen-modal').style.display = 'none';
+        }
+
+        // 收藏功能
+        function toggleFav(id) {
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('jp_favs', JSON.stringify(favorites));
+            renderList(); // 更新畫面上的星星狀態
+        }
+
+        // 新增自訂句子
+        function addCustomPhrase() {
+            const zh = document.getElementById('custom-zh').value.trim();
+            const jp = document.getElementById('custom-jp').value.trim();
+            if (!zh || !jp) return alert('請輸入中文和日文喔！');
+
+            const newId = Date.now(); // 用時間戳當唯一 ID
+            customPhrases.push({ id: newId, cat: '自訂', zh: zh, jp: jp, romaji: '' });
+            localStorage.setItem('jp_customs', JSON.stringify(customPhrases));
+            
+            document.getElementById('custom-zh').value = '';
+            document.getElementById('custom-jp').value = '';
+            renderList();
+        }
+
+        // 初始化
+        renderList();
     </script>
 </body>
 </html>
