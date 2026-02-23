@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="JP Voice">
-    <title>日本旅遊常用句</title>
+    <title>日文語音終端系統</title>
     <style>
         * { -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
 
@@ -73,7 +73,7 @@
         }
         .translate-btn-inline:active { transform: translateY(6px); border-bottom-width: 0px; background: #6b21a8; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
-        /* 開關控制區塊 */
+        /* 禮貌模式與拼音開關 */
         .toggles-panel { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
         .polite-toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-muted); font-weight: bold; cursor: pointer;}
         .polite-toggle input { width: 18px; height: 18px; accent-color: var(--primary); }
@@ -87,13 +87,18 @@
         .trans-badge { position: absolute; top: -12px; left: 20px; font-size: 14px; font-weight: bold; color: #000; background: var(--primary); padding: 4px 12px; border-radius: 4px; }
         #inline-jp-text { font-size: 28px; font-weight: 900; color: var(--success); margin: 15px 0; letter-spacing: 2px; }
 
-        /* 分類按鈕 (改為兩排設計) */
+        /* 分類按鈕 (第一排固定，第二排滑動) */
         .category-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        .category-row { display: flex; flex-wrap: wrap; gap: 12px; }
+        .category-row-static { display: flex; flex-wrap: wrap; gap: 12px; }
+        .category-scroll { 
+            display: flex; overflow-x: auto; gap: 12px; padding-bottom: 10px; 
+            scrollbar-width: none; cursor: grab; white-space: nowrap;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
         .cat-btn { 
-            white-space: nowrap; background: #0f172a; color: var(--text-muted); 
+            flex-shrink: 0; background: #0f172a; color: var(--text-muted); 
             border: 1px solid #334155; border-bottom: 4px solid #020617;
-            padding: 10px 22px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.1s; letter-spacing: 1px;
+            padding: 12px 26px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: all 0.1s; letter-spacing: 1px;
         }
         .cat-btn:active { transform: translateY(4px); border-bottom-width: 0px; }
         .cat-btn.active { background: rgba(0, 240, 255, 0.15); color: var(--primary); border-color: var(--primary); border-bottom-color: #008b99; }
@@ -133,7 +138,7 @@
         .key-content { z-index: 1; pointer-events: none; margin-bottom: 15px; margin-top: 15px;}
         .zh-text-main { font-size: 26px; font-weight: 900; color: #fff; display: block; margin-bottom: 10px; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .jp-text-sub { font-size: 20px; color: var(--primary); display: block; margin-bottom: 8px; font-weight: 800; letter-spacing: 1px; }
-        .romaji-text { font-size: 14px; color: var(--success); font-family: monospace; font-weight: bold; background: rgba(57, 255, 20, 0.05); padding: 4px 8px; border-radius: 4px; }
+        .romaji-text { font-size: 14px; color: var(--success); font-family: monospace; display: inline-block; font-weight: bold; background: rgba(57, 255, 20, 0.05); padding: 4px 8px; border-radius: 4px; }
         
         .key-actions { display: flex; gap: 10px; justify-content: flex-end; border-top: 1px dashed #1e3a5f; padding-top: 15px; }
         .icon-btn { background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 6px; font-size: 15px; color: #cbd5e1; cursor: pointer; padding: 10px 18px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: 800; }
@@ -150,7 +155,7 @@
         .sos-option:active { transform: scale(0.95); }
         .sos-close { margin-top: 30px; background: none; border: 2px solid #fff; color: #fff; padding: 10px 40px; font-size: 20px; border-radius: 30px; cursor: pointer; font-weight: bold;}
 
-        /* 大字報彈窗 */
+        /* 其他覆蓋層與彈窗 */
         #fullscreen-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
         #fullscreen-jp { font-size: 10vw; font-weight: 900; color: var(--primary); margin-bottom: 20px; width: 100%; word-wrap: break-word; text-shadow: 0 0 30px rgba(0, 240, 255, 0.5); }
         #fullscreen-romaji { font-size: 5vw; font-weight: bold; color: var(--success); margin-bottom: 40px; }
@@ -202,7 +207,7 @@
     </div>
 
     <div class="header-area">
-        <h1 id="app-title">日本旅遊常用句</h1>
+        <h1 id="app-title">日文語音終端系統</h1>
         <button class="sos-btn" onclick="document.getElementById('sos-modal').style.display='flex'; triggerHaptic(50);">🚨 SOS</button>
     </div>
     
@@ -216,7 +221,7 @@
 
     <div class="toggles-panel">
         <label class="polite-toggle">
-            <input type="checkbox" id="polite-mode" onchange="filterData()"> 🌸 顯示禮貌用語 (すみません)
+            <input type="checkbox" id="polite-mode" onchange="filterData()"> 🌸 智慧禮貌用語 (自動避開問候與道謝)
         </label>
         <label class="polite-toggle">
             <input type="checkbox" id="romaji-toggle" checked onchange="toggleRomaji()"> 🔤 顯示羅馬拼音
@@ -233,9 +238,9 @@
         </div>
     </div>
 
-    <div class="category-container" id="category-container">
-        <div class="category-row" id="cat-row-1"></div>
-        <div class="category-row" id="cat-row-2"></div>
+    <div class="category-container">
+        <div class="category-row-static" id="cat-row-1"></div>
+        <div class="category-scroll" id="cat-row-2"></div>
     </div>
 
     <div class="controls-panel">
@@ -260,18 +265,15 @@
 
     <script>
         // ==========================================
-        // 1. 內建瀏覽器 (In-App Browser) 偵測防護
+        // 1. 內建瀏覽器防護 & PWA
         // ==========================================
         const ua = navigator.userAgent || navigator.vendor || window.opera;
         const isInApp = /Line|FBAN|FBAV|Instagram|MicroMessenger/i.test(ua);
         if (isInApp) { document.getElementById('inapp-warning').style.display = 'flex'; }
 
-        // ==========================================
-        // 2. PWA 動態生成與安裝邏輯
-        // ==========================================
         (function setupPWA() {
             const manifestJSON = {
-                "name": "日本旅遊常用句", "short_name": "旅遊常用句", "start_url": ".", "display": "standalone",
+                "name": "日文語音終端", "short_name": "JP Voice", "start_url": ".", "display": "standalone",
                 "background_color": "#050b14", "theme_color": "#00f0ff",
                 "icons": [{"src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzA1MGIxNCIvPjx0ZXh0IHk9Ii45ZW0iIGZvbnQtc2l6ZT0iOTAiPvCfh7Twn4e3PC90ZXh0Pjwvc3ZnPg==", "sizes": "192x192", "type": "image/svg+xml"}]
             };
@@ -292,38 +294,46 @@
         document.getElementById('install-close').addEventListener('click', () => { installPopup.style.display = 'none'; localStorage.setItem('hideInstall', 'true'); });
 
         // ==========================================
-        // 3. 語音辨識 (Voice Input)
+        // 2. 語音辨識
         // ==========================================
         function startVoiceInput() {
             triggerHaptic(20);
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) return alert("您的設備或瀏覽器不支援語音輸入功能！(請使用 Chrome/Safari)");
-            
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'zh-TW';
-            recognition.interimResults = false;
-            
-            const micBtn = document.getElementById('mic-btn');
-            const searchInput = document.getElementById('search-input');
-
-            recognition.onstart = () => { micBtn.classList.add('recording'); searchInput.value = ''; searchInput.placeholder = '🎤 正在聆聽，請說話...'; };
+            const recognition = new SpeechRecognition(); recognition.lang = 'zh-TW'; recognition.interimResults = false;
+            const micBtn = document.getElementById('mic-btn'); const searchInput = document.getElementById('search-input');
+            recognition.onstart = () => { micBtn.classList.add('recording'); searchInput.value = ''; searchInput.placeholder = '🎤 正在聆聽...'; };
             recognition.onresult = (event) => { searchInput.value = event.results[0][0].transcript; translateAndSpeak(); };
-            recognition.onerror = (e) => { alert("語音辨識失敗，請檢查麥克風權限。"); };
+            recognition.onerror = () => { alert("語音辨識失敗，請檢查麥克風權限。"); };
             recognition.onend = () => { micBtn.classList.remove('recording'); searchInput.placeholder = '輸入中文/日文，或點擊麥克風'; };
             recognition.start();
         }
 
         // ==========================================
-        // 4. 基礎功能與資料渲染
+        // 3. 基礎功能 & 分類滑動
         // ==========================================
         function triggerHaptic(duration = 15) { if (navigator.vibrate) navigator.vibrate(duration); }
         function triggerHapticSuccess() { if (navigator.vibrate) navigator.vibrate([20, 50, 20]); }
 
+        // 綁定第二排的橫向滑動功能
+        const catScrollContainer = document.getElementById('cat-row-2');
+        let isDown = false; let startX; let scrollLeft;
+        catScrollContainer.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - catScrollContainer.offsetLeft; scrollLeft = catScrollContainer.scrollLeft; });
+        catScrollContainer.addEventListener('mouseleave', () => { isDown = false; });
+        catScrollContainer.addEventListener('mouseup', () => { setTimeout(()=> { isDown = false; }, 50); }); // 延遲解除避免誤觸點擊
+        catScrollContainer.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); catScrollContainer.scrollLeft = scrollLeft - ((e.pageX - catScrollContainer.offsetLeft) - startX) * 2; });
+
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = []; let currentCategory = '全部';
         let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
+        
+        // 統一自訂的名稱，並且自動修復舊資料
+        const CUSTOM_KEYWORD = '🗂️ 自訂';
         let customTranslations = JSON.parse(localStorage.getItem('jp_custom_translations')) || [];
-        let clickCount = 0; let isSecretUnlocked = false; const SECRET_KEYWORD = '🤬 隱藏情緒'; const CUSTOM_KEYWORD = '🗂️ 自訂';
+        customTranslations.forEach(item => { if(item.cat === '🗂️ 自訂翻譯') item.cat = CUSTOM_KEYWORD; });
+        localStorage.setItem('jp_custom_translations', JSON.stringify(customTranslations));
+
+        let clickCount = 0; let isSecretUnlocked = false; const SECRET_KEYWORD = '🤬 隱藏情緒';
 
         window.onload = () => { loadCSV(); if ('speechSynthesis' in window) window.speechSynthesis.getVoices(); };
 
@@ -332,12 +342,9 @@
             document.getElementById('pitch-val').innerText = Number(document.getElementById('pitch-slider').value).toFixed(1);
         }
 
-        // 羅馬拼音切換
         function toggleRomaji() {
             const isChecked = document.getElementById('romaji-toggle').checked;
-            document.querySelectorAll('.romaji-text').forEach(el => {
-                el.style.display = isChecked ? 'inline-block' : 'none';
-            });
+            document.querySelectorAll('.romaji-text').forEach(el => el.style.display = isChecked ? 'inline-block' : 'none');
         }
 
         function speak(text, forceLoudAndSlow = false) {
@@ -345,27 +352,16 @@
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
-            
-            if (forceLoudAndSlow) {
-                utterance.rate = 0.7; utterance.pitch = 1.0; utterance.volume = 1.0;
-            } else {
-                let rate = parseFloat(document.getElementById('speed-slider').value);
-                utterance.rate = rate === 0 ? 0.1 : rate; // 防呆機制
-                utterance.pitch = parseFloat(document.getElementById('pitch-slider').value);
-            }
-            
-            const voices = window.speechSynthesis.getVoices();
-            const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
-            if(jpVoice) utterance.voice = jpVoice;
-            window.speechSynthesis.speak(utterance);
+            if (forceLoudAndSlow) { utterance.rate = 0.7; utterance.pitch = 1.0; utterance.volume = 1.0; } 
+            else { let r = parseFloat(document.getElementById('speed-slider').value); utterance.rate = r===0 ? 0.1 : r; utterance.pitch = parseFloat(document.getElementById('pitch-slider').value); }
+            const voices = window.speechSynthesis.getVoices(); const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
+            if(jpVoice) utterance.voice = jpVoice; window.speechSynthesis.speak(utterance);
         }
 
-        // SOS 模式
-        function triggerSOS(zh, jp) { triggerHaptic([50, 100, 50, 100, 50]); document.getElementById('sos-modal').style.display = 'none'; openFullscreen(new Event('click'), jp, zh, '[緊急事態]'); speak(jp, true); }
+        function triggerSOS(zh, jp) { triggerHaptic([50, 100, 50, 100, 50]); document.getElementById('sos-modal').style.display = 'none'; openFullscreen({stopPropagation:()=>{}}, jp, zh, '[緊急事態]'); speak(jp, true); }
         function closeSOS() { document.getElementById('sos-modal').style.display = 'none'; }
 
-        // 其他基礎函式
-        function toggleFavorite(event, originalJp) { event.stopPropagation(); triggerHaptic(20); const index = favorites.indexOf(originalJp); if (index > -1) favorites.splice(index, 1); else favorites.push(originalJp); localStorage.setItem('jp_favorites', JSON.stringify(favorites)); filterData(); }
+        function toggleFavorite(event, jp) { event.stopPropagation(); triggerHaptic(20); const index = favorites.indexOf(jp); if (index > -1) favorites.splice(index, 1); else favorites.push(jp); localStorage.setItem('jp_favorites', JSON.stringify(favorites)); filterData(); }
         function copyText(event, text) { event.stopPropagation(); triggerHapticSuccess(); navigator.clipboard.writeText(text).then(() => { const btn = event.currentTarget; const originalHTML = btn.innerHTML; btn.innerHTML = '✔ 成功'; btn.style.color = 'var(--success)'; btn.style.borderColor = 'var(--success)'; setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; btn.style.borderColor = ''; }, 1500); }); }
         
         function openFullscreen(event, jp, zh, romaji) { event.stopPropagation(); triggerHaptic(30); document.getElementById('fullscreen-jp').innerText = jp; document.getElementById('fullscreen-romaji').innerText = romaji || ''; document.getElementById('fullscreen-zh').innerText = zh; document.getElementById('fullscreen-overlay').style.display = 'flex'; speak(jp); }
@@ -393,25 +389,24 @@
         }
 
         // ==========================================
-        // 分類渲染 (兩排設計)
+        // 4. 分類渲染 (兩排獨立設計)
         // ==========================================
         function renderCategories() {
             const row1 = document.getElementById('cat-row-1');
             const row2 = document.getElementById('cat-row-2');
             row1.innerHTML = ''; row2.innerHTML = '';
             
-            // 第一排：固定顯示這三個
+            // 第一排：固定的重要項目
             let baseCats = ['全部', '⭐最愛']; 
             if (customTranslations.length > 0) baseCats.push(CUSTOM_KEYWORD);
             
-            // 第二排：雲端抓下來的其他分類
+            // 第二排：其他雲端抓的項目
             const otherCats = new Set(); 
             globalData.forEach(item => { 
                 if (!item.cat.includes('隱藏') && !item.cat.includes('🤬') && item.cat !== CUSTOM_KEYWORD) otherCats.add(item.cat); 
             });
             if (isSecretUnlocked) otherCats.add(SECRET_KEYWORD);
 
-            // 建立按鈕功能
             function createBtn(cat) {
                 const btn = document.createElement('button');
                 if (cat === currentCategory) { 
@@ -422,12 +417,21 @@
                 btn.innerText = cat;
                 if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = 'var(--warning)'; 
                 if(cat === CUSTOM_KEYWORD && cat !== currentCategory) btn.style.color = 'var(--success)';
-                btn.onclick = () => { triggerHaptic(15); currentCategory = cat; renderCategories(); filterData(); };
                 return btn;
             }
 
-            baseCats.forEach(cat => row1.appendChild(createBtn(cat)));
-            Array.from(otherCats).forEach(cat => row2.appendChild(createBtn(cat)));
+            baseCats.forEach(cat => {
+                let btn = createBtn(cat);
+                btn.onclick = () => { triggerHaptic(15); currentCategory = cat; renderCategories(); filterData(); };
+                row1.appendChild(btn);
+            });
+
+            Array.from(otherCats).forEach(cat => {
+                let btn = createBtn(cat);
+                // 第二排加入防呆：如果在拖曳(isDown=true)就不觸發點擊
+                btn.onclick = () => { if (isDown) return; triggerHaptic(15); currentCategory = cat; renderCategories(); filterData(); };
+                row2.appendChild(btn);
+            });
         }
 
         function filterData() {
@@ -446,8 +450,25 @@
         }
 
         // ==========================================
-        // 卡片列表渲染 (包含禮貌用語邏輯)
+        // 5. 智慧禮貌判斷器
         // ==========================================
+        function shouldAddPolitePrefix(zhText, jpText) {
+            // 定義不需要加「不好意思」的關鍵字
+            const excludeKeywords = ['你好', '早安', '午安', '晚安', '謝謝', '感謝', '對不起', '抱歉', '沒關係', '沒問題', '再見', '掰掰', '不好意思', '不用', '好', '是', '不是', '喂'];
+            
+            // 如果原本的日文已經有 すみません 或 ごめんなさい 就不加
+            if (jpText.includes('すみません') || jpText.includes('ごめんなさい') || jpText.includes('スミマセン')) return false;
+
+            // 如果句子太短 (小於等於2個字)，通常是單字或簡答，不加
+            if (zhText.trim().length <= 2) return false;
+
+            // 檢查是否以排除關鍵字開頭 (或等於該關鍵字)
+            for (let word of excludeKeywords) {
+                if (zhText.startsWith(word) || zhText === word) return false;
+            }
+            return true;
+        }
+
         function renderList(dataToRender) {
             const list = document.getElementById('sentence-list'); list.innerHTML = '';
             if(dataToRender.length === 0) { list.innerHTML = '<li style="background:transparent; border:none; box-shadow:none; text-align:center; color:var(--text-muted); font-size:18px;">[ 無資料，請使用語音辨識或輸入翻譯 ]</li>'; return; }
@@ -458,18 +479,14 @@
             dataToRender.forEach(item => {
                 const li = document.createElement('li'); li.className = 'cyber-key'; 
                 
-                // 動態加上禮貌前綴 (畫面與發音都會套用)
-                let displayZh = isPolite ? `不好意思，${item.zh}` : item.zh;
-                let displayJp = isPolite ? `すみません、${item.jp}` : item.jp;
-                let displayRomaji = isPolite && item.romaji ? `Sumimasen, ${item.romaji}` : item.romaji;
+                // 執行智慧禮貌判斷
+                let needsPolite = isPolite && shouldAddPolitePrefix(item.zh, item.jp);
+                let displayZh = needsPolite ? `不好意思，${item.zh}` : item.zh;
+                let displayJp = needsPolite ? `すみません、${item.jp}` : item.jp;
+                let displayRomaji = (needsPolite && item.romaji) ? `Sumimasen, ${item.romaji}` : item.romaji;
 
-                const safeJp = displayJp.replace(/'/g, "\\'").replace(/"/g, "&quot;"); 
-                const safeZh = displayZh.replace(/'/g, "\\'").replace(/"/g, "&quot;"); 
-                const safeRomaji = displayRomaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-                
-                // 收藏功能依然對應原始的日文，避免加了禮貌用語後找不到收藏紀錄
-                const isFav = favorites.includes(item.jp); 
-                const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
+                const safeJp = item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeZh = displayZh.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeRomaji = displayRomaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                const isFav = favorites.includes(item.jp); const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
                 
                 let indicatorName = `[ ${item.cat} ]`; if(isSecretItem) indicatorName = '[ DANGER ]'; else if(item.cat === CUSTOM_KEYWORD) indicatorName = '[ 自訂 ]';
                 li.onclick = (e) => { if(e.target.tagName !== 'BUTTON') { triggerHaptic(25); speak(displayJp); } };
@@ -483,7 +500,7 @@
                     </div>
                     <div class="key-actions">
                         <button class="icon-btn copy" onclick="copyText(event, '${safeJp}')">📋 複製</button>
-                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;")}')">★ 收藏</button>
+                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')">★ 收藏</button>
                         <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶ 大字</button>
                     </div>
                 `;
@@ -497,7 +514,11 @@
 
             const isPolite = document.getElementById('polite-mode').checked;
             const originalZh = input;
-            if (isPolite) input = "不好意思請問，" + input + "，謝謝。"; 
+            
+            // 翻譯時的智慧判斷：如果不需要加禮貌詞，就不硬塞
+            if (isPolite && shouldAddPolitePrefix(input, '')) {
+                input = "不好意思請問，" + input + "，謝謝。"; 
+            }
 
             const resContainer = document.getElementById('inline-translate-result'); const resJp = document.getElementById('inline-jp-text'); const btn = document.getElementById('main-translate-btn'); const saveBtn = document.getElementById('save-custom-btn');
             resContainer.style.display = 'block'; resJp.style.color = 'var(--text-muted)'; resJp.innerText = "神經網路解析中..."; btn.disabled = true; btn.innerText = "處理中"; saveBtn.style.display = 'none'; 
