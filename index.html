@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日文語音終端系統 v7.0</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="JP Voice">
+    <title>日文語音終端系統 v7.1</title>
     <style>
         /* 系統底層防護與變數 */
-        * {
-            /* 徹底解決手機端滑動與點擊出現的白框/灰框 */
-            -webkit-tap-highlight-color: transparent;
-            outline: none;
-        }
+        * { -webkit-tap-highlight-color: transparent; outline: none; }
 
         :root { 
             --bg-deep: #050b14; 
@@ -23,26 +22,20 @@
         body { 
             font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
             margin: 0; padding: 15px; padding-bottom: 90px; min-height: 100vh;
-            color: var(--text-main); 
-            background-color: var(--bg-deep); 
-            background-image: 
-                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
-            overflow-x: hidden;
+            color: var(--text-main); background-color: var(--bg-deep); 
+            background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px; overflow-x: hidden;
         }
 
-        /* 標題中文化與巨大化 */
+        /* 標題 */
         h1 { 
             text-align: center; font-size: 30px; font-weight: 900; letter-spacing: 4px;
             margin: 15px 0 25px 0; user-select: none; cursor: pointer;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-            border-bottom: 2px solid rgba(0, 240, 255, 0.2);
-            padding-bottom: 12px;
+            text-shadow: 0 0 15px rgba(0, 240, 255, 0.3); border-bottom: 2px solid rgba(0, 240, 255, 0.2); padding-bottom: 12px;
         }
-        h1::before { content: 'SYS.V7 // '; font-size: 16px; color: var(--secondary); -webkit-text-fill-color: initial; text-shadow: none; vertical-align: middle;}
+        h1::before { content: 'SYS.V7.1 // '; font-size: 16px; color: var(--secondary); -webkit-text-fill-color: initial; text-shadow: none; vertical-align: middle;}
 
         /* 搜尋與翻譯列 */
         .search-container { display: flex; gap: 12px; margin-bottom: 25px; width: 100%; }
@@ -56,28 +49,21 @@
         
         .translate-btn-inline { 
             background: linear-gradient(180deg, var(--secondary) 0%, #6b21a8 100%);
-            color: white; border: 1px solid #d8b4fe; border-bottom: 6px solid #4c1d95; /* 按鍵厚度 */
+            color: white; border: 1px solid #d8b4fe; border-bottom: 6px solid #4c1d95; 
             padding: 0 25px; border-radius: 8px; font-size: 18px; font-weight: 900; 
             cursor: pointer; transition: all 0.1s; white-space: nowrap; 
         }
-        .translate-btn-inline:active { 
-            transform: translateY(6px); border-bottom-width: 0px; 
-            background: #6b21a8; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
+        .translate-btn-inline:active { transform: translateY(6px); border-bottom-width: 0px; background: #6b21a8; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
         /* 翻譯結果顯示區 */
         #inline-translate-result { 
             display: none; margin-bottom: 25px; padding: 25px 20px; text-align: center; position: relative;
-            background: rgba(0, 240, 255, 0.05); border: 1px solid var(--primary); border-radius: 12px;
-            box-shadow: inset 0 0 20px rgba(0,240,255,0.1);
+            background: rgba(0, 240, 255, 0.05); border: 1px solid var(--primary); border-radius: 12px; box-shadow: inset 0 0 20px rgba(0,240,255,0.1);
         }
-        .trans-badge {
-            position: absolute; top: -12px; left: 20px; font-size: 14px; font-weight: bold; color: #000;
-            background: var(--primary); padding: 4px 12px; border-radius: 4px;
-        }
+        .trans-badge { position: absolute; top: -12px; left: 20px; font-size: 14px; font-weight: bold; color: #000; background: var(--primary); padding: 4px 12px; border-radius: 4px; }
         #inline-jp-text { font-size: 28px; font-weight: 900; color: var(--success); margin: 15px 0; letter-spacing: 2px; }
 
-        /* 分類按鈕 (膠囊風) */
+        /* 分類按鈕 */
         .category-scroll { display: flex; overflow-x: auto; gap: 12px; margin-bottom: 25px; padding-bottom: 10px; scrollbar-width: none; cursor: grab; }
         .category-scroll::-webkit-scrollbar { display: none; }
         .cat-btn { 
@@ -91,62 +77,36 @@
         .cat-btn.custom-active { background: rgba(57, 255, 20, 0.15); color: var(--success); border-color: var(--success); border-bottom-color: #1b7e09; }
         .cat-btn.secret-active { background: rgba(255, 42, 42, 0.15); color: var(--danger); border-color: var(--danger); border-bottom-color: #8b0000; }
 
-        /* 語速/音調完美置中面板 */
+        /* 滑桿面板 */
         .controls-panel { 
             background: rgba(11, 20, 38, 0.8); padding: 20px; border-radius: 12px; 
-            border: 1px solid #1e3a5f; margin-bottom: 30px; 
-            display: flex; flex-direction: column; gap: 18px; 
-            align-items: center; /* 完美置中核心設定 */
+            border: 1px solid #1e3a5f; margin-bottom: 30px; display: flex; flex-direction: column; gap: 18px; align-items: center; 
         }
-        .slider-container { 
-            display: flex; align-items: center; gap: 15px; 
-            width: 100%; max-width: 350px; /* 限制最大寬度讓滑桿集中 */
-            justify-content: space-between;
-        }
+        .slider-container { display: flex; align-items: center; gap: 15px; width: 100%; max-width: 350px; justify-content: space-between; }
         .slider-label { font-size: 16px; font-weight: bold; color: var(--text-muted); width: 50px; text-align: left; }
         .speed-slider { flex: 1; -webkit-appearance: none; background: #1e3a5f; height: 8px; border-radius: 4px; outline: none; }
         .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--primary); cursor: pointer; box-shadow: 0 0 10px var(--primary); }
         .slider-val { font-family: monospace; font-size: 16px; font-weight: bold; color: var(--primary); width: 45px; text-align: right; }
 
-        /* ====== 立體機械按鍵列表 ====== */
+        /* ====== 立體機械按鍵 ====== */
         ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        
         li.cyber-key { 
             background: linear-gradient(180deg, var(--key-top) 0%, #0d1627 100%);
-            border: 1px solid var(--key-border); 
-            border-bottom: 10px solid var(--key-side); /* 極深的實體按鍵厚度 */
-            border-radius: 12px; padding: 22px; 
-            display: flex; flex-direction: column; justify-content: space-between;
-            cursor: pointer; position: relative; 
-            transition: transform 0.08s ease, border-bottom-width 0.08s ease, box-shadow 0.08s ease;
+            border: 1px solid var(--key-border); border-bottom: 10px solid var(--key-side); 
+            border-radius: 12px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;
+            cursor: pointer; position: relative; transition: transform 0.08s ease, border-bottom-width 0.08s ease, box-shadow 0.08s ease;
             box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 2px 2px rgba(255,255,255,0.05); 
         }
-        
-        li.cyber-key:active { 
-            transform: translateY(10px); /* 按下深陷的物理感 */
-            border-bottom-width: 0px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 240, 255, 0.2); 
-            background: linear-gradient(180deg, #0d1627 0%, var(--key-top) 100%);
-        }
+        li.cyber-key:active { transform: translateY(10px); border-bottom-width: 0px; box-shadow: 0 2px 5px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 240, 255, 0.2); background: linear-gradient(180deg, #0d1627 0%, var(--key-top) 100%); }
 
-        .key-indicator {
-            position: absolute; top: 18px; right: 18px; font-size: 13px; font-weight: bold; color: var(--text-muted);
-            background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 6px; border: 1px solid #1e3a5f;
-        }
-
-        /* 字體巨大化排版 */
+        .key-indicator { position: absolute; top: 18px; right: 18px; font-size: 13px; font-weight: bold; color: var(--text-muted); background: rgba(0,0,0,0.4); padding: 4px 12px; border-radius: 6px; border: 1px solid #1e3a5f; }
         .key-content { z-index: 1; pointer-events: none; margin-bottom: 15px; margin-top: 15px;}
         .zh-text-main { font-size: 26px; font-weight: 900; color: #fff; display: block; margin-bottom: 10px; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .jp-text-sub { font-size: 20px; color: var(--primary); display: block; margin-bottom: 8px; font-weight: 800; letter-spacing: 1px; }
         .romaji-text { font-size: 14px; color: var(--success); font-family: monospace; display: inline-block; font-weight: bold; background: rgba(57, 255, 20, 0.05); padding: 4px 8px; border-radius: 4px; }
-
-        /* 按鍵底部動作列 */
+        
         .key-actions { display: flex; gap: 10px; justify-content: flex-end; border-top: 1px dashed #1e3a5f; padding-top: 15px; }
-        .icon-btn { 
-            background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 6px; 
-            font-size: 15px; color: #cbd5e1; cursor: pointer; padding: 10px 18px; 
-            transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: 800;
-        }
+        .icon-btn { background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 6px; font-size: 15px; color: #cbd5e1; cursor: pointer; padding: 10px 18px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: 800; }
         .icon-btn:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .icon-btn.star.active { color: var(--warning); border-color: var(--warning); background: rgba(251, 191, 36, 0.1); }
         .icon-btn.fullscreen { color: var(--primary); border-color: rgba(0, 240, 255, 0.3);}
@@ -158,19 +118,47 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
         /* 全螢幕覆蓋 */
-        #fullscreen-overlay { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); 
-            z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; 
-        }
+        #fullscreen-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
         #fullscreen-jp { font-size: 12vw; font-weight: 900; color: var(--primary); margin-bottom: 20px; width: 100%; word-wrap: break-word; text-shadow: 0 0 30px rgba(0, 240, 255, 0.5); }
         #fullscreen-romaji { font-size: 6vw; font-weight: bold; color: var(--success); margin-bottom: 40px; }
         #fullscreen-zh { font-size: 7vw; font-weight: bold; color: #fff; }
         .close-fullscreen { position: absolute; top: 30px; right: 30px; font-size: 40px; color: #fff; background: none; border: none; cursor: pointer; }
         .replay-btn-large { margin-top: 50px; background: rgba(0, 240, 255, 0.1); border: 2px solid var(--primary); color: var(--primary); padding: 15px 40px; font-size: 22px; font-weight: 900; border-radius: 12px; cursor: pointer; transition: 0.2s;}
         .replay-btn-large:active { background: var(--primary); color: #000; }
+
+        /* ====== PWA 安裝提示 Popup ====== */
+        .install-popup {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 450px; background: rgba(11, 20, 38, 0.95);
+            border: 1px solid var(--primary); border-radius: 12px; padding: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 240, 255, 0.2);
+            z-index: 9999; display: none; align-items: center; justify-content: space-between;
+            backdrop-filter: blur(10px); animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes slideUp { from { bottom: -100px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
+        .install-content { display: flex; align-items: center; width: 100%; gap: 15px; }
+        .install-icon { font-size: 32px; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 10px;}
+        .install-text { flex: 1; line-height: 1.5; }
+        .install-title { font-size: 16px; font-weight: bold; color: #fff; }
+        .install-desc { font-size: 13px; color: var(--text-muted); }
+        .install-btn { background: var(--primary); color: #000; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 900; font-size: 15px; cursor: pointer; white-space: nowrap; box-shadow: 0 0 15px rgba(0,240,255,0.4); }
+        .install-btn:active { transform: scale(0.95); }
+        .install-close { background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 0 5px; margin-left: 5px;}
     </style>
 </head>
 <body>
+
+    <div id="install-popup" class="install-popup">
+        <div class="install-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <div class="install-title">安裝「日文語音」APP</div>
+                <div class="install-desc" id="install-desc">一鍵直達桌面，離線全螢幕體驗！</div>
+            </div>
+            <button id="install-btn" class="install-btn">一鍵安裝</button>
+            <button id="install-close" class="install-close">✕</button>
+        </div>
+    </div>
 
     <div id="fullscreen-overlay">
         <button class="close-fullscreen" onclick="closeFullscreen()">✕</button>
@@ -220,11 +208,90 @@
     <ul id="sentence-list"></ul>
 
     <script>
-        // 觸覺震動回饋
+        // ==========================================
+        // PWA 核心黑科技 (單檔動態生成 Manifest & SW)
+        // ==========================================
+        (function setupPWA() {
+            // 1. 動態注入 Manifest (讓瀏覽器承認這是 APP)
+            const manifestJSON = {
+                "name": "日文語音終端系統",
+                "short_name": "JP Voice",
+                "start_url": ".",
+                "display": "standalone",
+                "background_color": "#050b14",
+                "theme_color": "#00f0ff",
+                "icons": [{
+                    "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzA1MGIxNCIvPjx0ZXh0IHk9Ii45ZW0iIGZvbnQtc2l6ZT0iOTAiPvCfh7Twn4e3PC90ZXh0Pjwvc3ZnPg==",
+                    "sizes": "192x192", "type": "image/svg+xml"
+                }]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifestJSON)], {type: 'application/json'});
+            const link = document.createElement('link');
+            link.rel = 'manifest'; link.href = URL.createObjectURL(manifestBlob);
+            document.head.appendChild(link);
+
+            // 2. 動態註冊虛擬 Service Worker (Android Chrome 安裝必備條件)
+            if ('serviceWorker' in navigator) {
+                const swCode = `self.addEventListener('fetch', ()=>{});`;
+                const swBlob = new Blob([swCode], {type: 'application/javascript'});
+                navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+            }
+        })();
+
+        // ==========================================
+        // 安裝提示 Popup 邏輯
+        // ==========================================
+        let deferredPrompt;
+        const installPopup = document.getElementById('install-popup');
+        const installBtn = document.getElementById('install-btn');
+        const installClose = document.getElementById('install-close');
+        const installDesc = document.getElementById('install-desc');
+
+        // 偵測裝置與狀態
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        const hidePrompt = localStorage.getItem('hideInstallPrompt') === 'true';
+
+        if (!isStandalone && !hidePrompt) {
+            // Android / Windows Chrome 觸發安裝事件
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault(); deferredPrompt = e;
+                installPopup.style.display = 'flex';
+            });
+
+            // iOS Safari 不支援原生 API，改顯示圖文教學
+            if (isIOS && isSafari) {
+                setTimeout(() => {
+                    installPopup.style.display = 'flex';
+                    installBtn.style.display = 'none'; // 隱藏按鈕，改為純文字教學
+                    installDesc.innerHTML = '點擊底部 <b>[分享 ⍐]</b> 圖示<br>選擇 <b>[加入主畫面 ➕]</b> 即可安裝。';
+                    installDesc.style.color = 'var(--primary)';
+                }, 1500); // 延遲一下彈出
+            }
+        }
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') installPopup.style.display = 'none';
+                deferredPrompt = null;
+            }
+        });
+
+        installClose.addEventListener('click', () => {
+            installPopup.style.display = 'none';
+            localStorage.setItem('hideInstallPrompt', 'true'); // 關閉後不再打擾
+        });
+
+
+        // ==========================================
+        // 原有核心功能 (翻譯、語音、分類)
+        // ==========================================
         function triggerHaptic(duration = 15) { if (navigator.vibrate) navigator.vibrate(duration); }
         function triggerHapticSuccess() { if (navigator.vibrate) navigator.vibrate([20, 50, 20]); }
 
-        // 滑鼠拖曳分類支援
         const catContainer = document.getElementById('category-container');
         let isDown = false; let startX; let scrollLeft;
         catContainer.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - catContainer.offsetLeft; scrollLeft = catContainer.scrollLeft; });
@@ -235,54 +302,39 @@
             catContainer.scrollLeft = scrollLeft - ((e.pageX - catContainer.offsetLeft) - startX) * 2; 
         });
 
-        // 資料狀態
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = [];
         let currentCategory = '全部';
         let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
         let customTranslations = JSON.parse(localStorage.getItem('jp_custom_translations')) || [];
-        
-        // 隱藏彩蛋
-        let clickCount = 0;
-        let isSecretUnlocked = false;
-        const SECRET_KEYWORD = '🤬 隱藏情緒';
-        const CUSTOM_KEYWORD = '🗂️ 自訂翻譯';
+        let clickCount = 0; let isSecretUnlocked = false;
+        const SECRET_KEYWORD = '🤬 隱藏情緒'; const CUSTOM_KEYWORD = '🗂️ 自訂翻譯';
 
-        window.onload = () => {
-            loadCSV();
-            if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
-        };
+        window.onload = () => { loadCSV(); if ('speechSynthesis' in window) window.speechSynthesis.getVoices(); };
 
         function updateSliders() {
             document.getElementById('speed-val').innerText = Number(document.getElementById('speed-slider').value).toFixed(1) + 'x';
             document.getElementById('pitch-val').innerText = Number(document.getElementById('pitch-slider').value).toFixed(1);
         }
 
-        // 語音發音核心
         function speak(text) {
             if (!('speechSynthesis' in window)) return alert("設備不支援語音引擎");
             window.speechSynthesis.cancel();
-            
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
             utterance.rate = parseFloat(document.getElementById('speed-slider').value);
             utterance.pitch = parseFloat(document.getElementById('pitch-slider').value);
-            
             const voices = window.speechSynthesis.getVoices();
             const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
             if(jpVoice) utterance.voice = jpVoice;
-
             window.speechSynthesis.speak(utterance);
         }
 
-        // 功能操作
         function toggleFavorite(event, jp) {
             event.stopPropagation(); triggerHaptic(20);
             const index = favorites.indexOf(jp);
-            if (index > -1) favorites.splice(index, 1);
-            else favorites.push(jp);
-            localStorage.setItem('jp_favorites', JSON.stringify(favorites));
-            filterData();
+            if (index > -1) favorites.splice(index, 1); else favorites.push(jp);
+            localStorage.setItem('jp_favorites', JSON.stringify(favorites)); filterData();
         }
 
         function copyText(event, text) {
@@ -299,43 +351,25 @@
             document.getElementById('fullscreen-jp').innerText = jp;
             document.getElementById('fullscreen-romaji').innerText = romaji || '';
             document.getElementById('fullscreen-zh').innerText = zh;
-            document.getElementById('fullscreen-overlay').style.display = 'flex';
-            speak(jp);
+            document.getElementById('fullscreen-overlay').style.display = 'flex'; speak(jp);
         }
 
-        function closeFullscreen() {
-            triggerHaptic(15);
-            document.getElementById('fullscreen-overlay').style.display = 'none';
-            window.speechSynthesis.cancel();
-        }
+        function closeFullscreen() { triggerHaptic(15); document.getElementById('fullscreen-overlay').style.display = 'none'; window.speechSynthesis.cancel(); }
+        function replayFullscreen() { triggerHaptic(20); const jp = document.getElementById('fullscreen-jp').innerText; if(jp) speak(jp); }
 
-        function replayFullscreen() {
-            triggerHaptic(20);
-            const jp = document.getElementById('fullscreen-jp').innerText;
-            if(jp) speak(jp);
-        }
-
-        // 隱藏解鎖
         document.getElementById('app-title').addEventListener('click', () => {
-            if (isSecretUnlocked) return;
-            clickCount++;
+            if (isSecretUnlocked) return; clickCount++;
             if (clickCount >= 10) {
-                isSecretUnlocked = true; triggerHapticSuccess();
-                alert('⚠️ 系統警告：安全限制解除，隱藏模組開啟。');
+                isSecretUnlocked = true; triggerHapticSuccess(); alert('⚠️ 系統警告：安全限制解除，隱藏模組開啟。');
                 currentCategory = SECRET_KEYWORD; renderCategories(); filterData();
             }
         });
 
-        // 讀取與解析資料
         async function loadCSV() {
             try {
-                const res = await fetch(CSV_URL);
-                if (!res.ok) throw new Error("連線失敗");
-                const csvText = await res.text();
-                processData(csvText);
-            } catch(e) {
-                document.getElementById('loading').innerHTML = `<span style="color:var(--danger)">讀取失敗：${e.message}</span>`;
-            }
+                const res = await fetch(CSV_URL); if (!res.ok) throw new Error("連線失敗");
+                const csvText = await res.text(); processData(csvText);
+            } catch(e) { document.getElementById('loading').innerHTML = `<span style="color:var(--danger)">讀取失敗：${e.message}</span>`; }
         }
 
         function processData(csvText) {
@@ -345,54 +379,35 @@
                 let cols = []; let currentVal = ''; let inQuotes = false;
                 for (let j = 0; j < row.length; j++) {
                     let char = row[j];
-                    if (char === '"') inQuotes = !inQuotes; 
-                    else if (char === ',' && !inQuotes) { cols.push(currentVal.trim()); currentVal = ''; } 
-                    else currentVal += char;
+                    if (char === '"') inQuotes = !inQuotes; else if (char === ',' && !inQuotes) { cols.push(currentVal.trim()); currentVal = ''; } else currentVal += char;
                 }
                 cols.push(currentVal.trim()); 
                 if (cols.length >= 3) {
-                    globalData.push({ 
-                        cat: (cols[0] || '未分類').replace(/"/g, ''), 
-                        zh: (cols[1] || '').replace(/"/g, ''), 
-                        jp: (cols[2] || '').replace(/"/g, ''), 
-                        romaji: (cols[3] || '').replace(/"/g, '') 
-                    });
+                    globalData.push({ cat: (cols[0] || '未分類').replace(/"/g, ''), zh: (cols[1] || '').replace(/"/g, ''), jp: (cols[2] || '').replace(/"/g, ''), romaji: (cols[3] || '').replace(/"/g, '') });
                 }
             }
             if(customTranslations.length > 0) globalData = [...globalData, ...customTranslations];
-            renderCategories(); filterData();
-            document.getElementById('loading').style.display = 'none';
+            renderCategories(); filterData(); document.getElementById('loading').style.display = 'none';
         }
 
         function renderCategories() {
-            catContainer.innerHTML = '';
-            let baseCats = [];
+            catContainer.innerHTML = ''; let baseCats = [];
             if (isSecretUnlocked) baseCats.push(SECRET_KEYWORD);
             baseCats.push('全部', '⭐最愛');
             if (customTranslations.length > 0) baseCats.push(CUSTOM_KEYWORD);
-            
             const otherCats = new Set();
-            globalData.forEach(item => {
-                if (!item.cat.includes('隱藏') && !item.cat.includes('🤬') && item.cat !== CUSTOM_KEYWORD) otherCats.add(item.cat);
-            });
+            globalData.forEach(item => { if (!item.cat.includes('隱藏') && !item.cat.includes('🤬') && item.cat !== CUSTOM_KEYWORD) otherCats.add(item.cat); });
             const allCats = [...baseCats, ...Array.from(otherCats)];
 
             allCats.forEach(cat => {
                 const btn = document.createElement('button');
                 if (cat === currentCategory) {
-                    if (cat === SECRET_KEYWORD) btn.className = 'cat-btn secret-active';
-                    else if (cat === CUSTOM_KEYWORD) btn.className = 'cat-btn custom-active';
-                    else btn.className = 'cat-btn active';
+                    if (cat === SECRET_KEYWORD) btn.className = 'cat-btn secret-active'; else if (cat === CUSTOM_KEYWORD) btn.className = 'cat-btn custom-active'; else btn.className = 'cat-btn active';
                 } else btn.className = 'cat-btn';
-                
                 btn.innerText = cat;
                 if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = 'var(--warning)';
                 if(cat === CUSTOM_KEYWORD && cat !== currentCategory) btn.style.color = 'var(--success)';
-                
-                btn.onclick = () => {
-                    if (isDown) return; triggerHaptic(15);
-                    currentCategory = cat; renderCategories(); filterData();
-                };
+                btn.onclick = () => { if (isDown) return; triggerHaptic(15); currentCategory = cat; renderCategories(); filterData(); };
                 catContainer.appendChild(btn);
             });
         }
@@ -405,51 +420,28 @@
                 const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
                 if (isSecretItem && !isSecretUnlocked) return false;
                 if (currentCategory === '全部' && isSecretItem) return false;
-
                 let matchCat = false;
                 if (currentCategory === '全部') matchCat = true;
                 else if (currentCategory === '⭐最愛') matchCat = favorites.includes(item.jp);
                 else matchCat = item.cat === currentCategory;
-
-                const matchQuery = (item.zh && item.zh.toLowerCase().includes(query)) || 
-                                   (item.jp && item.jp.toLowerCase().includes(query)) || 
-                                   (item.romaji && item.romaji.toLowerCase().includes(query));
+                const matchQuery = (item.zh && item.zh.toLowerCase().includes(query)) || (item.jp && item.jp.toLowerCase().includes(query)) || (item.romaji && item.romaji.toLowerCase().includes(query));
                 return matchCat && matchQuery;
             });
-            
             renderList(filteredData);
         }
 
         function renderList(dataToRender) {
             const list = document.getElementById('sentence-list'); list.innerHTML = '';
-            if(dataToRender.length === 0) {
-                list.innerHTML = '<li style="background:transparent; border:none; box-shadow:none; text-align:center; color:var(--text-muted); font-size:18px;">[ 無資料，請使用上方翻譯 ]</li>';
-                return;
-            }
+            if(dataToRender.length === 0) { list.innerHTML = '<li style="background:transparent; border:none; box-shadow:none; text-align:center; color:var(--text-muted); font-size:18px;">[ 無資料，請使用上方翻譯 ]</li>'; return; }
 
             dataToRender.forEach(item => {
-                const li = document.createElement('li'); 
-                li.className = 'cyber-key'; // 強制套用立體機械按鍵樣式
-                
-                const safeJp = item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-                const safeZh = item.zh.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-                const safeRomaji = item.romaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-                const isFav = favorites.includes(item.jp);
-                const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
-                
-                if(isSecretItem) {
-                    li.style.borderColor = 'rgba(255, 42, 42, 0.5)';
-                    li.style.borderBottomColor = '#4a0000';
-                }
+                const li = document.createElement('li'); li.className = 'cyber-key'; 
+                const safeJp = item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeZh = item.zh.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeRomaji = item.romaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                const isFav = favorites.includes(item.jp); const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
+                if(isSecretItem) { li.style.borderColor = 'rgba(255, 42, 42, 0.5)'; li.style.borderBottomColor = '#4a0000'; }
 
-                let indicatorName = `[ ${item.cat} ]`;
-                if(isSecretItem) indicatorName = '[ DANGER ]'; else if(item.cat === CUSTOM_KEYWORD) indicatorName = '[ 自訂 ]';
-
-                // 主體點擊發音
-                li.onclick = (e) => { 
-                    if(e.target.tagName !== 'BUTTON') { triggerHaptic(25); speak(item.jp); }
-                };
-                
+                let indicatorName = `[ ${item.cat} ]`; if(isSecretItem) indicatorName = '[ DANGER ]'; else if(item.cat === CUSTOM_KEYWORD) indicatorName = '[ 自訂 ]';
+                li.onclick = (e) => { if(e.target.tagName !== 'BUTTON') { triggerHaptic(25); speak(item.jp); } };
                 li.innerHTML = `
                     <div class="key-indicator" ${item.cat === CUSTOM_KEYWORD ? 'style="color:var(--success); border-color:var(--success);"' : ''} ${isSecretItem ? 'style="color:var(--danger); border-color:var(--danger);"' : ''}>${indicatorName}</div>
                     <div class="key-content">
@@ -468,50 +460,26 @@
         }
 
         async function translateAndSpeak() {
-            const input = document.getElementById('search-input').value.trim();
-            if (!input) return;
-
-            triggerHaptic(20);
-            const resContainer = document.getElementById('inline-translate-result');
-            const resJp = document.getElementById('inline-jp-text');
-            const btn = document.getElementById('main-translate-btn');
-            const saveBtn = document.getElementById('save-custom-btn');
-            
-            resContainer.style.display = 'block'; resJp.style.color = 'var(--text-muted)';
-            resJp.innerText = "解析中..."; btn.disabled = true; btn.innerText = "處理中"; saveBtn.style.display = 'none'; 
-
+            const input = document.getElementById('search-input').value.trim(); if (!input) return;
+            triggerHaptic(20); const resContainer = document.getElementById('inline-translate-result'); const resJp = document.getElementById('inline-jp-text'); const btn = document.getElementById('main-translate-btn'); const saveBtn = document.getElementById('save-custom-btn');
+            resContainer.style.display = 'block'; resJp.style.color = 'var(--text-muted)'; resJp.innerText = "解析中..."; btn.disabled = true; btn.innerText = "處理中"; saveBtn.style.display = 'none'; 
             try {
                 const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=ja&dt=t&q=${encodeURIComponent(input)}`;
-                const response = await fetch(url);
-                if (!response.ok) throw new Error("伺服器斷線");
-                
+                const response = await fetch(url); if (!response.ok) throw new Error("伺服器斷線");
                 const data = await response.json(); const translatedText = data[0][0][0]; 
-                
-                resJp.style.color = 'var(--success)'; resJp.innerText = translatedText;
-                saveBtn.style.display = 'flex'; triggerHapticSuccess(); speak(translatedText);
-            } catch (error) {
-                resJp.style.color = 'var(--danger)'; resJp.innerText = "[ 解析失敗 ]";
-            } finally { btn.disabled = false; btn.innerText = "⚡ 翻譯"; }
+                resJp.style.color = 'var(--success)'; resJp.innerText = translatedText; saveBtn.style.display = 'flex'; triggerHapticSuccess(); speak(translatedText);
+            } catch (error) { resJp.style.color = 'var(--danger)'; resJp.innerText = "[ 解析失敗 ]"; } finally { btn.disabled = false; btn.innerText = "⚡ 翻譯"; }
         }
 
         function saveCustomTranslation() {
-            const zh = document.getElementById('search-input').value.trim();
-            const jp = document.getElementById('inline-jp-text').innerText.trim();
+            const zh = document.getElementById('search-input').value.trim(); const jp = document.getElementById('inline-jp-text').innerText.trim();
             if (!zh || !jp || jp === "解析中..." || jp === "[ 解析失敗 ]") return;
-
-            const exists = customTranslations.some(item => item.jp === jp && item.zh === zh);
-            if (exists) return alert('這句已經在您的自訂清單中囉！');
-
-            triggerHapticSuccess();
-            const newItem = { cat: CUSTOM_KEYWORD, zh: zh, jp: jp, romaji: '' };
-            customTranslations.push(newItem);
-            localStorage.setItem('jp_custom_translations', JSON.stringify(customTranslations));
-            globalData.push(newItem);
-            
+            const exists = customTranslations.some(item => item.jp === jp && item.zh === zh); if (exists) return alert('這句已經在您的自訂清單中囉！');
+            triggerHapticSuccess(); const newItem = { cat: CUSTOM_KEYWORD, zh: zh, jp: jp, romaji: '' };
+            customTranslations.push(newItem); localStorage.setItem('jp_custom_translations', JSON.stringify(customTranslations)); globalData.push(newItem);
             const btn = document.getElementById('save-custom-btn'); const originalHTML = btn.innerHTML;
             btn.innerHTML = '✔ 已保存'; btn.style.color = 'var(--success)'; btn.style.borderColor = 'var(--success)';
-            setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; btn.style.borderColor = '';}, 2000);
-            renderCategories(); filterData();
+            setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; btn.style.borderColor = '';}, 2000); renderCategories(); filterData();
         }
     </script>
 </body>
