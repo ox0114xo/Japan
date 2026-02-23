@@ -3,224 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEO_JP_VOICE v5.1 實用進化版</title>
+    <title>NEO_JP_VOICE v6.0 琉璃全息版</title>
     <style>
-        /* 賽博機甲 UI 變數 */
+        /* 新東京・琉璃全息 UI 變數 */
         :root { 
-            --bg-deep: #050b14; --panel-bg: #0b1426; 
-            --neon-blue: #00f0ff; --neon-purple: #b026ff; --neon-green: #39ff14; 
-            --neon-red: #ff2a2a; --neon-yellow: #fbbf24;
-            --key-top: #152238; --key-side: #060c17; --key-border: #1e3a5f;
-            --text-main: #e2e8f0; --text-muted: #64748b; 
+            --primary: #00f0ff; 
+            --secondary: #b026ff; 
+            --success: #39ff14; 
+            --danger: #ff2a2a; 
+            --warning: #fbbf24;
+            --text-main: #ffffff; 
+            --text-muted: #94a3b8; 
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
         
+        /* 流動極光背景 */
         body { 
-            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
-            background-color: var(--bg-deep); 
-            background-image: 
-                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px;
+            font-family: '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Microsoft JhengHei', sans-serif; 
+            margin: 0; padding: 15px; padding-bottom: 90px; min-height: 100vh;
             color: var(--text-main); 
-            padding: 15px; max-width: 800px; margin: 0 auto; line-height: 1.6; 
-            padding-bottom: 40px; min-height: 100vh;
+            background: linear-gradient(-45deg, #0f172a, #2e0842, #041b3b, #001524);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             overflow-x: hidden;
         }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
+        /* 磨砂玻璃共用特效 */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* 標題 */
         h1 { 
-            text-align: center; color: #fff; 
-            text-shadow: 0 0 5px var(--neon-blue), 0 0 15px var(--neon-blue); 
-            font-size: 28px; margin: 10px 0 25px 0; user-select: none; cursor: pointer; 
-            letter-spacing: 4px; font-weight: 900; font-style: italic;
-            border-bottom: 2px solid rgba(0, 240, 255, 0.3);
-            padding-bottom: 10px;
+            text-align: center; font-size: 26px; font-weight: 800; letter-spacing: 3px;
+            margin: 10px 0 20px 0; user-select: none; cursor: pointer;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
         }
-        h1::before { content: 'SYS.V5.1 // '; font-size: 14px; color: var(--neon-purple); text-shadow: none; vertical-align: middle;}
+
+        /* 頂部控制列 (搜尋 + 翻譯 + 連播) */
+        .top-controls { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .search-row { display: flex; gap: 10px; width: 100%; }
         
-        /* 終端搜尋與翻譯整合區 */
-        .search-container { display: flex; gap: 12px; margin-bottom: 20px; width: 100%; }
         .search-box { 
-            flex: 1; padding: 16px 20px; 
-            background: rgba(0,0,0,0.7); 
-            border: 1px solid var(--neon-purple); 
-            border-left: 4px solid var(--neon-purple);
-            border-radius: 4px; font-size: 16px; color: var(--neon-blue); 
-            box-sizing: border-box; transition: 0.3s; width: 100%;
-            font-family: monospace; letter-spacing: 1px;
-            box-shadow: inset 0 0 10px rgba(176, 38, 255, 0.1);
+            flex: 1; padding: 16px 20px; font-size: 16px; color: #fff; 
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); 
+            border-radius: 12px; transition: 0.3s; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
         }
-        .search-box:focus { outline: none; box-shadow: 0 0 20px rgba(176, 38, 255, 0.4), inset 0 0 10px rgba(176, 38, 255, 0.2); }
-        .search-box::placeholder { color: #475569; font-family: 'Segoe UI'; }
+        .search-box:focus { outline: none; border-color: var(--primary); background: rgba(0, 240, 255, 0.05); }
+        .search-box::placeholder { color: #64748b; }
         
-        .translate-btn-inline { 
-            background: linear-gradient(180deg, var(--neon-purple) 0%, #6b21a8 100%);
-            color: white; border: 1px solid #d8b4fe; 
-            border-bottom: 5px solid #4c1d95; 
-            padding: 0 20px; border-radius: 6px; font-size: 16px; font-weight: 900; 
-            cursor: pointer; transition: all 0.1s; white-space: nowrap; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            box-shadow: 0 6px 15px rgba(176, 38, 255, 0.3);
+        .action-btn { 
+            background: linear-gradient(135deg, var(--primary) 0%, #0077ff 100%);
+            color: #fff; border: none; padding: 0 20px; border-radius: 12px; 
+            font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; 
+            box-shadow: 0 4px 15px rgba(0, 240, 255, 0.3); white-space: nowrap;
         }
-        .translate-btn-inline:active { 
-            transform: translateY(5px); 
-            border-bottom: 0px solid #4c1d95; 
-            box-shadow: 0 1px 5px rgba(176, 38, 255, 0.5);
-            background: #6b21a8;
+        .action-btn:active { transform: scale(0.95); }
+        
+        .play-all-btn {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid var(--glass-border);
+            color: var(--primary); padding: 12px; border-radius: 12px; cursor: pointer;
+            font-weight: bold; display: flex; justify-content: center; align-items: center; gap: 8px;
+            transition: 0.3s; backdrop-filter: blur(5px);
         }
-        .translate-btn-inline:disabled { opacity: 0.5; cursor: not-allowed; transform: none; border-bottom: 5px solid #4c1d95; }
+        .play-all-btn:hover { background: rgba(0, 240, 255, 0.1); }
+        .play-all-btn.playing { background: var(--primary); color: #000; animation: pulse 1.5s infinite; }
 
-        /* 即時翻譯結果框 */
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(0, 240, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 240, 255, 0); } }
+
+        /* 即時翻譯結果 */
         #inline-translate-result { 
-            display: none; margin-bottom: 25px; padding: 25px 20px 20px 20px; 
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, rgba(0,0,0,0.8) 100%); 
-            border: 1px solid var(--neon-blue); border-radius: 8px; text-align: center; 
-            position: relative; box-shadow: 0 0 20px rgba(0, 240, 255, 0.15) inset, 0 10px 30px rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
+            display: none; margin-bottom: 20px; padding: 25px 20px; text-align: center; position: relative;
         }
-        #inline-translate-result::before { 
-            content: '▶ NEURAL_TRANSLATION_CORE_ACTIVE'; font-size: 11px; font-family: monospace;
-            color: #000; position: absolute; top: -1px; left: -1px; 
-            background: var(--neon-blue); padding: 4px 10px; font-weight: bold; 
-            border-bottom-right-radius: 8px; box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        .trans-badge {
+            position: absolute; top: 10px; left: 15px; font-size: 11px; color: var(--primary);
+            background: rgba(0, 240, 255, 0.1); padding: 4px 10px; border-radius: 20px;
         }
-        #inline-jp-text { 
-            font-size: 26px; font-weight: 900; color: var(--neon-green); margin: 15px 0; 
-            letter-spacing: 2px; word-break: break-all; text-shadow: 0 0 15px rgba(57, 255, 20, 0.6);
-        }
+        #inline-jp-text { font-size: 24px; font-weight: 800; color: var(--success); margin: 15px 0; letter-spacing: 1px; }
 
-        /* 分類按鈕區 */
-        .category-scroll { display: flex; overflow-x: auto; gap: 12px; margin-bottom: 25px; padding-bottom: 10px; scrollbar-width: none; cursor: grab; }
-        .category-scroll:active { cursor: grabbing; }
+        /* 分類按鈕 (膠囊風) */
+        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 10px; scrollbar-width: none; cursor: grab; }
         .category-scroll::-webkit-scrollbar { display: none; }
         .cat-btn { 
-            white-space: nowrap; background: #0f172a; color: var(--text-muted); 
-            border: 1px solid #334155; border-bottom: 3px solid #020617;
-            padding: 10px 22px; border-radius: 4px; font-size: 14px; font-weight: bold;
-            cursor: pointer; transition: all 0.1s; letter-spacing: 1px; user-select: none;
+            white-space: nowrap; background: rgba(0,0,0,0.4); color: var(--text-muted); 
+            border: 1px solid rgba(255,255,255,0.05); padding: 10px 22px; border-radius: 30px; 
+            font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
         }
-        .cat-btn:active { transform: translateY(3px); border-bottom-width: 0px; }
-        .cat-btn.active { 
-            background: rgba(0, 240, 255, 0.15); color: var(--neon-blue); 
-            border-color: var(--neon-blue); border-bottom-color: #008b99;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3); text-shadow: 0 0 5px var(--neon-blue);
-        }
-        .cat-btn.secret-active { 
-            background: rgba(255, 42, 42, 0.15); color: var(--neon-red); 
-            border-color: var(--neon-red); border-bottom-color: #8b0000;
-            box-shadow: 0 0 15px rgba(255, 42, 42, 0.3); text-shadow: 0 0 5px var(--neon-red);
-        }
-        .cat-btn.custom-active {
-            background: rgba(57, 255, 20, 0.15); color: var(--neon-green); 
-            border-color: var(--neon-green); border-bottom-color: #1b7e09;
-            box-shadow: 0 0 15px rgba(57, 255, 20, 0.3); text-shadow: 0 0 5px var(--neon-green);
-        }
+        .cat-btn.active { background: rgba(0, 240, 255, 0.15); color: var(--primary); border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
+        .cat-btn.custom-active { background: rgba(57, 255, 20, 0.15); color: var(--success); border-color: var(--success); box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
+        .cat-btn.secret-active { background: rgba(255, 42, 42, 0.15); color: var(--danger); border-color: var(--danger); box-shadow: 0 0 15px rgba(255, 42, 42, 0.2); }
 
         /* 控制滑桿區 */
-        .controls-panel { 
-            background: rgba(11, 20, 38, 0.8); padding: 15px 20px; border-radius: 8px; 
-            border: 1px solid #1e3a5f; border-left: 3px solid var(--text-muted);
-            margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; 
-            box-shadow: inset 0 4px 6px rgba(0,0,0,0.3);
-        }
+        .controls-panel { padding: 15px 20px; margin-bottom: 25px; display: flex; flex-direction: column; gap: 15px; }
         .slider-container { display: flex; align-items: center; gap: 15px; }
-        .speed-slider { flex: 1; -webkit-appearance: none; background: #1e3a5f; height: 6px; border-radius: 3px; outline: none; }
-        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 4px; background: var(--text-main); cursor: pointer; box-shadow: 0 0 10px rgba(255,255,255,0.5); border: 2px solid var(--bg-deep);}
-        .slider-val { font-family: monospace; font-size: 16px; color: var(--text-main); width: 45px; text-align: right; font-weight: bold;}
+        .speed-slider { flex: 1; -webkit-appearance: none; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; outline: none; }
+        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        .slider-val { font-family: monospace; font-size: 14px; color: var(--primary); width: 40px; text-align: right; }
 
-        /* 立體機械按鍵列表 */
-        ul { 
-            list-style: none; padding: 0; margin: 0; 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;
+        /* 琉璃卡片列表 */
+        ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
+        li.glass-card { 
+            padding: 20px; display: flex; flex-direction: column; justify-content: space-between;
+            position: relative; transition: transform 0.2s, box-shadow 0.2s;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+            border-top: 1px solid rgba(255,255,255,0.2); border-left: 1px solid rgba(255,255,255,0.1);
         }
-        li.cyber-key { 
-            background: linear-gradient(180deg, var(--key-top) 0%, #0d1627 100%);
-            border: 1px solid var(--key-border); 
-            border-bottom: 8px solid var(--key-side); 
-            border-radius: 12px; 
-            padding: 20px; 
-            display: flex; flex-direction: column; justify-content: space-between;
-            cursor: pointer; 
-            position: relative; 
-            transition: transform 0.08s ease, border-bottom-width 0.08s ease, box-shadow 0.08s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 2px 2px rgba(255,255,255,0.05); 
-        }
-        
-        li.cyber-key:active { 
-            transform: translateY(8px); 
-            border-bottom-width: 0px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.8), inset 0 0 15px rgba(0, 240, 255, 0.2); 
-            background: linear-gradient(180deg, #0d1627 0%, var(--key-top) 100%);
-        }
+        li.glass-card:active { transform: scale(0.98); background: rgba(255,255,255,0.08); }
 
-        /* 標籤角標 (替換掉原本的 DATA_BLOCK) */
+        /* 標籤角標 */
         .key-indicator {
-            position: absolute; top: 15px; right: 15px;
-            font-size: 11px; color: var(--neon-blue); font-family: monospace;
-            border: 1px solid var(--neon-blue); padding: 2px 8px; border-radius: 4px;
-            opacity: 0.6; background: rgba(0, 240, 255, 0.05);
+            position: absolute; top: 15px; right: 15px; font-size: 11px; color: var(--text-muted);
+            background: rgba(0,0,0,0.3); padding: 4px 10px; border-radius: 12px;
         }
 
-        /* 內容排版：中文大、日文小 */
-        .key-content { z-index: 1; pointer-events: none; margin-bottom: 15px; margin-top: 5px;}
-        .zh-text-main { 
-            font-size: 20px; font-weight: 900; color: #fff; display: block; 
-            margin-bottom: 8px; letter-spacing: 1px; line-height: 1.3;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-        .jp-text-sub { 
-            font-size: 15px; color: var(--neon-blue); display: block; 
-            margin-bottom: 6px; font-weight: bold; letter-spacing: 0.5px;
-        }
-        .romaji-text { 
-            font-size: 12px; color: var(--neon-green); font-family: monospace; 
-            display: inline-block; margin-bottom: 8px; background: rgba(57, 255, 20, 0.05);
-            padding: 4px 8px; border-radius: 4px; border-left: 2px solid var(--neon-green);
-        }
+        /* 內容排版 */
+        .key-content { z-index: 1; pointer-events: none; margin-bottom: 15px; margin-top: 10px;}
+        .zh-text-main { font-size: 20px; font-weight: 800; color: #fff; display: block; margin-bottom: 8px; line-height: 1.3; }
+        .jp-text-sub { font-size: 15px; color: var(--primary); display: block; margin-bottom: 6px; font-weight: 600; }
+        .romaji-text { font-size: 12px; color: var(--success); opacity: 0.8; font-family: monospace; display: inline-block; }
 
         /* 按鍵底部的功能列 */
-        .key-actions { 
-            display: flex; gap: 8px; justify-content: flex-end; 
-            border-top: 1px dashed #1e3a5f; padding-top: 12px;
-        }
+        .key-actions { display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; }
         .icon-btn { 
-            background: rgba(0,0,0,0.4); border: 1px solid #334155; border-radius: 4px; 
-            font-size: 14px; color: #64748b; cursor: pointer; padding: 8px 15px; 
-            transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px;
-            font-weight: bold; white-space: nowrap;
+            background: rgba(255,255,255,0.05); border: none; border-radius: 8px; 
+            font-size: 13px; color: #cbd5e1; cursor: pointer; padding: 8px 12px; 
+            transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: 600;
         }
-        .icon-btn:hover { background: rgba(255,255,255,0.05); color: #fff; border-color: #64748b;}
-        .icon-btn.star.active { 
-            color: var(--neon-yellow); border-color: var(--neon-yellow); 
-            background: rgba(251, 191, 36, 0.1); box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
-        }
-        .icon-btn.fullscreen { color: var(--neon-blue); border-color: rgba(0, 240, 255, 0.3);}
-        .icon-btn.copy { color: var(--neon-green); border-color: rgba(57, 255, 20, 0.3);}
-        .key-actions .icon-btn:active { transform: scale(0.9); }
-
-        /* 全螢幕字幕覆蓋層 (保持日文最大) */
+        .icon-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .icon-btn.star.active { color: var(--warning); background: rgba(251, 191, 36, 0.1); }
+        .icon-btn.slow { color: #f472b6; background: rgba(244, 114, 182, 0.1); } /* 蝸牛模式特調粉色 */
+        
+        /* 全螢幕覆蓋 */
         #fullscreen-overlay { 
-            display: none; position: fixed; inset: 0; background: #000; 
-            background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 240, 255, 0.05) 2px, rgba(0, 240, 255, 0.05) 4px);
-            z-index: 10000; flex-direction: column; justify-content: center; align-items: center; 
-            text-align: center; padding: 20px; box-sizing: border-box; font-family: monospace; 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
+            z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; 
         }
-        #fullscreen-jp { font-size: 10vw; font-weight: bold; color: var(--neon-blue); margin-bottom: 15px; width: 100%; word-wrap: break-word; text-shadow: 0 0 30px var(--neon-blue); }
-        #fullscreen-romaji { font-size: 5vw; color: var(--neon-green); margin-bottom: 30px; }
-        #fullscreen-zh { font-size: 6vw; color: #fff; font-family: 'Segoe UI';}
-        .close-fullscreen { position: absolute; top: 20px; right: 20px; font-size: 35px; color: #fff; background: none; border: none; cursor: pointer; padding: 10px; z-index: 10001; }
-        .replay-btn-large { 
-            margin-top: 50px; background: rgba(0, 240, 255, 0.1); border: 2px solid var(--neon-blue); 
-            color: var(--neon-blue); padding: 15px 50px; font-size: 22px; font-weight: bold;
-            border-radius: 8px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 4px;
-        }
-        .replay-btn-large:active { background: var(--neon-blue); color: #000; box-shadow: 0 0 30px var(--neon-blue); }
+        #fullscreen-jp { font-size: 9vw; font-weight: 900; color: var(--primary); margin-bottom: 15px; width: 100%; word-wrap: break-word; }
+        #fullscreen-romaji { font-size: 4vw; color: var(--success); margin-bottom: 30px; }
+        #fullscreen-zh { font-size: 5vw; color: #fff; }
+        .close-fullscreen { position: absolute; top: 30px; right: 30px; font-size: 30px; color: #fff; background: rgba(255,255,255,0.1); border-radius: 50%; width: 50px; height: 50px; border: none; cursor: pointer; }
+        .fs-controls { display: flex; gap: 15px; margin-top: 40px;}
+        .replay-btn-large { background: rgba(0, 240, 255, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 15px 30px; font-size: 18px; border-radius: 30px; cursor: pointer; transition: 0.2s;}
+        .slow-btn-large { background: rgba(244, 114, 182, 0.1); border: 1px solid #f472b6; color: #f472b6; padding: 15px 30px; font-size: 18px; border-radius: 30px; cursor: pointer; transition: 0.2s;}
 
-        /* 錯誤與讀取 */
-        .loader-container { display: flex; justify-content: center; align-items: center; padding: 50px; flex-direction: column; gap: 20px; }
-        .tech-spinner { width: 50px; height: 50px; border: 3px solid rgba(0, 240, 255, 0.2); border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+        .loader-container { display: flex; justify-content: center; align-items: center; padding: 50px; flex-direction: column; gap: 15px; }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        #error-box { display: none; background: rgba(255,42,42,0.1); border: 2px solid var(--neon-red); padding: 20px; border-radius: 8px; margin-top: 20px; word-break: break-all; }
-        #error-box h3 { color: var(--neon-red); margin-top: 0; }
     </style>
 </head>
 <body>
@@ -230,78 +171,85 @@
         <div id="fullscreen-jp"></div>
         <div id="fullscreen-romaji"></div>
         <div id="fullscreen-zh"></div>
-        <button class="replay-btn-large" onclick="replayFullscreen()">► REPLAY_VOICE</button>
+        <div class="fs-controls">
+            <button class="replay-btn-large" onclick="replayFullscreen(false)">🔊 正常發音</button>
+            <button class="slow-btn-large" onclick="replayFullscreen(true)">🐌 慢速教學</button>
+        </div>
     </div>
 
-    <h1 id="app-title">NEO_JP_VOICE</h1>
+    <h1 id="app-title">NEO JP VOICE</h1>
     
-    <div class="search-container">
-        <input type="text" id="search-input" class="search-box" placeholder="搜尋中文/日文，或輸入新句子按 Enter 翻譯..." onkeyup="filterData()" onkeypress="if(event.key === 'Enter') translateAndSpeak()">
-        <button class="translate-btn-inline" id="main-translate-btn" onclick="translateAndSpeak()" title="翻譯並發音">翻譯</button>
+    <div class="top-controls">
+        <div class="search-row">
+            <input type="text" id="search-input" class="search-box glass-panel" placeholder="搜尋中文/日文，或輸入新句按 Enter" onkeyup="filterData()" onkeypress="if(event.key === 'Enter') translateAndSpeak()">
+            <button class="action-btn" id="main-translate-btn" onclick="translateAndSpeak()">⚡ 翻譯</button>
+        </div>
+        <button id="auto-play-btn" class="play-all-btn" onclick="toggleAutoPlay()">▶️ 循序播放此分類 (Auto-Play)</button>
     </div>
 
-    <div id="inline-translate-result">
+    <div id="inline-translate-result" class="glass-panel">
+        <div class="trans-badge">即時翻譯結果</div>
         <div id="inline-jp-text"></div>
-        <div style="display: flex; gap: 8px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
-            <button class="icon-btn copy" onclick="copyText(event, document.getElementById('inline-jp-text').innerText)">📋 複製</button>
-            <button class="icon-btn fullscreen" onclick="triggerHaptic(); speak(document.getElementById('inline-jp-text').innerText)">🔊 發音</button>
-            <button class="icon-btn star active" id="save-custom-btn" onclick="saveCustomTranslation()">💾 保存這句</button>
+        <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+            <button class="icon-btn" onclick="copyText(event, document.getElementById('inline-jp-text').innerText)">📋 複製</button>
+            <button class="icon-btn" style="color:var(--primary)" onclick="triggerHaptic(); speak(document.getElementById('inline-jp-text').innerText)">🔊 發音</button>
+            <button class="icon-btn slow" onclick="triggerHaptic(); speak(document.getElementById('inline-jp-text').innerText, true)">🐌 慢速</button>
+            <button class="icon-btn star active" id="save-custom-btn" onclick="saveCustomTranslation()">💾 存入自訂</button>
         </div>
     </div>
 
     <div class="category-scroll" id="category-container"></div>
 
-    <div class="controls-panel">
+    <div class="controls-panel glass-panel">
         <div class="slider-container">
-            <span style="font-size: 14px; color: var(--text-muted); width: 60px;">⚡ 語速</span>
+            <span style="font-size: 13px; color: var(--text-muted); width: 40px;">語速</span>
             <input type="range" id="speed-slider" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updateSliders()">
             <span id="speed-val" class="slider-val">1.0x</span>
         </div>
         <div class="slider-container">
-            <span style="font-size: 14px; color: var(--text-muted); width: 60px;">🔊 音調</span>
+            <span style="font-size: 13px; color: var(--text-muted); width: 40px;">音調</span>
             <input type="range" id="pitch-slider" class="speed-slider" min="0.1" max="2.0" step="0.1" value="1.0" oninput="updateSliders()">
             <span id="pitch-val" class="slider-val">1.0</span>
         </div>
     </div>
 
-    <div id="error-box"></div>
-
-    <div id="loading" class="loader-container">
-        <div class="tech-spinner"></div>
-        <span style="color: var(--neon-blue); font-family: monospace; letter-spacing: 2px;">連線至資料庫...</span>
+    <div id="loading" class="loader-container glass-panel">
+        <div class="spinner"></div>
+        <span style="color: var(--primary); font-size: 14px;">同步資料庫中...</span>
     </div>
 
     <ul id="sentence-list"></ul>
 
     <script>
-        // 震動回饋
+        // --- 基礎與視覺設定 ---
         function triggerHaptic(duration = 15) { if (navigator.vibrate) navigator.vibrate(duration); }
         function triggerHapticSuccess() { if (navigator.vibrate) navigator.vibrate([20, 50, 20]); }
 
-        // 電腦版滑鼠拖曳
         const catContainer = document.getElementById('category-container');
         let isDown = false; let startX; let scrollLeft;
         catContainer.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - catContainer.offsetLeft; scrollLeft = catContainer.scrollLeft; });
         catContainer.addEventListener('mouseleave', () => { isDown = false; });
         catContainer.addEventListener('mouseup', () => { isDown = false; });
         catContainer.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
+            if (!isDown) return; e.preventDefault();
             catContainer.scrollLeft = scrollLeft - ((e.pageX - catContainer.offsetLeft) - startX) * 2; 
         });
 
+        // --- 資料狀態管理 ---
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = [];
+        let currentFilteredData = []; // 用於連續播放
         let currentCategory = '全部';
-        
-        // 讀取本地保存的喜好與「自訂翻譯」
         let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
         let customTranslations = JSON.parse(localStorage.getItem('jp_custom_translations')) || [];
-        
         let clickCount = 0;
         let isSecretUnlocked = false;
         const SECRET_KEYWORD = '🤬 隱藏情緒';
         const CUSTOM_KEYWORD = '🗂️ 自訂翻譯';
+
+        // --- 連續播放狀態 ---
+        let isAutoPlaying = false;
+        let autoPlayIndex = 0;
 
         window.onload = () => {
             loadCSV();
@@ -313,22 +261,80 @@
             document.getElementById('pitch-val').innerText = Number(document.getElementById('pitch-slider').value).toFixed(1);
         }
 
-        function speak(text) {
-            if (!('speechSynthesis' in window)) return alert("系統錯誤：未偵測到發音模組");
+        // --- 核心語音引擎 (支援慢速模式與連播回呼) ---
+        function speak(text, isSlowMode = false, onEndCallback = null) {
+            if (!('speechSynthesis' in window)) return alert("設備不支援語音引擎");
             window.speechSynthesis.cancel();
+            
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
-            utterance.rate = parseFloat(document.getElementById('speed-slider').value);
+            // 如果是慢速模式，強制語速為 0.5；否則讀取滑桿數值
+            utterance.rate = isSlowMode ? 0.4 : parseFloat(document.getElementById('speed-slider').value);
             utterance.pitch = parseFloat(document.getElementById('pitch-slider').value);
+            
             const voices = window.speechSynthesis.getVoices();
             const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
             if(jpVoice) utterance.voice = jpVoice;
+
+            if (onEndCallback) {
+                utterance.onend = onEndCallback;
+                // 防止某些瀏覽器 onend 不觸發的 bug
+                utterance.onerror = onEndCallback; 
+            }
+
             window.speechSynthesis.speak(utterance);
         }
 
+        // --- v6.0 新功能：分類連續播放 ---
+        function toggleAutoPlay() {
+            const btn = document.getElementById('auto-play-btn');
+            
+            if (isAutoPlaying) {
+                // 停止播放
+                isAutoPlaying = false;
+                window.speechSynthesis.cancel();
+                btn.innerText = '▶️ 循序播放此分類 (Auto-Play)';
+                btn.classList.remove('playing');
+                triggerHaptic(15);
+            } else {
+                // 開始播放
+                if (currentFilteredData.length === 0) {
+                    alert("目前列表沒有句子可以播放喔！");
+                    return;
+                }
+                isAutoPlaying = true;
+                autoPlayIndex = 0;
+                btn.innerText = '⏹️ 停止連續播放';
+                btn.classList.add('playing');
+                triggerHapticSuccess();
+                playNextInQueue();
+            }
+        }
+
+        function playNextInQueue() {
+            if (!isAutoPlaying || autoPlayIndex >= currentFilteredData.length) {
+                // 播放完畢或被中斷
+                isAutoPlaying = false;
+                const btn = document.getElementById('auto-play-btn');
+                btn.innerText = '▶️ 循序播放此分類 (Auto-Play)';
+                btn.classList.remove('playing');
+                return;
+            }
+
+            const item = currentFilteredData[autoPlayIndex];
+            // 播放當前句子，並傳入 callback 讓它結束後播下一句
+            speak(item.jp, false, () => {
+                if (isAutoPlaying) {
+                    autoPlayIndex++;
+                    // 句子之間間隔 1 秒
+                    setTimeout(playNextInQueue, 1000); 
+                }
+            });
+        }
+
+        // --- 工具與介面 ---
         function toggleFavorite(event, jp) {
-            event.stopPropagation();
-            triggerHaptic(20);
+            event.stopPropagation(); triggerHaptic(20);
             const index = favorites.indexOf(jp);
             if (index > -1) favorites.splice(index, 1);
             else favorites.push(jp);
@@ -337,20 +343,16 @@
         }
 
         function copyText(event, text) {
-            event.stopPropagation();
-            triggerHapticSuccess();
+            event.stopPropagation(); triggerHapticSuccess();
             navigator.clipboard.writeText(text).then(() => {
-                const btn = event.currentTarget;
-                const originalHTML = btn.innerHTML;
-                btn.innerHTML = '✔ 成功';
-                btn.style.color = '#39ff14'; btn.style.borderColor = '#39ff14';
-                setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; btn.style.borderColor = ''; }, 1500);
-            }).catch(err => console.error('複製失敗:', err));
+                const btn = event.currentTarget; const originalHTML = btn.innerHTML;
+                btn.innerHTML = '✔ 成功'; btn.style.color = 'var(--success)';
+                setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; }, 1500);
+            });
         }
 
         function openFullscreen(event, jp, zh, romaji) {
-            event.stopPropagation();
-            triggerHaptic(30);
+            event.stopPropagation(); triggerHaptic(30);
             document.getElementById('fullscreen-jp').innerText = jp;
             document.getElementById('fullscreen-romaji').innerText = romaji || '';
             document.getElementById('fullscreen-zh').innerText = zh;
@@ -364,84 +366,58 @@
             window.speechSynthesis.cancel();
         }
 
-        function replayFullscreen() {
+        function replayFullscreen(isSlow) {
             triggerHaptic(20);
             const jp = document.getElementById('fullscreen-jp').innerText;
-            if(jp) speak(jp);
+            if(jp) speak(jp, isSlow);
         }
 
         document.getElementById('app-title').addEventListener('click', () => {
             if (isSecretUnlocked) return;
-            triggerHaptic(10);
             clickCount++;
             if (clickCount >= 10) {
-                isSecretUnlocked = true;
-                triggerHapticSuccess();
-                alert('⚠️ 系統警告：安全限制已解除，深網隱藏模組開啟。');
-                currentCategory = SECRET_KEYWORD; 
-                renderCategories();
-                filterData();
+                isSecretUnlocked = true; triggerHapticSuccess();
+                alert('⚠️ 系統警告：安全限制解除，隱藏模組開啟。');
+                currentCategory = SECRET_KEYWORD; renderCategories(); filterData();
             }
         });
 
-        function showError(message) {
-            document.getElementById('loading').style.display = 'none';
-            const errorBox = document.getElementById('error-box');
-            errorBox.style.display = 'block';
-            errorBox.innerHTML = `<h3>[ERR] 連線失敗</h3><p>${message}</p>`;
-        }
-
+        // --- 資料讀取與渲染 ---
         async function loadCSV() {
             try {
                 const res = await fetch(CSV_URL);
-                if (!res.ok) throw new Error("遠端伺服器拒絕連線");
+                if (!res.ok) throw new Error("連線失敗");
                 const csvText = await res.text();
                 processData(csvText);
             } catch(e) {
-                showError(e.message || e.toString());
+                document.getElementById('loading').innerHTML = `<span style="color:var(--danger)">讀取失敗：${e.message}</span>`;
             }
         }
 
         function processData(csvText) {
-            try {
-                const rows = csvText.split('\n');
-                globalData = [];
-                for (let i = 1; i < rows.length; i++) {
-                    const row = rows[i].trim();
-                    if(!row) continue;
-                    
-                    let cols = [];
-                    let currentVal = '';
-                    let inQuotes = false;
-                    for (let j = 0; j < row.length; j++) {
-                        let char = row[j];
-                        if (char === '"') inQuotes = !inQuotes; 
-                        else if (char === ',' && !inQuotes) { cols.push(currentVal.trim()); currentVal = ''; } 
-                        else currentVal += char;
-                    }
-                    cols.push(currentVal.trim()); 
-
-                    if (cols.length >= 3) {
-                        globalData.push({ 
-                            cat: (cols[0] || '未分類').replace(/"/g, ''), 
-                            zh: (cols[1] || '').replace(/"/g, ''), 
-                            jp: (cols[2] || '').replace(/"/g, ''), 
-                            romaji: (cols[3] || '').replace(/"/g, '') 
-                        });
-                    }
+            const rows = csvText.split('\n'); globalData = [];
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i].trim(); if(!row) continue;
+                let cols = []; let currentVal = ''; let inQuotes = false;
+                for (let j = 0; j < row.length; j++) {
+                    let char = row[j];
+                    if (char === '"') inQuotes = !inQuotes; 
+                    else if (char === ',' && !inQuotes) { cols.push(currentVal.trim()); currentVal = ''; } 
+                    else currentVal += char;
                 }
-                
-                // 將本地保存的「自訂翻譯」合併進全局數據
-                if(customTranslations.length > 0) {
-                    globalData = [...globalData, ...customTranslations];
+                cols.push(currentVal.trim()); 
+                if (cols.length >= 3) {
+                    globalData.push({ 
+                        cat: (cols[0] || '未分類').replace(/"/g, ''), 
+                        zh: (cols[1] || '').replace(/"/g, ''), 
+                        jp: (cols[2] || '').replace(/"/g, ''), 
+                        romaji: (cols[3] || '').replace(/"/g, '') 
+                    });
                 }
-
-                renderCategories();
-                filterData();
-                document.getElementById('loading').style.display = 'none';
-            } catch(e) {
-                showError("數據解析失敗: " + e.message);
             }
+            if(customTranslations.length > 0) globalData = [...globalData, ...customTranslations];
+            renderCategories(); filterData();
+            document.getElementById('loading').style.display = 'none';
         }
 
         function renderCategories() {
@@ -449,42 +425,32 @@
             let baseCats = [];
             if (isSecretUnlocked) baseCats.push(SECRET_KEYWORD);
             baseCats.push('全部', '⭐最愛');
-            
-            // 如果有自訂翻譯，將其顯示在最愛後面
-            if (customTranslations.length > 0) {
-                baseCats.push(CUSTOM_KEYWORD);
-            }
+            if (customTranslations.length > 0) baseCats.push(CUSTOM_KEYWORD);
             
             const otherCats = new Set();
             globalData.forEach(item => {
-                if (!item.cat.includes('隱藏') && !item.cat.includes('🤬') && item.cat !== CUSTOM_KEYWORD) {
-                    otherCats.add(item.cat);
-                }
+                if (!item.cat.includes('隱藏') && !item.cat.includes('🤬') && item.cat !== CUSTOM_KEYWORD) otherCats.add(item.cat);
             });
-            
             const allCats = [...baseCats, ...Array.from(otherCats)];
 
             allCats.forEach(cat => {
                 const btn = document.createElement('button');
-                
                 if (cat === currentCategory) {
                     if (cat === SECRET_KEYWORD) btn.className = 'cat-btn secret-active';
                     else if (cat === CUSTOM_KEYWORD) btn.className = 'cat-btn custom-active';
                     else btn.className = 'cat-btn active';
-                } else {
-                    btn.className = 'cat-btn';
-                }
+                } else btn.className = 'cat-btn';
                 
                 btn.innerText = cat;
-                if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = 'var(--neon-yellow)';
-                if(cat === CUSTOM_KEYWORD && cat !== currentCategory) btn.style.color = 'var(--neon-green)';
+                if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = 'var(--warning)';
+                if(cat === CUSTOM_KEYWORD && cat !== currentCategory) btn.style.color = 'var(--success)';
                 
                 btn.onclick = () => {
-                    if (isDown) return; 
-                    triggerHaptic(15);
+                    if (isDown) return; triggerHaptic(15);
                     currentCategory = cat;
-                    renderCategories(); 
-                    filterData();
+                    // 切換分類時若正在自動播放，先強制中斷
+                    if(isAutoPlaying) toggleAutoPlay(); 
+                    renderCategories(); filterData();
                 };
                 catContainer.appendChild(btn);
             });
@@ -494,11 +460,9 @@
             const query = document.getElementById('search-input').value;
             const queryLower = query.toLowerCase();
             
-            if(query.trim() === '') {
-                document.getElementById('inline-translate-result').style.display = 'none';
-            }
+            if(query.trim() === '') document.getElementById('inline-translate-result').style.display = 'none';
 
-            const filteredData = globalData.filter(item => {
+            currentFilteredData = globalData.filter(item => {
                 const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
                 if (isSecretItem && !isSecretUnlocked) return false;
                 if (currentCategory === '全部' && isSecretItem) return false;
@@ -511,55 +475,48 @@
                 const matchQuery = (item.zh && item.zh.toLowerCase().includes(queryLower)) || 
                                    (item.jp && item.jp.toLowerCase().includes(queryLower)) || 
                                    (item.romaji && item.romaji.toLowerCase().includes(queryLower));
-                
                 return matchCat && matchQuery;
             });
             
-            renderList(filteredData);
+            renderList(currentFilteredData);
         }
 
         function renderList(dataToRender) {
-            const list = document.getElementById('sentence-list');
-            list.innerHTML = '';
+            const list = document.getElementById('sentence-list'); list.innerHTML = '';
             if(dataToRender.length === 0) {
-                list.innerHTML = '<li style="background:transparent; border:none; box-shadow:none; text-align:center; color:#475569; display:block;">[ 查無資料，可直接按 Enter 執行自譯 ]</li>';
+                list.innerHTML = '<li style="background:transparent; border:none; box-shadow:none; text-align:center; color:var(--text-muted);">[ 無資料，請使用上方翻譯 ]</li>';
                 return;
             }
 
             dataToRender.forEach(item => {
-                const li = document.createElement('li');
-                li.className = 'cyber-key';
-                
+                const li = document.createElement('li'); li.className = 'glass-card glass-panel';
                 const safeJp = item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;");
                 const safeZh = item.zh.replace(/'/g, "\\'").replace(/"/g, "&quot;");
                 const safeRomaji = item.romaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
                 const isFav = favorites.includes(item.jp);
-
                 const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
-                if(isSecretItem) {
-                    li.style.borderColor = 'rgba(255, 42, 42, 0.4)';
-                    li.style.borderBottomColor = '#3a0000';
-                }
                 
-                // 動態判斷角標名稱
-                let indicatorName = `[ ${item.cat} ]`;
-                if(isSecretItem) indicatorName = '[ DANGER ]';
-                else if(item.cat === CUSTOM_KEYWORD) indicatorName = '[ USER_DATA ]';
+                let indicatorName = item.cat;
+                if(isSecretItem) indicatorName = 'DANGER'; else if(item.cat === CUSTOM_KEYWORD) indicatorName = '自訂';
 
-                li.onclick = () => { triggerHaptic(25); speak(item.jp); };
+                // 主體點擊正常發音
+                li.onclick = (e) => { 
+                    // 防止點擊到底部按鈕時觸發
+                    if(e.target.tagName !== 'BUTTON') { triggerHaptic(25); speak(item.jp); }
+                };
                 
-                // 中文與日文排版對調
                 li.innerHTML = `
-                    <div class="key-indicator" ${item.cat === CUSTOM_KEYWORD ? 'style="color:var(--neon-green); border-color:var(--neon-green);"' : ''}>${indicatorName}</div>
+                    <div class="key-indicator" ${item.cat === CUSTOM_KEYWORD ? 'style="color:var(--success);"' : ''}>${indicatorName}</div>
                     <div class="key-content">
                         <span class="zh-text-main">${item.zh}</span>
-                        <span class="jp-text-sub" ${isSecretItem ? 'style="color:var(--neon-red);"' : ''}>${item.jp}</span>
+                        <span class="jp-text-sub" ${isSecretItem ? 'style="color:var(--danger);"' : ''}>${item.jp}</span>
                         ${item.romaji ? `<span class="romaji-text">${item.romaji}</span>` : ''}
                     </div>
                     <div class="key-actions">
-                        <button class="icon-btn copy" onclick="copyText(event, '${safeJp}')">📋 複製</button>
-                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')">★ 收藏</button>
-                        <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶ 放大</button>
+                        <button class="icon-btn slow" onclick="event.stopPropagation(); triggerHaptic(); speak('${safeJp}', true)" title="慢速教學">🐌</button>
+                        <button class="icon-btn copy" onclick="copyText(event, '${safeJp}')">📋</button>
+                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')">★</button>
+                        <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶</button>
                     </div>
                 `;
                 list.appendChild(li);
@@ -576,69 +533,41 @@
             const btn = document.getElementById('main-translate-btn');
             const saveBtn = document.getElementById('save-custom-btn');
             
-            resContainer.style.display = 'block';
-            resJp.style.color = 'var(--text-muted)';
-            resJp.style.textShadow = 'none';
-            resJp.innerText = "解析中...";
-            btn.disabled = true; btn.innerText = "處理中";
-            saveBtn.style.display = 'none'; // 翻譯中先隱藏保存按鈕
+            resContainer.style.display = 'block'; resJp.style.color = 'var(--text-muted)';
+            resJp.innerText = "解析中..."; btn.disabled = true; btn.innerText = "處理中"; saveBtn.style.display = 'none'; 
 
             try {
                 const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=ja&dt=t&q=${encodeURIComponent(input)}`;
                 const response = await fetch(url);
-                
                 if (!response.ok) throw new Error("伺服器斷線");
                 
-                const data = await response.json();
-                const translatedText = data[0][0][0]; 
+                const data = await response.json(); const translatedText = data[0][0][0]; 
                 
-                resJp.style.color = 'var(--neon-green)';
-                resJp.style.textShadow = '0 0 15px rgba(57, 255, 20, 0.6)';
-                resJp.innerText = translatedText;
-                
-                saveBtn.style.display = 'flex'; // 翻譯成功顯示保存按鈕
-                triggerHapticSuccess();
-                speak(translatedText);
-
+                resJp.style.color = 'var(--success)'; resJp.innerText = translatedText;
+                saveBtn.style.display = 'flex'; triggerHapticSuccess(); speak(translatedText);
             } catch (error) {
-                resJp.style.color = 'var(--neon-red)';
-                resJp.innerText = "[ 解析失敗 ]";
-            } finally {
-                btn.disabled = false; btn.innerText = "翻譯";
-            }
+                resJp.style.color = 'var(--danger)'; resJp.innerText = "[ 解析失敗 ]";
+            } finally { btn.disabled = false; btn.innerText = "⚡ 翻譯"; }
         }
 
-        // 保存自訂翻譯功能
         function saveCustomTranslation() {
             const zh = document.getElementById('search-input').value.trim();
             const jp = document.getElementById('inline-jp-text').innerText.trim();
-            
             if (!zh || !jp || jp === "解析中..." || jp === "[ 解析失敗 ]") return;
 
-            // 檢查是否已經儲存過
             const exists = customTranslations.some(item => item.jp === jp && item.zh === zh);
-            if (exists) {
-                alert('這句已經在您的自訂清單中囉！');
-                return;
-            }
+            if (exists) return alert('這句已經在您的自訂清單中囉！');
 
             triggerHapticSuccess();
             const newItem = { cat: CUSTOM_KEYWORD, zh: zh, jp: jp, romaji: '' };
-            
             customTranslations.push(newItem);
             localStorage.setItem('jp_custom_translations', JSON.stringify(customTranslations));
-            
             globalData.push(newItem);
             
-            const btn = document.getElementById('save-custom-btn');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '✔ 已保存';
-            btn.style.color = '#39ff14'; btn.style.borderColor = '#39ff14';
-            setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; btn.style.borderColor = ''; }, 2000);
-
-            // 重新渲染分類（確保「自訂翻譯」標籤出現）並更新列表
-            renderCategories();
-            filterData();
+            const btn = document.getElementById('save-custom-btn'); const originalHTML = btn.innerHTML;
+            btn.innerHTML = '✔ 已保存'; btn.style.color = 'var(--success)';
+            setTimeout(() => { btn.innerHTML = originalHTML; btn.style.color = ''; }, 2000);
+            renderCategories(); filterData();
         }
     </script>
 </body>
