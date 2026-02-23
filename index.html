@@ -1,11 +1,9 @@
-</body>
-</html>
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日文語音系統 v3.0 (滿血終極版)</title>
+    <title>日文語音系統 v4.0 (覺醒版)</title>
     <style>
         /* 未來科技感 UI 變數 */
         :root { 
@@ -30,10 +28,12 @@
         .cat-btn.active { background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); font-weight: bold; }
         .cat-btn.secret-active { background: rgba(255, 51, 51, 0.1); color: var(--neon-red); border-color: var(--neon-red); box-shadow: 0 0 10px rgba(255, 51, 51, 0.3); }
 
-        /* 語速滑桿 */
-        .slider-container { display: flex; align-items: center; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 25px; }
+        /* 滑桿區 (語速與音調) */
+        .controls-panel { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 25px; display: flex; flex-direction: column; gap: 10px; }
+        .slider-container { display: flex; align-items: center; gap: 15px; }
         .speed-slider { flex: 1; -webkit-appearance: none; background: #334155; height: 4px; border-radius: 2px; outline: none; }
         .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--neon-blue); cursor: pointer; box-shadow: 0 0 10px var(--neon-blue); }
+        .slider-val { font-family: monospace; color: var(--neon-blue); width: 40px; text-align: right; }
 
         /* 機械鍵盤效果列表 */
         ul { list-style: none; padding: 0; margin: 0; }
@@ -46,18 +46,19 @@
         .romaji-text { font-size: 12px; color: var(--neon-blue); font-family: monospace; display: block; margin-bottom: 6px; }
         .zh-text { font-size: 14px; color: var(--text-muted); display: block; }
 
-        /* 右側動作按鈕 (星星、全螢幕) */
-        .action-group { display: flex; gap: 10px; z-index: 1; align-items: center; }
-        .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 6px; font-size: 18px; color: #64748b; cursor: pointer; padding: 8px; transition: 0.2s; display: flex; justify-content: center; align-items: center;}
+        /* 右側動作按鈕 */
+        .action-group { display: flex; gap: 8px; z-index: 1; align-items: center; flex-wrap: wrap; justify-content: flex-end;}
+        .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 6px; font-size: 16px; color: #64748b; cursor: pointer; padding: 8px; transition: 0.2s; display: flex; justify-content: center; align-items: center;}
         .icon-btn.star.active { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); text-shadow: 0 0 10px rgba(251, 191, 36, 0.5); background: rgba(251, 191, 36, 0.1); }
         .icon-btn.fullscreen { color: var(--neon-blue); }
+        .icon-btn.copy { color: var(--neon-green); }
         .action-group .icon-btn:active { transform: scale(0.9); }
 
         /* 全螢幕字幕覆蓋層 */
         #fullscreen-overlay { display: none; position: fixed; inset: 0; background: #000; color: var(--neon-green); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; font-family: monospace; }
-        #fullscreen-jp { font-size: 12vw; font-weight: bold; margin-bottom: 15px; width: 100%; word-wrap: break-word; text-shadow: 0 0 20px var(--neon-green); }
-        #fullscreen-romaji { font-size: 6vw; color: #fff; margin-bottom: 20px; opacity: 0.8; }
-        #fullscreen-zh { font-size: 6vw; color: var(--text-muted); }
+        #fullscreen-jp { font-size: 10vw; font-weight: bold; margin-bottom: 15px; width: 100%; word-wrap: break-word; text-shadow: 0 0 20px var(--neon-green); }
+        #fullscreen-romaji { font-size: 5vw; color: #fff; margin-bottom: 20px; opacity: 0.8; }
+        #fullscreen-zh { font-size: 5vw; color: var(--text-muted); }
         .close-fullscreen { position: absolute; top: 20px; right: 20px; font-size: 30px; color: #fff; background: none; border: none; cursor: pointer; padding: 10px; z-index: 10001; }
         .replay-btn-large { margin-top: 40px; background: transparent; border: 2px solid var(--neon-green); color: var(--neon-green); padding: 15px 40px; font-size: 20px; border-radius: 8px; cursor: pointer; font-family: monospace; transition: 0.3s; text-transform: uppercase; letter-spacing: 2px;}
         .replay-btn-large:active { background: var(--neon-green); color: #000; box-shadow: 0 0 20px var(--neon-green); }
@@ -71,7 +72,8 @@
         .modal-content { background: var(--bg-dark); border: 1px solid var(--neon-blue); box-shadow: 0 0 30px rgba(0, 240, 255, 0.2); padding: 25px; border-radius: 16px; width: 90%; max-width: 400px; position: relative; color: #fff;}
         .modal-content input { width: 100%; padding: 15px; margin-bottom: 15px; background: rgba(0,0,0,0.5); border: 1px solid #334155; border-radius: 8px; color: #fff; font-size: 16px; box-sizing: border-box; }
         .modal-content input:focus { outline: none; border-color: var(--neon-blue); }
-        .modal-content button { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        .modal-content button { width: 100%; background: var(--neon-blue); color: #000; border: none; padding: 15px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s;}
+        .modal-content button:disabled { background: #334155; color: #94a3b8; cursor: not-allowed; }
 
         /* 讀取動畫與錯誤 */
         .loader-container { display: flex; justify-content: center; align-items: center; padding: 40px; flex-direction: column; gap: 15px; }
@@ -96,10 +98,17 @@
     <input type="text" id="search-input" class="search-box" placeholder="搜尋中文、日文或羅馬音..." onkeyup="filterData()">
     <div class="category-scroll" id="category-container"></div>
 
-    <div class="slider-container">
-        <span style="font-size: 14px; color: var(--text-muted);">⚙️ 系統語速</span>
-        <input type="range" id="speed-slider" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updateSpeedVal()">
-        <span id="speed-val" style="font-family: monospace; color: var(--neon-blue); width: 35px; text-align: right;">1.0x</span>
+    <div class="controls-panel">
+        <div class="slider-container">
+            <span style="font-size: 14px; color: var(--text-muted); width: 80px;">⚙️ 語速</span>
+            <input type="range" id="speed-slider" class="speed-slider" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updateSliders()">
+            <span id="speed-val" class="slider-val">1.0x</span>
+        </div>
+        <div class="slider-container">
+            <span style="font-size: 14px; color: var(--text-muted); width: 80px;">🎵 音調</span>
+            <input type="range" id="pitch-slider" class="speed-slider" min="0.1" max="2.0" step="0.1" value="1.0" oninput="updateSliders()">
+            <span id="pitch-val" class="slider-val">1.0</span>
+        </div>
     </div>
 
     <div id="error-box"></div>
@@ -117,49 +126,65 @@
 
     <div id="translate-modal">
         <div class="modal-content">
-            <button class="close-fullscreen" style="top:5px; right:5px; color:#64748b;" onclick="document.getElementById('translate-modal').style.display='none'">✕</button>
+            <button class="close-fullscreen" style="top:5px; right:5px; color:#64748b;" onclick="closeModal()">✕</button>
             <h3 style="margin-top: 0; color: var(--neon-blue);">自譯引擎啟動</h3>
-            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">輸入中文，系統將自動翻譯並進行日文語音合成。</p>
-            <input type="text" id="translate-input" placeholder="請輸入欲翻譯之中文...">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">輸入中文，系統將透過神經網路自動翻譯並進行日文語音合成。</p>
+            <input type="text" id="translate-input" placeholder="請輸入欲翻譯之中文..." onkeypress="if(event.key === 'Enter') translateAndSpeak()">
             <button onclick="translateAndSpeak()" id="translate-btn">執行翻譯與發音</button>
             <div id="translate-result" style="margin-top: 15px; font-weight: bold; color: var(--neon-green); text-align: center; font-size: 18px;"></div>
         </div>
     </div>
 
     <script>
-        // 確保不被舊快取綁架
+        // 清除快取機制
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for(let registration of registrations) registration.unregister();
             });
         }
 
-        // --- 核心變數 ---
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = [];
         let currentCategory = '全部';
         let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
         
-        // 彩蛋變數
         let clickCount = 0;
         let isSecretUnlocked = false;
-        const SECRET_KEYWORD = '🤬 隱藏情緒'; // 必須與你試算表的分類名稱一模一樣
+        const SECRET_KEYWORD = '🤬 隱藏情緒';
 
-        // --- 語音功能 ---
-        function updateSpeedVal() {
+        // 初始化
+        window.onload = () => {
+            loadCSV();
+            // 預先載入語音包以防延遲
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+            }
+        };
+
+        // --- 控制面板 ---
+        function updateSliders() {
             document.getElementById('speed-val').innerText = Number(document.getElementById('speed-slider').value).toFixed(1) + 'x';
+            document.getElementById('pitch-val').innerText = Number(document.getElementById('pitch-slider').value).toFixed(1);
         }
 
         function speak(text) {
-            if (!('speechSynthesis' in window)) return alert("引擎不支援");
+            if (!('speechSynthesis' in window)) return alert("您的瀏覽器不支援語音引擎");
             window.speechSynthesis.cancel();
+            
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'ja-JP';
             utterance.rate = parseFloat(document.getElementById('speed-slider').value);
+            utterance.pitch = parseFloat(document.getElementById('pitch-slider').value);
+            
+            // 嘗試強制使用日文語音包
+            const voices = window.speechSynthesis.getVoices();
+            const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
+            if(jpVoice) utterance.voice = jpVoice;
+
             window.speechSynthesis.speak(utterance);
         }
 
-        // --- 我的最愛功能 ---
+        // --- 工具功能 ---
         function toggleFavorite(event, jp) {
             event.stopPropagation();
             const index = favorites.indexOf(jp);
@@ -167,6 +192,20 @@
             else favorites.push(jp);
             localStorage.setItem('jp_favorites', JSON.stringify(favorites));
             filterData();
+        }
+
+        function copyText(event, text) {
+            event.stopPropagation();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = '✓';
+                btn.style.color = '#39ff14';
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.color = '';
+                }, 1500);
+            }).catch(err => console.error('複製失敗:', err));
         }
 
         // --- 全螢幕功能 ---
@@ -189,20 +228,20 @@
             if(jp) speak(jp);
         }
 
-        // --- 彩蛋解鎖系統 ---
+        // --- 彩蛋解鎖 ---
         document.getElementById('app-title').addEventListener('click', () => {
             if (isSecretUnlocked) return;
             clickCount++;
             if (clickCount >= 10) {
                 isSecretUnlocked = true;
                 alert('⚠️ 警告：系統安全協議已覆蓋，隱藏情緒模組解鎖。');
-                currentCategory = SECRET_KEYWORD; // 解鎖後自動跳到該分類
+                currentCategory = SECRET_KEYWORD; 
                 renderCategories();
                 filterData();
             }
         });
 
-        // --- 資料讀取與處理 ---
+        // --- 資料讀取 ---
         function showError(message) {
             document.getElementById('loading').style.display = 'none';
             const errorBox = document.getElementById('error-box');
@@ -225,17 +264,17 @@
             try {
                 const rows = csvText.split('\n');
                 globalData = [];
-
                 for (let i = 1; i < rows.length; i++) {
                     const row = rows[i].trim();
                     if(!row) continue;
-                    const cols = row.split(',');
+                    // 處理 CSV 中可能包含逗號的引號字串
+                    const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || row.split(',');
                     if (cols.length >= 3) {
                         globalData.push({ 
-                            cat: cols[0] || '未分類', 
-                            zh: cols[1], 
-                            jp: cols[2], 
-                            romaji: cols[3] || '' 
+                            cat: (cols[0] || '未分類').replace(/"/g, ''), 
+                            zh: (cols[1] || '').replace(/"/g, ''), 
+                            jp: (cols[2] || '').replace(/"/g, ''), 
+                            romaji: (cols[3] || '').replace(/"/g, '') 
                         });
                     }
                 }
@@ -247,27 +286,23 @@
             }
         }
 
-        // --- 渲染分類 (結合彩蛋邏輯) ---
+        // --- 渲染分類 ---
         function renderCategories() {
             const container = document.getElementById('category-container');
             container.innerHTML = '';
             
-            // 找出所有分類，但先排除隱藏分類
             const cats = new Set(['全部', '⭐最愛']);
             globalData.forEach(item => {
                 if (item.cat !== SECRET_KEYWORD) cats.add(item.cat);
             });
             
-            // 如果解鎖了，才把隱藏分類加進去
             if (isSecretUnlocked) cats.add(SECRET_KEYWORD);
 
             Array.from(cats).forEach(cat => {
                 const btn = document.createElement('button');
                 
-                // 設定特殊樣式
                 if (cat === currentCategory) {
-                    if (cat === SECRET_KEYWORD) btn.className = 'cat-btn secret-active';
-                    else btn.className = 'cat-btn active';
+                    btn.className = cat === SECRET_KEYWORD ? 'cat-btn secret-active' : 'cat-btn active';
                 } else {
                     btn.className = 'cat-btn';
                 }
@@ -277,7 +312,7 @@
                 
                 btn.onclick = () => {
                     currentCategory = cat;
-                    renderCategories(); // 重新渲染按鈕狀態
+                    renderCategories(); 
                     filterData();
                 };
                 container.appendChild(btn);
@@ -289,20 +324,14 @@
             const query = document.getElementById('search-input').value.toLowerCase();
             
             const filteredData = globalData.filter(item => {
-                // 【核心保護機制】如果還沒解鎖，永遠不顯示隱藏資料
                 if (item.cat === SECRET_KEYWORD && !isSecretUnlocked) return false;
-                
-                // 【全部列表保護機制】為了避免在公共場合點「全部」不小心唸出髒話，
-                // 隱藏情緒「永遠不會」出現在「全部」列表裡，只能點專屬分類查看。
                 if (currentCategory === '全部' && item.cat === SECRET_KEYWORD) return false;
 
-                // 一般分類邏輯
                 let matchCat = false;
                 if (currentCategory === '全部') matchCat = true;
                 else if (currentCategory === '⭐最愛') matchCat = favorites.includes(item.jp);
                 else matchCat = item.cat === currentCategory;
 
-                // 搜尋邏輯
                 const matchQuery = (item.zh && item.zh.toLowerCase().includes(query)) || 
                                    (item.jp && item.jp.toLowerCase().includes(query)) || 
                                    (item.romaji && item.romaji.toLowerCase().includes(query));
@@ -323,12 +352,11 @@
 
             dataToRender.forEach(item => {
                 const li = document.createElement('li');
-                const safeJp = item.jp.replace(/'/g, "\\'");
-                const safeZh = item.zh.replace(/'/g, "\\'");
-                const safeRomaji = item.romaji.replace(/'/g, "\\'");
+                const safeJp = item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                const safeZh = item.zh.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                const safeRomaji = item.romaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
                 const isFav = favorites.includes(item.jp);
 
-                // 如果是隱藏情緒，把發音圖示變紅色警告
                 const isSecret = item.cat === SECRET_KEYWORD;
                 const iconColor = isSecret ? 'color: var(--neon-red); text-shadow: 0 0 8px rgba(255, 51, 51, 0.5);' : '';
 
@@ -342,24 +370,65 @@
                         <span class="zh-text">${item.zh}</span>
                     </div>
                     <div class="action-group">
-                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')">★</button>
-                        <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶</button>
+                        <button class="icon-btn copy" onclick="copyText(event, '${safeJp}')" title="複製日文">📋</button>
+                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')" title="加入最愛">★</button>
+                        <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')" title="全螢幕">⛶</button>
                     </div>
                 `;
                 list.appendChild(li);
             });
         }
 
-        // --- 自定義翻譯 ---
+        // --- 補全：自譯引擎 (使用開源免金鑰 API) ---
+        function closeModal() {
+            document.getElementById('translate-modal').style.display = 'none';
+            document.getElementById('translate-result').innerText = '';
+            document.getElementById('translate-input').value = '';
+        }
+
         async function translateAndSpeak() {
             const input = document.getElementById('translate-input').value.trim();
             const btn = document.getElementById('translate-btn');
             const resDiv = document.getElementById('translate-result');
-            if (!input) return;
+            
+            if (!input) {
+                resDiv.style.color = 'var(--neon-red)';
+                resDiv.innerText = '請先輸入中文！';
+                return;
+            }
 
-            btn.innerText = "資料解析中...";
+            btn.innerText = "神經網路解析中...";
             btn.style.background = "#4f46e5";
             btn.disabled = true;
+            resDiv.innerText = '';
 
             try {
-                const response = await
+                // 使用 Google Translate 非官方公開端點進行前端直譯
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=ja&dt=t&q=${encodeURIComponent(input)}`;
+                const response = await fetch(url);
+                
+                if (!response.ok) throw new Error("翻譯伺服器無回應");
+                
+                const data = await response.json();
+                const translatedText = data[0][0][0]; // 提取翻譯結果
+                
+                resDiv.style.color = 'var(--neon-green)';
+                resDiv.innerText = translatedText;
+                
+                // 自動發音
+                speak(translatedText);
+
+            } catch (error) {
+                resDiv.style.color = 'var(--neon-red)';
+                resDiv.innerText = "翻譯失敗，請檢查網路狀態。";
+                console.error(error);
+            } finally {
+                // 恢復按鈕狀態
+                btn.innerText = "執行翻譯與發音";
+                btn.style.background = "var(--neon-blue)";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
