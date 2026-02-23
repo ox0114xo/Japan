@@ -25,10 +25,9 @@
         }
         
         body { 
-            font-family: 'Noto Serif JP', 'Yu Mincho', 'Microsoft JhengHei', serif; /* 帶有襯線的典雅字體 */
+            font-family: 'Noto Serif JP', 'Yu Mincho', 'Microsoft JhengHei', serif; 
             margin: 0; padding: 15px; padding-bottom: 90px; min-height: 100vh;
             color: var(--text-main); background-color: var(--bg-washi); 
-            /* 隱約的和風紋理背景 */
             background-image: linear-gradient(rgba(188, 0, 45, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(188, 0, 45, 0.03) 1px, transparent 1px);
             background-size: 20px 20px; overflow-x: hidden; position: relative;
         }
@@ -40,29 +39,16 @@
 
         /* 標題與功能區 */
         .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border-light); padding-bottom: 15px;}
-        h1 { 
-            font-size: 26px; font-weight: 900; letter-spacing: 2px; margin: 0; color: var(--sumi);
-            display: flex; align-items: center; gap: 8px;
-        }
+        h1 { font-size: 26px; font-weight: 900; letter-spacing: 2px; margin: 0; color: var(--sumi); display: flex; align-items: center; gap: 8px;}
         .header-actions { display: flex; gap: 10px; }
-        .omikuji-btn {
-            background: #fff; color: var(--sumi); border: 1px solid var(--border-light);
-            padding: 8px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s;
-        }
-        .sos-btn {
-            background: var(--kurenai); color: #fff; border: none;
-            padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 10px rgba(188, 0, 45, 0.3); animation: pulseRed 2s infinite;
-        }
+        .omikuji-btn { background: #fff; color: var(--sumi); border: 1px solid var(--border-light); padding: 8px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; }
+        .sos-btn { background: var(--kurenai); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 10px rgba(188, 0, 45, 0.3); animation: pulseRed 2s infinite; }
         @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(188, 0, 45, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(188, 0, 45, 0); } 100% { box-shadow: 0 0 0 0 rgba(188, 0, 45, 0); } }
 
         /* 搜尋、語音輸入與翻譯列 */
         .search-container { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
         .input-wrapper { position: relative; flex: 1; display: flex; }
-        .search-box { 
-            width: 100%; padding: 16px 50px 16px 20px; font-size: 16px; color: var(--sumi); font-weight: bold;
-            background: #fff; border: 2px solid var(--border-light); 
-            border-radius: 30px; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-        }
+        .search-box { width: 100%; padding: 16px 50px 16px 20px; font-size: 16px; color: var(--sumi); font-weight: bold; background: #fff; border: 2px solid var(--border-light); border-radius: 30px; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
         .search-box:focus { border-color: var(--kurenai); box-shadow: 0 0 10px rgba(188,0,45,0.1); }
         .mic-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: var(--bg-washi); border: none; color: var(--kurenai); width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
         .mic-btn.recording { background: var(--kurenai); color: #fff; animation: pulseRed 1s infinite; }
@@ -79,17 +65,17 @@
         .trans-badge { position: absolute; top: -12px; left: 20px; font-size: 13px; font-weight: bold; color: #fff; background: var(--kurenai); padding: 4px 12px; border-radius: 20px; }
         #inline-jp-text { font-size: 26px; font-weight: 900; color: var(--sumi); margin: 15px 0; letter-spacing: 2px; }
 
-        /* 分類按鈕 (木牌風格) */
+        /* 分類按鈕修復 (加入原生橫向滑動與卷軸) */
         .category-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
         .category-row-static { display: flex; flex-wrap: wrap; gap: 10px; }
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scrollbar-width: none; cursor: grab; white-space: nowrap; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn { 
-            flex-shrink: 0; background: #fff; color: var(--text-muted); 
-            border: 1px solid var(--border-light); 
-            padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.2s; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        .category-scroll { 
+            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 12px; 
+            -webkit-overflow-scrolling: touch; scroll-behavior: smooth; white-space: nowrap;
         }
+        .category-scroll::-webkit-scrollbar { height: 6px; }
+        .category-scroll::-webkit-scrollbar-track { background: var(--bg-washi); border-radius: 10px; }
+        .category-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
+        .cat-btn { flex-shrink: 0; background: #fff; color: var(--text-muted); border: 1px solid var(--border-light); padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .cat-btn.active { background: var(--kurenai); color: #fff; border-color: var(--kurenai); box-shadow: 0 4px 10px rgba(188,0,45,0.2); }
         .cat-btn.custom-active { background: var(--matcha); color: #fff; border-color: var(--matcha); }
         .cat-btn.secret-active { background: var(--sumi); color: #fff; border-color: var(--sumi); }
@@ -104,47 +90,59 @@
 
         /* ====== 和風卡片 (繪馬/印章設計) ====== */
         ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
-        
-        li.wafu-card { 
-            background: #fff; border: 1px solid var(--border-light); border-left: 5px solid var(--kurenai);
-            border-radius: 10px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between;
-            cursor: pointer; position: relative; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
-        }
+        li.wafu-card { background: #fff; border: 1px solid var(--border-light); border-left: 5px solid var(--kurenai); border-radius: 10px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; position: relative; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
         li.wafu-card:active { transform: scale(0.98); background: #fdfbf7; }
-
-        /* 印章風格的分類標籤 */
-        .hanko-stamp { 
-            position: absolute; top: 15px; right: 15px; font-size: 12px; font-weight: 900; color: var(--kurenai); 
-            border: 2px solid var(--kurenai); padding: 2px 6px; border-radius: 4px; 
-            transform: rotate(-5deg); opacity: 0.8; letter-spacing: 1px; font-family: 'Yu Mincho', serif;
-        }
+        .hanko-stamp { position: absolute; top: 15px; right: 15px; font-size: 12px; font-weight: 900; color: var(--kurenai); border: 2px solid var(--kurenai); padding: 2px 6px; border-radius: 4px; transform: rotate(-5deg); opacity: 0.8; letter-spacing: 1px; font-family: 'Yu Mincho', serif; }
         .key-content { z-index: 1; pointer-events: none; margin-bottom: 15px; margin-top: 10px;}
         .zh-text-main { font-size: 18px; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 8px; line-height: 1.4; }
         .jp-text-sub { font-size: 24px; color: var(--sumi); display: block; margin-bottom: 8px; font-weight: 900; letter-spacing: 1px; }
         .romaji-text { font-size: 13px; color: var(--ai); font-family: monospace; display: inline-block; font-weight: bold; background: rgba(26, 67, 89, 0.05); padding: 4px 8px; border-radius: 4px; }
-        
         .card-actions { display: flex; gap: 10px; justify-content: flex-end; border-top: 1px dashed var(--border-light); padding-top: 15px; }
         .icon-btn { background: #f9f9f9; border: 1px solid var(--border-light); border-radius: 20px; font-size: 13px; color: var(--text-main); cursor: pointer; padding: 6px 14px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; }
         .icon-btn:hover { background: #f0f0f0; }
         .icon-btn.star.active { color: var(--kin); border-color: var(--kin); background: rgba(212, 175, 55, 0.1); }
         .icon-btn.fullscreen { color: var(--kurenai); border-color: rgba(188, 0, 45, 0.2);}
         
-        /* 櫻花飄落動畫 */
-        .petal { position: fixed; top: -10px; background: var(--sakura); border-radius: 15px 0 15px 0; width: 12px; height: 12px; z-index: 9998; pointer-events: none; animation: fall linear infinite, sway ease-in-out infinite alternate; box-shadow: 0 0 5px rgba(254, 223, 225, 0.8); }
+        /* 櫻花飄落層級修復 (Z-index 設為最高) */
+        .petal { position: fixed; top: -10px; background: var(--sakura); border-radius: 15px 0 15px 0; width: 12px; height: 12px; z-index: 999999; pointer-events: none; animation: fall linear infinite, sway ease-in-out infinite alternate; box-shadow: 0 0 5px rgba(254, 223, 225, 0.8); }
         @keyframes fall { to { top: 110vh; transform: rotate(720deg); } }
         @keyframes sway { from { margin-left: -20px; } to { margin-left: 20px; } }
 
-        /* 書法掛軸大字報 (Fullscreen) */
-        #fullscreen-overlay { display: none; position: fixed; inset: 0; background: var(--bg-washi); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; background-image: radial-gradient(circle, rgba(0,0,0,0.02) 2px, transparent 2px); background-size: 30px 30px;}
-        .scroll-inner { background: #fff; width: 90%; height: 80%; border: 20px solid #e0d0b8; border-top-width: 40px; border-bottom-width: 40px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; justify-content: center; padding: 30px; position: relative;}
-        #fullscreen-jp { font-size: 8vw; font-weight: 900; color: var(--sumi); margin-bottom: 20px; word-wrap: break-word; font-family: 'Yu Mincho', serif; writing-mode: vertical-rl; text-orientation: upright; max-height: 60vh;}
-        #fullscreen-romaji { font-size: 4vw; font-weight: bold; color: var(--kurenai); position: absolute; bottom: 20px; left: 20px; writing-mode: horizontal-tb;}
-        #fullscreen-zh { font-size: 4vw; font-weight: bold; color: var(--text-muted); position: absolute; top: 20px; left: 20px; writing-mode: horizontal-tb;}
-        .close-fullscreen { position: absolute; top: 20px; right: 20px; font-size: 40px; color: var(--sumi); background: none; border: none; cursor: pointer; z-index: 10001;}
-        .replay-btn-large { position: absolute; bottom: 30px; right: 30px; background: var(--kurenai); color: #fff; border: none; padding: 12px 25px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(188,0,45,0.3);}
+        /* ====== 書法掛軸大字報 (究極進化 100% 滿版) ====== */
+        #fullscreen-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100000; padding: 20px; align-items: center; justify-content: center;}
+        
+        .scroll-container { 
+            width: 100%; height: 100%; max-width: 800px;
+            background: #c1a173; /* 畫軸底色 */
+            border-top: 30px solid #5c4033; /* 頂部木捲軸 */
+            border-bottom: 30px solid #5c4033; /* 底部木捲軸 */
+            border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
+            display: flex; align-items: center; justify-content: center; padding: 20px 10px; position: relative;
+        }
+        
+        .scroll-paper { 
+            width: 100%; height: 100%; background: #fdfbf7; 
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.08); border: 2px solid #e8dcc7; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            position: relative; padding: 40px; box-sizing: border-box;
+        }
+        
+        #fullscreen-jp { 
+            writing-mode: vertical-rl; text-orientation: upright; color: var(--sumi); 
+            font-family: 'Yu Mincho', serif; font-weight: 900; 
+            max-height: 85%; word-break: break-all; letter-spacing: 4px; line-height: 1.3;
+            /* 字體大小由 JS 動態控制，確保塞得進去 */
+        }
+        
+        #fullscreen-zh { position: absolute; top: 20px; left: 20px; font-size: 20px; color: var(--text-muted); font-weight: bold; writing-mode: horizontal-tb;}
+        #fullscreen-romaji { position: absolute; bottom: 20px; left: 20px; font-size: 18px; color: var(--kurenai); font-weight: bold; font-family: monospace; writing-mode: horizontal-tb;}
+        
+        .close-fullscreen { position: absolute; top: 15px; right: 20px; font-size: 35px; color: #fff; background: none; border: none; cursor: pointer; z-index: 100001; text-shadow: 0 2px 5px rgba(0,0,0,0.5);}
+        .replay-btn-large { position: absolute; bottom: 25px; right: 25px; background: var(--kurenai); color: #fff; border: none; padding: 12px 25px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(188,0,45,0.4); z-index: 10; transition: 0.2s;}
+        .replay-btn-large:active { transform: scale(0.95); }
 
         /* 御神籤 (Omikuji) 彈窗 */
-        #omikuji-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;}
+        #omikuji-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;}
         .omikuji-card { background: #fff; padding: 30px; border-radius: 15px; width: 100%; max-width: 350px; position: relative; border-top: 10px solid var(--kurenai); box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
         .omikuji-fortune { font-size: 40px; font-weight: 900; color: var(--kurenai); margin-bottom: 10px; font-family: 'Yu Mincho', serif;}
         .omikuji-title { font-size: 14px; color: var(--text-muted); margin-bottom: 15px; font-weight: bold;}
@@ -190,11 +188,13 @@
 
     <div id="fullscreen-overlay">
         <button class="close-fullscreen" onclick="closeFullscreen()">✕</button>
-        <div class="scroll-inner">
-            <div id="fullscreen-zh"></div>
-            <div id="fullscreen-jp"></div>
-            <div id="fullscreen-romaji"></div>
-            <button class="replay-btn-large" onclick="replayFullscreen()">🔊 發音</button>
+        <div class="scroll-container">
+            <div class="scroll-paper">
+                <div id="fullscreen-zh"></div>
+                <div id="fullscreen-jp"></div>
+                <div id="fullscreen-romaji"></div>
+                <button class="replay-btn-large" onclick="replayFullscreen()">🔊 發音</button>
+            </div>
         </div>
     </div>
 
@@ -216,7 +216,7 @@
 
     <div class="toggles-panel">
         <label class="polite-toggle">
-            <input type="checkbox" id="polite-mode" onchange="filterData()"> 🌸 智慧禮貌用語 (すみません)
+            <input type="checkbox" id="polite-mode" onchange="filterData()"> 🌸 智慧禮貌用語 (自動過濾問候/讚美)
         </label>
         <label class="polite-toggle">
             <input type="checkbox" id="romaji-toggle" checked onchange="toggleRomaji()"> 🔤 顯示羅馬拼音
@@ -257,7 +257,6 @@
     <ul id="sentence-list"></ul>
 
     <script>
-        // 內建瀏覽器防護
         const ua = navigator.userAgent || navigator.vendor || window.opera;
         const isInApp = /Line|FBAN|FBAV|Instagram|MicroMessenger/i.test(ua);
         if (isInApp) { document.getElementById('inapp-warning').style.display = 'flex'; }
@@ -282,7 +281,6 @@
             }
         }
 
-        // 御神籤 (Omikuji) 邏輯
         function drawOmikuji() {
             triggerHaptic(30);
             if (globalData.length === 0) return alert('資料庫載入中，請稍後抽籤！');
@@ -298,7 +296,6 @@
             speak(item.jp);
         }
 
-        // 語音辨識
         function startVoiceInput() {
             triggerHaptic(20);
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -311,17 +308,8 @@
             recognition.start();
         }
 
-        // 基礎功能
         function triggerHaptic(duration = 15) { if (navigator.vibrate) navigator.vibrate(duration); }
         function triggerHapticSuccess() { if (navigator.vibrate) navigator.vibrate([20, 50, 20]); }
-
-        // 橫向滑動
-        const catScrollContainer = document.getElementById('cat-row-2');
-        let isDown = false; let startX; let scrollLeft;
-        catScrollContainer.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - catScrollContainer.offsetLeft; scrollLeft = catScrollContainer.scrollLeft; });
-        catScrollContainer.addEventListener('mouseleave', () => { isDown = false; });
-        catScrollContainer.addEventListener('mouseup', () => { setTimeout(()=> { isDown = false; }, 50); });
-        catScrollContainer.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); catScrollContainer.scrollLeft = scrollLeft - ((e.pageX - catScrollContainer.offsetLeft) - startX) * 2; });
 
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = []; let currentCategory = '全部';
@@ -357,7 +345,26 @@
         function toggleFavorite(event, jp) { event.stopPropagation(); triggerHaptic(20); const index = favorites.indexOf(jp); if (index > -1) favorites.splice(index, 1); else favorites.push(jp); localStorage.setItem('jp_favorites', JSON.stringify(favorites)); filterData(); }
         function copyText(event, text) { event.stopPropagation(); navigator.clipboard.writeText(text).then(() => { const btn = event.currentTarget; const originalHTML = btn.innerHTML; btn.innerHTML = '✔ 成功'; setTimeout(() => btn.innerHTML = originalHTML, 1500); }); }
         
-        function openFullscreen(event, jp, zh, romaji) { event.stopPropagation(); triggerHaptic(30); document.getElementById('fullscreen-jp').innerText = jp; document.getElementById('fullscreen-romaji').innerText = romaji || ''; document.getElementById('fullscreen-zh').innerText = zh; document.getElementById('fullscreen-overlay').style.display = 'flex'; speak(jp); }
+        // 掛軸大字報動態調整字體功能
+        function openFullscreen(event, jp, zh, romaji) { 
+            event.stopPropagation(); triggerHaptic(30); 
+            
+            const jpEl = document.getElementById('fullscreen-jp');
+            jpEl.innerText = jp;
+            
+            // 動態調整日文字體大小 (確保無論多長都能塞進掛軸)
+            let len = jp.length;
+            if (len <= 5) jpEl.style.fontSize = '12vh';
+            else if (len <= 10) jpEl.style.fontSize = '9vh';
+            else if (len <= 15) jpEl.style.fontSize = '7vh';
+            else if (len <= 20) jpEl.style.fontSize = '5.5vh';
+            else jpEl.style.fontSize = '4vh';
+
+            document.getElementById('fullscreen-romaji').innerText = romaji || ''; 
+            document.getElementById('fullscreen-zh').innerText = zh; 
+            document.getElementById('fullscreen-overlay').style.display = 'flex'; 
+            speak(jp); 
+        }
         function closeFullscreen() { triggerHaptic(15); document.getElementById('fullscreen-overlay').style.display = 'none'; window.speechSynthesis.cancel(); }
         function replayFullscreen() { triggerHaptic(20); speak(document.getElementById('fullscreen-jp').innerText); }
 
@@ -379,6 +386,7 @@
             renderCategories(); filterData();
         }
 
+        // 分類渲染 (已移除會干擾點擊的 drag 監聽，改為原生滑動)
         function renderCategories() {
             const row1 = document.getElementById('cat-row-1'); const row2 = document.getElementById('cat-row-2');
             row1.innerHTML = ''; row2.innerHTML = '';
@@ -392,15 +400,30 @@
                 return btn;
             }
 
-            baseCats.forEach(cat => { let btn = createBtn(cat); btn.onclick = () => { currentCategory = cat; renderCategories(); filterData(); }; row1.appendChild(btn); });
-            Array.from(otherCats).forEach(cat => { let btn = createBtn(cat); btn.onclick = () => { if (isDown) return; currentCategory = cat; renderCategories(); filterData(); }; row2.appendChild(btn); });
+            baseCats.forEach(cat => { 
+                let btn = createBtn(cat); 
+                btn.onclick = () => { currentCategory = cat; renderCategories(); filterData(); triggerHaptic(15); }; 
+                row1.appendChild(btn); 
+            });
+            Array.from(otherCats).forEach(cat => { 
+                let btn = createBtn(cat); 
+                btn.onclick = () => { currentCategory = cat; renderCategories(); filterData(); triggerHaptic(15); }; 
+                row2.appendChild(btn); 
+            });
         }
 
+        // ====== 更強大的智慧禮貌擴充系統 ======
         function shouldAddPolitePrefix(zhText, jpText) {
-            const excludeKeywords = ['你好', '早安', '午安', '晚安', '謝謝', '感謝', '對不起', '抱歉', '沒關係', '沒問題', '再見', '掰掰', '不好意思', '不用', '好'];
-            if (jpText.includes('すみません') || jpText.includes('ごめんなさい')) return false;
+            // 1. 如果日文已經有不好意思/抱歉，不加
+            if (jpText.includes('すみません') || jpText.includes('ごめんなさい') || jpText.includes('失礼')) return false;
+            // 2. 如果字太少 (單字回答等)，不加
             if (zhText.trim().length <= 2) return false;
-            for (let word of excludeKeywords) { if (zhText.startsWith(word) || zhText === word) return false; }
+
+            // 3. 擴充字庫: 涵蓋打招呼、稱讚、肯定否定、感謝道歉
+            const excludeRegex = /^(你好|早安|午安|晚安|初次見面|很高興|再見|拜拜|掰掰|辛苦了|謝謝|感謝|對不起|抱歉|沒關係|沒事|沒錯|對|是|不是|好|不好|不用|不需要|當然|太棒了|讚|很好|棒|厲害|斯勾伊|好吃|美味|漂亮|美麗|帥|救命|幫忙)/;
+            if (excludeRegex.test(zhText.trim())) {
+                return false;
+            }
             return true;
         }
 
