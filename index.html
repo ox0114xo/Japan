@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日文語音系統 v4.0 (覺醒版)</title>
+    <title>日文語音系統 v4.1 (修復進化版)</title>
     <style>
         /* 未來科技感 UI 變數 */
         :root { 
@@ -21,10 +21,11 @@
         .search-box:focus { outline: none; box-shadow: 0 0 15px var(--neon-purple); }
         .search-box::placeholder { color: #64748b; }
 
-        /* 分類按鈕區 */
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 8px; scrollbar-width: none; }
+        /* 分類按鈕區 - 加入 cursor 提示可拖曳 */
+        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 8px; scrollbar-width: none; cursor: grab; }
+        .category-scroll:active { cursor: grabbing; }
         .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; transition: all 0.3s ease; letter-spacing: 1px;}
+        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; transition: all 0.3s ease; letter-spacing: 1px; user-select: none;}
         .cat-btn.active { background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 240, 255, 0.3); font-weight: bold; }
         .cat-btn.secret-active { background: rgba(255, 51, 51, 0.1); color: var(--neon-red); border-color: var(--neon-red); box-shadow: 0 0 10px rgba(255, 51, 51, 0.3); }
 
@@ -136,13 +137,28 @@
     </div>
 
     <script>
-        // 清除快取機制
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) registration.unregister();
-            });
-        }
+        // --- 1. 電腦版滑鼠拖曳滑動分類 ---
+        const catContainer = document.getElementById('category-container');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
 
+        catContainer.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - catContainer.offsetLeft;
+            scrollLeft = catContainer.scrollLeft;
+        });
+        catContainer.addEventListener('mouseleave', () => { isDown = false; });
+        catContainer.addEventListener('mouseup', () => { isDown = false; });
+        catContainer.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - catContainer.offsetLeft;
+            const walk = (x - startX) * 2; // 調整滑動速度
+            catContainer.scrollLeft = scrollLeft - walk;
+        });
+
+        // 核心變數
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let globalData = [];
         let currentCategory = '全部';
@@ -155,10 +171,7 @@
         // 初始化
         window.onload = () => {
             loadCSV();
-            // 預先載入語音包以防延遲
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.getVoices();
-            }
+            if ('speechSynthesis' in window) window.speechSynthesis.getVoices();
         };
 
         // --- 控制面板 ---
@@ -176,7 +189,6 @@
             utterance.rate = parseFloat(document.getElementById('speed-slider').value);
             utterance.pitch = parseFloat(document.getElementById('pitch-slider').value);
             
-            // 嘗試強制使用日文語音包
             const voices = window.speechSynthesis.getVoices();
             const jpVoice = voices.find(v => v.lang === 'ja-JP' || v.lang.includes('ja'));
             if(jpVoice) utterance.voice = jpVoice;
@@ -267,14 +279,14 @@
                 for (let i = 1; i < rows.length; i++) {
                     const row = rows[i].trim();
                     if(!row) continue;
-                    // 處理 CSV 中可能包含逗號的引號字串
                     const cols = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || row.split(',');
                     if (cols.length >= 3) {
+                        // 使用 trim() 移除可能存在的隱形空白，避免比對失敗
                         globalData.push({ 
-                            cat: (cols[0] || '未分類').replace(/"/g, ''), 
-                            zh: (cols[1] || '').replace(/"/g, ''), 
-                            jp: (cols[2] || '').replace(/"/g, ''), 
-                            romaji: (cols[3] || '').replace(/"/g, '') 
+                            cat: (cols[0] || '未分類').replace(/"/g, '').trim(), 
+                            zh: (cols[1] || '').replace(/"/g, '').trim(), 
+                            jp: (cols[2] || '').replace(/"/g, '').trim(), 
+                            romaji: (cols[3] || '').replace(/"/g, '').trim() 
                         });
                     }
                 }
@@ -288,17 +300,26 @@
 
         // --- 渲染分類 ---
         function renderCategories() {
-            const container = document.getElementById('category-container');
-            container.innerHTML = '';
+            catContainer.innerHTML = '';
             
-            const cats = new Set(['全部', '⭐最愛']);
+            // 讓隱藏分類在解鎖後成為「第一個」
+            let baseCats = [];
+            if (isSecretUnlocked) {
+                baseCats.push(SECRET_KEYWORD);
+            }
+            baseCats.push('全部', '⭐最愛');
+            
+            const otherCats = new Set();
             globalData.forEach(item => {
-                if (item.cat !== SECRET_KEYWORD) cats.add(item.cat);
+                // 防呆：用 includes 檢查，只要名稱裡面有「隱藏」或「🤬」就當作是隱藏分類，不放入常規名單
+                if (!item.cat.includes('隱藏') && !item.cat.includes('🤬')) {
+                    otherCats.add(item.cat);
+                }
             });
             
-            if (isSecretUnlocked) cats.add(SECRET_KEYWORD);
+            const allCats = [...baseCats, ...Array.from(otherCats)];
 
-            Array.from(cats).forEach(cat => {
+            allCats.forEach(cat => {
                 const btn = document.createElement('button');
                 
                 if (cat === currentCategory) {
@@ -310,12 +331,14 @@
                 btn.innerText = cat;
                 if(cat === '⭐最愛' && cat !== currentCategory) btn.style.color = '#fbbf24';
                 
+                // 點擊事件也加入防拖曳誤觸機制
                 btn.onclick = () => {
+                    if (isDown) return; // 如果正在拖曳，則不觸發點擊
                     currentCategory = cat;
                     renderCategories(); 
                     filterData();
                 };
-                container.appendChild(btn);
+                catContainer.appendChild(btn);
             });
         }
 
@@ -324,13 +347,26 @@
             const query = document.getElementById('search-input').value.toLowerCase();
             
             const filteredData = globalData.filter(item => {
-                if (item.cat === SECRET_KEYWORD && !isSecretUnlocked) return false;
-                if (currentCategory === '全部' && item.cat === SECRET_KEYWORD) return false;
+                // 嚴格判定是否為隱藏項目
+                const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
+                
+                // 1. 如果是隱藏內容，但未解鎖，絕對不顯示
+                if (isSecretItem && !isSecretUnlocked) return false;
+                
+                // 2. 即使解鎖了，在「全部」分類下也不顯示隱藏內容，必須點擊專屬按鈕才看得到
+                if (currentCategory === '全部' && isSecretItem) return false;
 
                 let matchCat = false;
-                if (currentCategory === '全部') matchCat = true;
-                else if (currentCategory === '⭐最愛') matchCat = favorites.includes(item.jp);
-                else matchCat = item.cat === currentCategory;
+                if (currentCategory === '全部') {
+                    matchCat = true;
+                } else if (currentCategory === '⭐最愛') {
+                    matchCat = favorites.includes(item.jp);
+                } else if (currentCategory === SECRET_KEYWORD) {
+                    // 如果點擊了隱藏分類，只顯示被判定為隱藏的項目
+                    matchCat = isSecretItem;
+                } else {
+                    matchCat = item.cat === currentCategory;
+                }
 
                 const matchQuery = (item.zh && item.zh.toLowerCase().includes(query)) || 
                                    (item.jp && item.jp.toLowerCase().includes(query)) || 
@@ -357,8 +393,8 @@
                 const safeRomaji = item.romaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
                 const isFav = favorites.includes(item.jp);
 
-                const isSecret = item.cat === SECRET_KEYWORD;
-                const iconColor = isSecret ? 'color: var(--neon-red); text-shadow: 0 0 8px rgba(255, 51, 51, 0.5);' : '';
+                const isSecretItem = item.cat.includes('隱藏') || item.cat.includes('🤬');
+                const iconColor = isSecretItem ? 'color: var(--neon-red); text-shadow: 0 0 8px rgba(255, 51, 51, 0.5);' : '';
 
                 li.onclick = () => speak(item.jp);
                 
@@ -379,7 +415,7 @@
             });
         }
 
-        // --- 補全：自譯引擎 (使用開源免金鑰 API) ---
+        // --- 自譯引擎 ---
         function closeModal() {
             document.getElementById('translate-modal').style.display = 'none';
             document.getElementById('translate-result').innerText = '';
@@ -403,19 +439,17 @@
             resDiv.innerText = '';
 
             try {
-                // 使用 Google Translate 非官方公開端點進行前端直譯
                 const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=ja&dt=t&q=${encodeURIComponent(input)}`;
                 const response = await fetch(url);
                 
                 if (!response.ok) throw new Error("翻譯伺服器無回應");
                 
                 const data = await response.json();
-                const translatedText = data[0][0][0]; // 提取翻譯結果
+                const translatedText = data[0][0][0]; 
                 
                 resDiv.style.color = 'var(--neon-green)';
                 resDiv.innerText = translatedText;
                 
-                // 自動發音
                 speak(translatedText);
 
             } catch (error) {
@@ -423,7 +457,6 @@
                 resDiv.innerText = "翻譯失敗，請檢查網路狀態。";
                 console.error(error);
             } finally {
-                // 恢復按鈕狀態
                 btn.innerText = "執行翻譯與發音";
                 btn.style.background = "var(--neon-blue)";
                 btn.disabled = false;
