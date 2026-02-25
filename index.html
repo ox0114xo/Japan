@@ -1,51 +1,231 @@
-<style>
-    /* iOS 安裝引導面板 */
-    #ios-install-guide {
-        display: none;
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 400px;
-        background: rgba(15, 23, 42, 0.95);
-        border: 2px solid var(--neon-blue);
-        border-radius: 16px;
-        padding: 20px;
-        z-index: 10002;
-        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
-        color: white;
-        text-align: center;
-    }
-    .ios-step { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0; font-size: 15px; }
-    .ios-icon { width: 24px; height: 24px; }
-</style>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>日本旅遊常用句</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<div id="ios-install-guide">
-    <div style="font-weight: bold; color: var(--neon-blue); margin-bottom: 10px;">📲 將此工具安裝至桌面</div>
-    <div class="ios-step">1. 點擊瀏覽器下方的 <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" class="ios-icon"> 「分享」按鈕</div>
-    <div class="ios-step">2. 往下滑找到 <img src="https://img.icons8.com/ios/50/ffffff/plus-math.png" class="ios-icon"> 「加入主畫面」</div>
-    <button onclick="document.getElementById('ios-install-guide').style.display='none'" style="margin-top:15px; background:none; border:1px solid #444; color:#888; padding:5px 15px; border-radius:20px;">暫時關閉</button>
-</div>
+    <style>
+        :root { 
+            --bg-dark: #0f172a; --neon-blue: #00f0ff; --neon-purple: #b026ff; 
+            --neon-green: #39ff14; --neon-red: #ff3333; --btn-depth: #0369a1; 
+            --text-main: #e2e8f0; --text-muted: #94a3b8; 
+        }
+        
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 70%); color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 90px; min-height: 100vh; }
+        
+        /* 標題與 Logo */
+        .header { text-align: center; margin-bottom: 25px; padding-top: 10px; }
+        .logo { width: 70px; height: 70px; border-radius: 18px; box-shadow: 0 0 15px var(--neon-blue); margin-bottom: 12px; border: 2px solid var(--neon-blue); }
+        h1 { color: #fff; text-shadow: 0 0 10px var(--neon-blue); font-size: 22px; margin: 0; user-select: none; cursor: pointer; letter-spacing: 1px; }
 
-<script>
-    // 偵測是否為 iPhone 且尚未安裝
-    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        /* 整合搜尋 + 翻譯 */
+        .search-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .search-box { flex: 1; padding: 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-purple); border-radius: 12px; color: #fff; font-size: 16px; outline: none; }
+        .trans-btn { background: var(--neon-purple); border: none; border-radius: 12px; padding: 0 18px; color: white; cursor: pointer; font-size: 20px; box-shadow: 0 0 10px rgba(176, 38, 255, 0.4); }
+        .trans-btn:active { transform: scale(0.9); }
 
-    if (isIos && !isStandalone) {
-        // 如果是 iPhone 且不在 App 模式下，顯示教學
-        setTimeout(() => {
-            document.getElementById('ios-install-guide').style.display = 'block';
-        }, 3000); // 延遲 3 秒顯示，比較不突兀
-    }
+        /* 分類按鈕 */
+        .cat-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 5px; scrollbar-width: none; }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 8px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.3s; }
+        .cat-btn.active { color: var(--neon-blue); border-color: var(--neon-blue); background: rgba(0, 240, 255, 0.1); font-weight: bold; }
+        .cat-btn.secret-active { color: var(--neon-red); border-color: var(--neon-red); background: rgba(255, 51, 51, 0.1); }
 
-    // Android 一鍵安裝邏輯 (維持不變，但在 iOS 不會觸發)
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        // 這裡可以顯示一個自定義的 Android 安裝按鈕
-    });
-</script>
+        /* 機械按鍵列表 */
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { 
+            background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(0, 240, 255, 0.3); 
+            border-radius: 14px; margin-bottom: 20px; padding: 18px; display: flex; justify-content: space-between; 
+            align-items: center; cursor: pointer; box-shadow: 0 6px 0 var(--btn-depth), 0 10px 15px rgba(0,0,0,0.4); 
+            transform: translateY(0); transition: 0.1s; 
+        }
+        li:active { transform: translateY(6px); box-shadow: 0 0 0 var(--btn-depth), 0 2px 4px rgba(0,0,0,0.4); }
+        
+        .play-icon { font-size: 22px; margin-right: 15px; color: var(--neon-blue); text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); }
+        .content { flex: 1; }
+        .jp { font-size: 18px; font-weight: bold; color: #fff; display: block; margin-bottom: 3px; }
+        .romaji { font-size: 12px; color: var(--neon-blue); font-family: monospace; display: block; margin-bottom: 5px; opacity: 0.8; }
+        .zh { font-size: 14px; color: var(--text-muted); display: block; }
 
+        /* 動作按鈕 */
+        .actions { display: flex; gap: 10px; }
+        .btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: #64748b; padding: 8px; font-size: 18px; }
+        .btn.fav-on { color: #fbbf24; border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+
+        /* 全螢幕、載入與 iOS 教學 */
+        #fs-overlay { display: none; position: fixed; inset: 0; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        #ios-guide { 
+            display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 85%; 
+            background: rgba(15, 23, 42, 0.95); border: 2px solid var(--neon-blue); border-radius: 16px; padding: 20px; 
+            z-index: 10002; box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); color: white; text-align: center;
+        }
+        .step { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 8px 0; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div id="fs-overlay" onclick="this.style.display='none'">
+        <div id="fs-jp" style="font-size: 10vw; color: var(--neon-green); font-weight: bold; margin-bottom: 20px;"></div>
+        <div id="fs-zh" style="font-size: 5vw; color: #fff; opacity: 0.6;"></div>
+        <div style="margin-top: 40px; color: #444;">[ 點擊畫面任意處關閉 ]</div>
+    </div>
+
+    <div class="header">
+        <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="logo" alt="Logo">
+        <h1 id="app-title">日本旅遊常用句</h1>
+    </div>
+
+    <div class="search-row">
+        <input type="text" id="search" class="search-box" placeholder="搜尋或輸入中文按⚡翻譯..." onkeyup="doSearch()">
+        <button class="trans-btn" onclick="goTranslate()" id="trans-icon">⚡</button>
+    </div>
+
+    <div class="cat-scroll" id="cats"></div>
+
+    <div id="loading" style="text-align: center; padding: 40px; color: var(--neon-blue); font-family: monospace;">
+        📡 資料同步中...
+    </div>
+
+    <ul id="list"></ul>
+
+    <div id="ios-guide">
+        <div style="font-weight: bold; color: var(--neon-blue); margin-bottom: 10px;">📲 安裝到 iPhone 桌面</div>
+        <div class="step">1. 點擊下方選單的「分享」箭頭 📤</div>
+        <div class="step">2. 點擊「加入主畫面」 ➕</div>
+        <button onclick="this.parentElement.style.display='none'" style="margin-top:10px; background:none; border:none; color:#555; font-size:12px;">暫時關閉</button>
+    </div>
+
+    <script>
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
+        let raw = [], curCat = '全部', favs = JSON.parse(localStorage.getItem('jp_f')) || [], unlocked = false, clicks = 0;
+
+        // 語音
+        function play(t) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ja-JP'; window.speechSynthesis.speak(u); }
+
+        // 翻譯
+        async function goTranslate() {
+            const t = document.getElementById('search').value.trim();
+            if(!t) return;
+            const btn = document.getElementById('trans-icon');
+            btn.innerText = '⌛';
+            try {
+                const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(t)}&langpair=zh-TW|ja`);
+                const d = await r.json();
+                const jp = d.responseData.translatedText;
+                play(jp);
+                alert(`翻譯結果：${jp}`);
+            } catch(e) { alert("連線失敗"); }
+            btn.innerText = '⚡';
+        }
+
+        // 標題彩蛋
+        document.getElementById('app-title').onclick = () => {
+            if(unlocked) return;
+            if(++clicks >= 10) {
+                unlocked = true;
+                alert("⚠️ 髒話模式已解鎖");
+                curCat = '🤬 隱藏情緒';
+                drawCats();
+                doSearch();
+            }
+        };
+
+        // 讀取資料
+        async function init() {
+            try {
+                const r = await fetch(CSV_URL);
+                const csv = await r.text();
+                const rows = csv.split('\n').slice(1);
+                raw = rows.map(line => {
+                    const c = line.split(',');
+                    return { cat: c[0], zh: c[1], jp: c[2], romaji: c[3] };
+                }).filter(i => i.jp);
+                document.getElementById('loading').style.display = 'none';
+                drawCats();
+                doSearch();
+            } catch(e) { document.getElementById('loading').innerText = "連線失敗"; }
+        }
+
+        function drawCats() {
+            const s = new Set(['全部', '⭐收藏']);
+            raw.forEach(i => {
+                if(i.cat === '🤬 隱藏情緒') { if(unlocked) s.add(i.cat); }
+                else { s.add(i.cat); }
+            });
+            const div = document.getElementById('cats');
+            div.innerHTML = '';
+            s.forEach(c => {
+                const b = document.createElement('button');
+                b.className = `cat-btn ${c===curCat ? (c.includes('🤬')?'secret-active':'active') : ''}`;
+                b.innerText = c;
+                if(c==='⭐收藏' && c!==curCat) b.style.color = '#fbbf24';
+                b.onclick = () => { curCat = c; drawCats(); doSearch(); };
+                div.appendChild(b);
+            });
+        }
+
+        function doSearch() {
+            const q = document.getElementById('search').value.toLowerCase();
+            const filtered = raw.filter(i => {
+                if(i.cat === '🤬 隱藏情緒' && !unlocked) return false;
+                if(curCat === '全部' && i.cat === '🤬 隱藏情緒') return false;
+                const mC = (curCat === '全部') ? true : (curCat === '⭐收藏' ? favs.includes(i.jp) : i.cat === curCat);
+                const mQ = i.zh.includes(q) || i.jp.includes(q);
+                return mC && mQ;
+            });
+            drawList(filtered);
+        }
+
+        function drawList(data) {
+            const el = document.getElementById('list');
+            el.innerHTML = '';
+            data.forEach(i => {
+                const isF = favs.includes(i.jp);
+                const item = document.createElement('li');
+                item.onclick = () => play(i.jp);
+                item.innerHTML = `
+                    <div class="play-icon" style="${i.cat.includes('🤬')?'color:var(--neon-red)':''}">🔊</div>
+                    <div class="content">
+                        <span class="jp">${i.jp}</span>
+                        <span class="romaji">${i.romaji || ''}</span>
+                        <span class="zh">${i.zh}</span>
+                    </div>
+                    <div class="actions">
+                        <button class="btn ${isF?'fav-on':''}" onclick="event.stopPropagation(); setFav('${i.jp}')">★</button>
+                        <button class="btn" onclick="event.stopPropagation(); goFS('${i.jp}','${i.zh}')">⛶</button>
+                    </div>
+                `;
+                el.appendChild(item);
+            });
+        }
+
+        function setFav(j) {
+            const idx = favs.indexOf(j);
+            if(idx > -1) favs.splice(idx, 1); else favs.push(j);
+            localStorage.setItem('jp_f', JSON.stringify(favs));
+            doSearch();
+        }
+
+        function goFS(j, z) {
+            document.getElementById('fs-jp').innerText = j;
+            document.getElementById('fs-zh').innerText = z;
+            document.getElementById('fs-overlay').style.display = 'flex';
+            play(j);
+        }
+
+        // iOS 引導
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const isApp = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        if(isIos && !isApp) setTimeout(() => document.getElementById('ios-guide').style.display='block', 2000);
+
+        if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+        init();
+    </script>
+</body>
+</html>
