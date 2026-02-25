@@ -1,228 +1,51 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本旅遊常用句</title>
-    
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
-    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
-    <style>
-        :root { 
-            --bg-dark: #0f172a; --neon-blue: #00f0ff; --neon-purple: #b026ff; 
-            --neon-green: #39ff14; --neon-red: #ff3333; --btn-depth: #0369a1; 
-            --text-main: #e2e8f0; --text-muted: #94a3b8; 
-        }
-        
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 70%); color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 50px; min-height: 100vh; }
-        
-        /* 標題與 Icon */
-        .app-header { text-align: center; margin-bottom: 25px; }
-        .app-logo { width: 80px; height: 80px; border-radius: 20px; box-shadow: 0 0 20px var(--neon-blue); margin-bottom: 15px; }
-        h1 { color: #fff; text-shadow: 0 0 10px var(--neon-blue); font-size: 24px; margin: 0; user-select: none; cursor: pointer; letter-spacing: 2px;}
-        
-        /* 搜尋 + 翻譯合併列 */
-        .search-container { position: relative; margin-bottom: 15px; display: flex; gap: 10px; }
-        .search-box { flex: 1; padding: 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-purple); border-radius: 12px; font-size: 16px; color: #fff; box-sizing: border-box; }
-        .translate-btn { background: var(--neon-purple); border: none; border-radius: 12px; padding: 0 20px; color: white; cursor: pointer; font-size: 20px; transition: 0.3s; box-shadow: 0 0 10px rgba(176, 38, 255, 0.4); }
-        .translate-btn:active { transform: scale(0.9); }
+<style>
+    /* iOS 安裝引導面板 */
+    #ios-install-guide {
+        display: none;
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 400px;
+        background: rgba(15, 23, 42, 0.95);
+        border: 2px solid var(--neon-blue);
+        border-radius: 16px;
+        padding: 20px;
+        z-index: 10002;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        color: white;
+        text-align: center;
+    }
+    .ios-step { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0; font-size: 15px; }
+    .ios-icon { width: 24px; height: 24px; }
+</style>
 
-        /* 分類按鈕 */
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 8px; scrollbar-width: none; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; }
-        .cat-btn.active { background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); border-color: var(--neon-blue); font-weight: bold; }
-        .cat-btn.secret-active { background: rgba(255, 51, 51, 0.1); color: var(--neon-red); border-color: var(--neon-red); }
+<div id="ios-install-guide">
+    <div style="font-weight: bold; color: var(--neon-blue); margin-bottom: 10px;">📲 將此工具安裝至桌面</div>
+    <div class="ios-step">1. 點擊瀏覽器下方的 <img src="https://img.icons8.com/ios/50/ffffff/share-rounded.png" class="ios-icon"> 「分享」按鈕</div>
+    <div class="ios-step">2. 往下滑找到 <img src="https://img.icons8.com/ios/50/ffffff/plus-math.png" class="ios-icon"> 「加入主畫面」</div>
+    <button onclick="document.getElementById('ios-install-guide').style.display='none'" style="margin-top:15px; background:none; border:1px solid #444; color:#888; padding:5px 15px; border-radius:20px;">暫時關閉</button>
+</div>
 
-        /* 列表樣式 */
-        ul { list-style: none; padding: 0; margin: 0; }
-        li { background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 12px; margin-bottom: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 0 var(--btn-depth); transition: 0.1s; }
-        li:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--btn-depth); }
-        
-        .jp-text { font-size: 18px; font-weight: bold; color: #fff; display: block; }
-        .romaji-text { font-size: 12px; color: var(--neon-blue); display: block; }
-        .zh-text { font-size: 14px; color: var(--text-muted); display: block; }
+<script>
+    // 偵測是否為 iPhone 且尚未安裝
+    const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-        .action-group { display: flex; gap: 8px; }
-        .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: #64748b; padding: 8px; cursor: pointer; }
-        .icon-btn.active { color: #fbbf24; border-color: #fbbf24; }
+    if (isIos && !isStandalone) {
+        // 如果是 iPhone 且不在 App 模式下，顯示教學
+        setTimeout(() => {
+            document.getElementById('ios-install-guide').style.display = 'block';
+        }, 3000); // 延遲 3 秒顯示，比較不突兀
+    }
 
-        /* 全螢幕覆蓋 */
-        #fullscreen-overlay { display: none; position: fixed; inset: 0; background: #000; color: var(--neon-green); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        #fullscreen-jp { font-size: 10vw; margin-bottom: 20px; text-shadow: 0 0 20px var(--neon-green); }
+    // Android 一鍵安裝邏輯 (維持不變，但在 iOS 不會觸發)
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // 這裡可以顯示一個自定義的 Android 安裝按鈕
+    });
+</script>
 
-        /* 讀取畫面 */
-        .loader { text-align: center; padding: 50px; }
-        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-    </style>
-</head>
-<body>
-
-    <div id="fullscreen-overlay" onclick="closeFullscreen()">
-        <div id="fullscreen-jp"></div>
-        <div id="fullscreen-zh" style="font-size: 5vw; color: #fff; opacity: 0.7;"></div>
-        <div style="margin-top: 30px; font-size: 4vw; color: var(--neon-green);">[ 點擊畫面任意處退出 ]</div>
-    </div>
-
-    <div class="app-header">
-        <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="app-logo" alt="Logo">
-        <h1 id="app-title">日本旅遊常用句</h1>
-    </div>
-
-    <div class="search-container">
-        <input type="text" id="search-input" class="search-box" placeholder="搜尋或輸入中文進行翻譯..." onkeyup="filterData()">
-        <button class="translate-btn" onclick="translateNow()" title="翻譯當前文字">⚡</button>
-    </div>
-
-    <div class="category-scroll" id="category-container"></div>
-
-    <div id="loading" class="loader">
-        <div class="spinner"></div>
-        <div style="color: var(--neon-blue); font-family: monospace;">連線至 Google 資料庫...</div>
-    </div>
-
-    <ul id="sentence-list"></ul>
-
-    <script>
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
-        let globalData = [];
-        let currentCategory = '全部';
-        let favorites = JSON.parse(localStorage.getItem('jp_favs')) || [];
-        let clickCount = 0;
-        let secretUnlocked = false;
-
-        // 語音引擎
-        function speak(text) {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(text);
-            u.lang = 'ja-JP';
-            window.speechSynthesis.speak(u);
-        }
-
-        // 翻譯功能 (合併在搜尋框)
-        async function translateNow() {
-            const text = document.getElementById('search-input').value.trim();
-            if(!text) return;
-            const btn = document.querySelector('.translate-btn');
-            btn.innerText = "⏳";
-            try {
-                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=zh-TW|ja`);
-                const data = await res.json();
-                const jp = data.responseData.translatedText;
-                speak(jp);
-                alert(`翻譯結果：${jp}`);
-            } catch(e) { alert("翻譯失敗"); }
-            btn.innerText = "⚡";
-        }
-
-        // 彩蛋解鎖
-        document.getElementById('app-title').onclick = () => {
-            clickCount++;
-            if(clickCount >= 10 && !secretUnlocked) {
-                secretUnlocked = true;
-                alert("⚠️ 隱藏模式已啟動");
-                renderCategories();
-            }
-        };
-
-        // 資料處理
-        async function loadData() {
-            try {
-                const res = await fetch(CSV_URL);
-                const csv = await res.text();
-                const rows = csv.split('\n').slice(1);
-                globalData = rows.map(r => {
-                    const c = r.split(',');
-                    return { cat: c[0], zh: c[1], jp: c[2], romaji: c[3] };
-                }).filter(i => i.jp);
-                
-                renderCategories();
-                filterData();
-                document.getElementById('loading').style.display = 'none';
-            } catch(e) { alert("資料讀取失敗，請檢查網路"); }
-        }
-
-        function renderCategories() {
-            const cats = new Set(['全部', '⭐收藏']);
-            globalData.forEach(i => {
-                if(i.cat === '🤬 隱藏情緒') { if(secretUnlocked) cats.add(i.cat); }
-                else { cats.add(i.cat); }
-            });
-            
-            const container = document.getElementById('category-container');
-            container.innerHTML = '';
-            cats.forEach(c => {
-                const btn = document.createElement('button');
-                btn.className = `cat-btn ${c === currentCategory ? (c.includes('🤬')?'secret-active':'active') : ''}`;
-                btn.innerText = c;
-                btn.onclick = () => { currentCategory = c; renderCategories(); filterData(); };
-                container.appendChild(btn);
-            });
-        }
-
-        function filterData() {
-            const q = document.getElementById('search-input').value.toLowerCase();
-            const filtered = globalData.filter(i => {
-                if(i.cat === '🤬 隱藏情緒' && !secretUnlocked) return false;
-                if(currentCategory === '全部' && i.cat === '🤬 隱藏情緒') return false;
-                
-                const matchCat = (currentCategory === '全部') ? true : 
-                                 (currentCategory === '⭐收藏') ? favorites.includes(i.jp) : (i.cat === currentCategory);
-                const matchQ = i.zh.includes(q) || i.jp.includes(q);
-                return matchCat && matchQ;
-            });
-            renderList(filtered);
-        }
-
-        function renderList(data) {
-            const list = document.getElementById('sentence-list');
-            list.innerHTML = '';
-            data.forEach(i => {
-                const isFav = favorites.includes(i.jp);
-                const li = document.createElement('li');
-                li.onclick = () => speak(i.jp);
-                li.innerHTML = `
-                    <div>
-                        <span class="jp-text">${i.jp}</span>
-                        <span class="romaji-text">${i.romaji || ''}</span>
-                        <span class="zh-text">${i.zh}</span>
-                    </div>
-                    <div class="action-group">
-                        <button class="icon-btn ${isFav?'active':''}" onclick="event.stopPropagation(); toggleFav('${i.jp}')">★</button>
-                        <button class="icon-btn" onclick="event.stopPropagation(); showFull('${i.jp}','${i.zh}')">⛶</button>
-                    </div>
-                `;
-                list.appendChild(li);
-            });
-        }
-
-        function toggleFav(jp) {
-            const idx = favorites.indexOf(jp);
-            if(idx > -1) favorites.splice(idx, 1);
-            else favorites.push(jp);
-            localStorage.setItem('jp_favs', JSON.stringify(favorites));
-            filterData();
-        }
-
-        function showFull(jp, zh) {
-            document.getElementById('fullscreen-jp').innerText = jp;
-            document.getElementById('fullscreen-zh').innerText = zh;
-            document.getElementById('fullscreen-overlay').style.display = 'flex';
-            speak(jp);
-        }
-
-        function closeFullscreen() { document.getElementById('fullscreen-overlay').style.display = 'none'; }
-
-        loadData();
-
-        // 簡易 PWA 註冊
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript;base64,');
-        }
-    </script>
-</body>
-</html>
