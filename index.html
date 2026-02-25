@@ -23,16 +23,38 @@
         .logo { width: 70px; height: 70px; border-radius: 18px; box-shadow: 0 0 15px var(--neon-blue); margin-bottom: 12px; border: 2px solid var(--neon-blue); cursor: pointer; }
         h1 { color: #fff; text-shadow: 0 0 10px var(--neon-blue); font-size: 22px; margin: 0; user-select: none; cursor: pointer; }
 
-        .cat-row { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 15px; padding-bottom: 5px; scrollbar-width: none; }
+        /* 分類容器與漸層遮罩 */
+        .cat-container { position: relative; width: 100%; overflow: hidden; margin-bottom: 15px; }
+        .cat-container::after {
+            content: ''; position: absolute; top: 0; right: 0; width: 50px; height: 100%;
+            background: linear-gradient(to right, transparent, var(--bg-dark));
+            pointer-events: none; z-index: 2;
+        }
+
+        .cat-row { 
+            display: flex; overflow-x: auto; gap: 12px; padding: 5px 40px 10px 5px; 
+            scrollbar-width: none; justify-content: flex-start; -webkit-overflow-scrolling: touch;
+        }
         .cat-row::-webkit-scrollbar { display: none; }
-        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 8px 18px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.3s; }
+        
+        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 8px 20px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.3s; }
         .cat-btn.active { color: var(--neon-blue); border-color: var(--neon-blue); background: rgba(0, 240, 255, 0.1); font-weight: bold; }
         .cat-btn.secret-active { color: var(--neon-red); border-color: var(--neon-red); background: rgba(255, 51, 51, 0.1); }
+
+        /* 安卓安裝按鈕 */
+        #install-pwa-btn {
+            display: none; width: 100%; padding: 12px; margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border: none; border-radius: 12px; color: #000; font-weight: bold;
+            box-shadow: 0 0 15px var(--neon-blue); cursor: pointer; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.8; } 50% { opacity: 1; box-shadow: 0 0 25px var(--neon-blue); } 100% { opacity: 0.8; } }
 
         .search-row { display: flex; gap: 10px; margin-bottom: 15px; }
         .search-box { flex: 1; padding: 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-purple); border-radius: 12px; color: #fff; font-size: 16px; outline: none; }
         .trans-btn { background: var(--neon-purple); border: none; border-radius: 12px; padding: 0 18px; color: white; cursor: pointer; font-size: 20px; }
 
+        /* 列表排版：中文大、日文中、拼音小 */
         ul { list-style: none; padding: 0; margin: 0; }
         li { 
             background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(0, 240, 255, 0.3); 
@@ -52,6 +74,7 @@
         .btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: #64748b; padding: 8px; font-size: 18px; }
         .btn.fav-on { color: #fbbf24; border-color: #fbbf24; }
 
+        /* 直式全螢幕字幕 */
         #fs-overlay { display: none; position: fixed; inset: 0; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         #fs-jp { writing-mode: vertical-rl; text-orientation: upright; font-size: 14vw; color: var(--neon-green); font-weight: bold; line-height: 1.2; letter-spacing: 0.2em; text-shadow: 0 0 20px var(--neon-green); max-height: 70vh; margin-bottom: 30px; }
         #fs-zh { font-size: 6vw; color: #fff; opacity: 0.7; border-top: 1px solid #333; padding-top: 15px; width: 80%; text-align: center; }
@@ -78,18 +101,22 @@
         <h1 id="app-title">日本旅遊常用句</h1>
     </div>
 
-    <div class="cat-row" id="top-cats"></div>
+    <div class="cat-container">
+        <div class="cat-row" id="top-cats"></div>
+    </div>
+
+    <button id="install-pwa-btn" onclick="installApp()">📲 偵測到環境：點擊安裝至桌面</button>
 
     <div class="search-row">
         <input type="text" id="search" class="search-box" placeholder="搜尋或翻譯..." onkeyup="doSearch()">
         <button class="trans-btn" onclick="goTranslate()" id="trans-icon">⚡</button>
     </div>
 
-    <div class="cat-row" id="sub-cats"></div>
-
-    <div id="loading" style="text-align: center; padding: 40px; color: var(--neon-blue); font-family: monospace;">
-        📡 連線中...
+    <div class="cat-container">
+        <div class="cat-row" id="sub-cats"></div>
     </div>
+
+    <div id="loading" style="text-align: center; padding: 40px; color: var(--neon-blue); font-family: monospace;">📡 連線中...</div>
 
     <ul id="list"></ul>
     <button id="clear-cache-btn" onclick="clearAllCache()">🧹 清除暫存</button>
@@ -97,6 +124,19 @@
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
         let raw = [], curCat = '全部', favs = JSON.parse(localStorage.getItem('jp_f')) || [], transHistory = JSON.parse(localStorage.getItem('jp_trans_hist')) || [], unlocked = false, clicks = 0;
+
+        // PWA 安裝
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); deferredPrompt = e;
+            document.getElementById('install-pwa-btn').style.display = 'block';
+        });
+        async function installApp() {
+            if (!deferredPrompt) return; deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') document.getElementById('install-pwa-btn').style.display = 'none';
+            deferredPrompt = null;
+        }
 
         function play(t) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ja-JP'; window.speechSynthesis.speak(u); }
 
@@ -126,10 +166,7 @@
                 transHistory.unshift({ cat: '⚡ 紀錄', zh: t, jp: jp, romaji: '' });
                 if(transHistory.length > 50) transHistory.pop();
                 localStorage.setItem('jp_trans_hist', JSON.stringify(transHistory));
-                play(jp);
-                curCat = '⚡ 紀錄';
-                drawCats();
-                doSearch(); 
+                play(jp); curCat = '⚡ 紀錄'; drawCats(); doSearch(); 
             } catch(e) { alert("翻譯失敗"); }
             btn.innerText = '⚡';
         }
@@ -139,6 +176,7 @@
         };
 
         async function init() {
+            if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
             try {
                 const r = await fetch(CSV_URL);
                 const csv = await r.text();
@@ -148,8 +186,7 @@
                     return { cat: c[0], zh: c[1], jp: c[2], romaji: c[3] };
                 }).filter(i => i.jp);
                 document.getElementById('loading').style.display = 'none';
-                drawCats();
-                doSearch();
+                drawCats(); doSearch();
             } catch(e) { document.getElementById('loading').innerText = "連線失敗"; }
         }
 
