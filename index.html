@@ -2,249 +2,227 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>日本旅遊神器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>日本旅遊常用句</title>
     
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="日語神器">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
-    <link rel="icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
-    <link rel="manifest" href='data:application/json;charset=utf-8,{"name":"日本旅遊神器","short_name":"日語神器","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#1e293b","icons":[{"src":"https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png","sizes":"512x512","type":"image/png"}]}'>
-
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --blue: #3b82f6; --green: #10b981; --red: #ef4444; --gold: #fbbf24; --text: #f8fafc; --sub: #94a3b8; --border: #334155; }
-        body { background-color: var(--bg); color: var(--text); margin: 0; font-family: sans-serif; text-align: center; padding-bottom: 120px; }
+        :root { 
+            --bg-dark: #0f172a; --neon-blue: #00f0ff; --neon-purple: #b026ff; 
+            --neon-green: #39ff14; --neon-red: #ff3333; --btn-depth: #0369a1; 
+            --text-main: #e2e8f0; --text-muted: #94a3b8; 
+        }
         
-        .container { max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
-        .title { font-size: 26px; font-weight: 900; margin: 20px 0; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 70%); color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 50px; min-height: 100vh; }
         
-        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center; outline: none; box-sizing: border-box; }
+        /* 標題與 Icon */
+        .app-header { text-align: center; margin-bottom: 25px; }
+        .app-logo { width: 80px; height: 80px; border-radius: 20px; box-shadow: 0 0 20px var(--neon-blue); margin-bottom: 15px; }
+        h1 { color: #fff; text-shadow: 0 0 10px var(--neon-blue); font-size: 24px; margin: 0; user-select: none; cursor: pointer; letter-spacing: 2px;}
         
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .btn { background: var(--card); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .btn.active { background: var(--blue); border-color: var(--blue); }
-        .chk-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; color: var(--sub); display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; }
-        
-        .cat-scroll { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; }
-        .cat-scroll::-webkit-scrollbar { display: none; }
-        .cat-item { background: var(--card); color: var(--sub); border: 1px solid var(--border); padding: 10px 18px; border-radius: 30px; white-space: nowrap; font-weight: bold; cursor: pointer; }
-        .cat-item.active { background: #475569; color: #fff; border-color: #fff; }
+        /* 搜尋 + 翻譯合併列 */
+        .search-container { position: relative; margin-bottom: 15px; display: flex; gap: 10px; }
+        .search-box { flex: 1; padding: 15px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-purple); border-radius: 12px; font-size: 16px; color: #fff; box-sizing: border-box; }
+        .translate-btn { background: var(--neon-purple); border: none; border-radius: 12px; padding: 0 20px; color: white; cursor: pointer; font-size: 20px; transition: 0.3s; box-shadow: 0 0 10px rgba(176, 38, 255, 0.4); }
+        .translate-btn:active { transform: scale(0.9); }
 
-        .list-area { display: flex; flex-direction: column; gap: 12px; text-align: left; }
-        .card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); text-align: center; position: relative; overflow: hidden; }
-        .card-inner { padding: 20px 15px; cursor: pointer; }
-        .zh { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
-        .ja-box { background: rgba(59,130,246,0.15); padding: 8px 15px; border-radius: 10px; margin-bottom: 5px; display: inline-block; border: 1px solid rgba(59,130,246,0.2); }
-        .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
-        .ro { font-size: 13px; color: var(--sub); }
-        .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: #334155; padding: 5px; cursor: pointer; z-index: 10; }
-        .star.active { color: var(--gold); }
-        .zoom-btn { width: 100%; background: rgba(255,255,255,0.05); color: var(--sub); border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; cursor: pointer; }
+        /* 分類按鈕 */
+        .category-scroll { display: flex; overflow-x: auto; gap: 10px; margin-bottom: 20px; padding-bottom: 8px; scrollbar-width: none; }
+        .category-scroll::-webkit-scrollbar { display: none; }
+        .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 10px 20px; border-radius: 30px; font-size: 14px; cursor: pointer; }
+        .cat-btn.active { background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); border-color: var(--neon-blue); font-weight: bold; }
+        .cat-btn.secret-active { background: rgba(255, 51, 51, 0.1); color: var(--neon-red); border-color: var(--neon-red); }
+
+        /* 列表樣式 */
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { background: linear-gradient(145deg, #1e293b, #0f172a); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 12px; margin-bottom: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 0 var(--btn-depth); transition: 0.1s; }
+        li:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--btn-depth); }
         
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-        .m-box { background: var(--card); padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; text-align: left; border: 1px solid var(--border); }
-        .m-close { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
-        
-        /* 底部安裝欄 */
-        #install-bar { display: none; position: fixed; bottom: 0; left:0; right:0; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); padding: 15px 20px; z-index: 9990; justify-content: space-between; align-items: center; animation: slideUp 0.5s ease-out; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .ib-content { display: flex; align-items: center; gap: 15px; flex-grow: 1; cursor: pointer; }
-        .ib-icon { width: 50px; height: 50px; border-radius: 12px; border: 1px solid var(--border); }
-        .ib-title { font-weight: 900; font-size: 16px; color: #fff; }
-        .ib-desc { font-size: 12px; color: var(--green); margin-top: 2px; }
-        .ib-btn { background: var(--blue); color: #fff; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; margin-right: 10px; }
-        .ib-close { color: var(--sub); font-size: 20px; padding: 5px; }
+        .jp-text { font-size: 18px; font-weight: bold; color: #fff; display: block; }
+        .romaji-text { font-size: 12px; color: var(--neon-blue); display: block; }
+        .zh-text { font-size: 14px; color: var(--text-muted); display: block; }
+
+        .action-group { display: flex; gap: 8px; }
+        .icon-btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: #64748b; padding: 8px; cursor: pointer; }
+        .icon-btn.active { color: #fbbf24; border-color: #fbbf24; }
+
+        /* 全螢幕覆蓋 */
+        #fullscreen-overlay { display: none; position: fixed; inset: 0; background: #000; color: var(--neon-green); z-index: 10000; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        #fullscreen-jp { font-size: 10vw; margin-bottom: 20px; text-shadow: 0 0 20px var(--neon-green); }
+
+        /* 讀取畫面 */
+        .loader { text-align: center; padding: 50px; }
+        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--neon-blue); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="install-bar">
-        <div class="ib-content" onclick="triggerInstall()">
-            <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="ib-icon">
-            <div class="ib-text">
-                <div class="ib-title">安裝旅遊神器</div>
-                <div class="ib-desc">✨ 點擊此處一鍵安裝至桌面</div>
-            </div>
-        </div>
-        <div class="ib-btn" onclick="triggerInstall()">安裝</div>
-        <div class="ib-close" onclick="hideInstallBar()">✕</div>
+    <div id="fullscreen-overlay" onclick="closeFullscreen()">
+        <div id="fullscreen-jp"></div>
+        <div id="fullscreen-zh" style="font-size: 5vw; color: #fff; opacity: 0.7;"></div>
+        <div style="margin-top: 30px; font-size: 4vw; color: var(--neon-green);">[ 點擊畫面任意處退出 ]</div>
     </div>
 
-    <div id="modal-ios" class="modal">
-        <div class="m-box" style="text-align:center;">
-            <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" style="width:70px; border-radius:15px; margin-bottom:15px;">
-            <h2 style="color:var(--gold); margin-top:0;">iPhone 安裝教學</h2>
-            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; text-align:left; font-size:15px; line-height: 1.8;">
-                1. 點擊瀏覽器下方的 <b>「分享鈕」</b> <img src="https://cdn-icons-png.flaticon.com/512/197/197604.png" style="width:16px; filter:invert(1);"><br>
-                2. 選單往下滑，點擊 <b style="color:var(--blue);">「加入主畫面」</b><br>
-                3. 點擊右上角 <b style="color:var(--blue);">「加入」</b> 即可完成！
-            </div>
-            <button class="m-close" onclick="document.getElementById('modal-ios').style.display='none'">我知道了</button>
-        </div>
+    <div class="app-header">
+        <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="app-logo" alt="Logo">
+        <h1 id="app-title">日本旅遊常用句</h1>
     </div>
 
-    <div id="modal-zoom" class="modal">
-        <div id="z-ja" style="font-size:12vw; font-weight:900; color:#fff; text-align:center;"></div>
-        <div id="z-zh" style="font-size:22px; color:var(--sub); margin-top:30px; text-align:center; font-weight:bold;"></div>
-        <button class="m-close" style="width:150px; background:var(--border);" onclick="document.getElementById('modal-zoom').style.display='none'">關閉</button>
+    <div class="search-container">
+        <input type="text" id="search-input" class="search-box" placeholder="搜尋或輸入中文進行翻譯..." onkeyup="filterData()">
+        <button class="translate-btn" onclick="translateNow()" title="翻譯當前文字">⚡</button>
     </div>
 
-    <div class="container">
-        <div class="title">🇯🇵 Japan Travel</div>
-        <input type="text" id="search" class="search" placeholder="🔍 搜尋中日文關鍵字...">
+    <div class="category-scroll" id="category-container"></div>
 
-        <div class="grid-2">
-            <button class="btn" id="btn-rec" onclick="setCat('🕒 歷史紀錄')">🕒 歷史紀錄</button>
-            <button class="btn" id="btn-fav" onclick="setCat('⭐ 收藏清單')">⭐ 收藏清單</button>
-            <div class="chk-box"><label>🔊 大音量 <input type="checkbox" id="vol" checked></label></div>
-            <div class="chk-box"><label>🐢 龜速 <input type="checkbox" id="spd"></label></div>
-        </div>
-
-        <div class="cat-scroll" id="cat-box"></div>
-        <div class="list-area" id="list-box"></div>
+    <div id="loading" class="loader">
+        <div class="spinner"></div>
+        <div style="color: var(--neon-blue); font-family: monospace;">連線至 Google 資料庫...</div>
     </div>
+
+    <ul id="sentence-list"></ul>
 
     <script>
-        // ✅ 永久儲存：從 LocalStorage 讀取資料
-        var favs = JSON.parse(localStorage.getItem('jap_favs') || '[]');
-        var hist = JSON.parse(localStorage.getItem('jap_hist') || '[]');
-        var curCat = "🌟 全部";
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
+        let globalData = [];
+        let currentCategory = '全部';
+        let favorites = JSON.parse(localStorage.getItem('jp_favs')) || [];
+        let clickCount = 0;
+        let secretUnlocked = false;
 
-        var rawData = [
-            ["👋 常用","你好","こんにちは","Konnichiwa"],
-            ["👋 常用","謝謝","ありがとうございます","Arigatou gozaimasu"],
-            ["👋 常用","不好意思","すみません","Sumimasen"],
-            ["👋 常用","對不起","ごめんなさい","Gomennasai"],
-            ["👋 常用","請問這個多少錢？","これはいくらですか？","Kore wa ikura desu ka?"],
-            ["👋 常用","請給我這個","これをください","Kore o kudasai"],
-            ["👋 常用","我不懂日文","日本語がわかりません","Nihongo ga wakarimasen"],
-            ["👋 常用","可以使用信用卡嗎？","クレジットカードは使えますか？","Kurejitto kaado wa tsukaemasu ka?"],
-            ["👋 常用","車站點在哪裡？","駅はどこですか？","Eki wa doko desu ka?"],
-            ["👋 常用","廁所在哪裡？","お手洗いはどこですか？","Otearai wa doko desu ka?"],
-            ["👋 常用","請幫幫我","助けてください","Tasukete kudasai"],
-            ["👋 常用","可以免稅嗎？","免税できますか？","Menzei dekimasu ka?"],
-            ["👋 常用","推薦的是什麼？","おすすめは何ですか？","Osusume wa nan desu ka?"],
-            ["👋 常用","我要點餐","注文をお願いします","Chuumon o onegaishimasu"],
-            ["👋 常用","結帳","お会計をお願いします","Okaikei o onegaishimasu"],
-            ["👋 常用","很好吃","美味しいです","Oishii desu"]
-        ];
-
-        var cats = ["🌟 全部"];
-        rawData.forEach(d => { if(cats.indexOf(d[0])===-1) cats.push(d[0]); });
-
-        // 安裝邏輯
-        var deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('install-bar').style.display = 'flex';
-        });
-
-        if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
-            // 已安裝則不顯示
-        } else if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-            setTimeout(() => document.getElementById('install-bar').style.display = 'flex', 2000);
+        // 語音引擎
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(text);
+            u.lang = 'ja-JP';
+            window.speechSynthesis.speak(u);
         }
 
-        window.triggerInstall = function() {
-            if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-                document.getElementById('modal-ios').style.display = 'flex';
-            } else if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choice) => {
-                    if (choice.outcome === 'accepted') hideInstallBar();
-                    deferredPrompt = null;
-                });
+        // 翻譯功能 (合併在搜尋框)
+        async function translateNow() {
+            const text = document.getElementById('search-input').value.trim();
+            if(!text) return;
+            const btn = document.querySelector('.translate-btn');
+            btn.innerText = "⏳";
+            try {
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=zh-TW|ja`);
+                const data = await res.json();
+                const jp = data.responseData.translatedText;
+                speak(jp);
+                alert(`翻譯結果：${jp}`);
+            } catch(e) { alert("翻譯失敗"); }
+            btn.innerText = "⚡";
+        }
+
+        // 彩蛋解鎖
+        document.getElementById('app-title').onclick = () => {
+            clickCount++;
+            if(clickCount >= 10 && !secretUnlocked) {
+                secretUnlocked = true;
+                alert("⚠️ 隱藏模式已啟動");
+                renderCategories();
             }
         };
 
-        window.hideInstallBar = () => {
-            document.getElementById('install-bar').style.display = 'none';
-            document.body.style.paddingBottom = '20px';
-        };
+        // 資料處理
+        async function loadData() {
+            try {
+                const res = await fetch(CSV_URL);
+                const csv = await res.text();
+                const rows = csv.split('\n').slice(1);
+                globalData = rows.map(r => {
+                    const c = r.split(',');
+                    return { cat: c[0], zh: c[1], jp: c[2], romaji: c[3] };
+                }).filter(i => i.jp);
+                
+                renderCategories();
+                filterData();
+                document.getElementById('loading').style.display = 'none';
+            } catch(e) { alert("資料讀取失敗，請檢查網路"); }
+        }
 
-        // 發音與歷史紀錄存檔
-        window.spk = function(txt, zh, ro) {
-            window.speechSynthesis.cancel();
-            var u = new SpeechSynthesisUtterance(txt);
-            u.lang = 'ja-JP';
-            u.rate = document.getElementById('spd').checked ? 0.5 : 0.9;
-            u.volume = document.getElementById('vol').checked ? 1.0 : 0.7;
-            window.speechSynthesis.speak(u);
-
-            if (zh) {
-                hist = hist.filter(h => h[2] !== txt);
-                hist.unshift(["🕒 歷史紀錄", zh, txt, ro]);
-                if (hist.length > 50) hist.pop();
-                localStorage.setItem('jap_hist', JSON.stringify(hist)); // ✅ 存檔
-            }
-        };
-
-        // 收藏存檔
-        window.tglFav = function(e, j) {
-            e.stopPropagation();
-            if (favs.indexOf(j) > -1) favs = favs.filter(f => f !== j);
-            else favs.push(j);
-            localStorage.setItem('jap_favs', JSON.stringify(favs)); // ✅ 存檔
-            drawList(curCat, document.getElementById('search').value);
-        };
-
-        window.zoom = function(e, ja, zh) {
-            e.stopPropagation();
-            document.getElementById('z-ja').innerText = ja;
-            document.getElementById('z-zh').innerText = zh;
-            document.getElementById('modal-zoom').style.display = 'flex';
-        };
-
-        function drawList(cat, q) {
-            var box = document.getElementById('list-box');
-            box.innerHTML = '';
-            var arr = [];
-            if (cat === "🌟 全部") arr = rawData;
-            else if (cat === "⭐ 收藏清單") arr = rawData.filter(d => favs.indexOf(d[2]) > -1);
-            else if (cat === "🕒 歷史紀錄") arr = hist;
-            else arr = rawData.filter(d => d[0] === cat);
-
-            if (q) {
-                q = q.toLowerCase();
-                arr = arr.filter(d => d[1].indexOf(q) > -1 || d[2].toLowerCase().indexOf(q) > -1);
-            }
-
-            arr.forEach(item => {
-                var isFav = favs.indexOf(item[2]) > -1 ? "active" : "";
-                var card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="star ${isFav}" onclick="tglFav(event, '${item[2]}')">★</div>
-                    <div class="card-inner" onclick="spk('${item[2]}', '${item[1]}', '${item[3]}')">
-                        <div class="zh">${item[1]}</div>
-                        <div class="ja-box"><span class="ja">🔊 ${item[2]}</span></div>
-                        <div class="ro">${item[3]||''}</div>
-                    </div>
-                    <button class="zoom-btn" onclick="zoom(event, '${item[2]}', '${item[1]}')">🪧 放大顯示</button>
-                `;
-                box.appendChild(card);
+        function renderCategories() {
+            const cats = new Set(['全部', '⭐收藏']);
+            globalData.forEach(i => {
+                if(i.cat === '🤬 隱藏情緒') { if(secretUnlocked) cats.add(i.cat); }
+                else { cats.add(i.cat); }
+            });
+            
+            const container = document.getElementById('category-container');
+            container.innerHTML = '';
+            cats.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = `cat-btn ${c === currentCategory ? (c.includes('🤬')?'secret-active':'active') : ''}`;
+                btn.innerText = c;
+                btn.onclick = () => { currentCategory = c; renderCategories(); filterData(); };
+                container.appendChild(btn);
             });
         }
 
-        window.setCat = function(cName) {
-            curCat = cName;
-            document.getElementById('btn-rec').className = (cName === '🕒 歷史紀錄') ? 'btn active' : 'btn';
-            document.getElementById('btn-fav').className = (cName === '⭐ 收藏清單') ? 'btn active' : 'btn';
-            document.querySelectorAll('.cat-item').forEach(b => b.className = (b.innerText === cName) ? 'cat-item active' : 'cat-item');
-            drawList(curCat, document.getElementById('search').value);
-        };
+        function filterData() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const filtered = globalData.filter(i => {
+                if(i.cat === '🤬 隱藏情緒' && !secretUnlocked) return false;
+                if(currentCategory === '全部' && i.cat === '🤬 隱藏情緒') return false;
+                
+                const matchCat = (currentCategory === '全部') ? true : 
+                                 (currentCategory === '⭐收藏') ? favorites.includes(i.jp) : (i.cat === currentCategory);
+                const matchQ = i.zh.includes(q) || i.jp.includes(q);
+                return matchCat && matchQ;
+            });
+            renderList(filtered);
+        }
 
-        document.getElementById('search').oninput = (e) => drawList(curCat, e.target.value);
+        function renderList(data) {
+            const list = document.getElementById('sentence-list');
+            list.innerHTML = '';
+            data.forEach(i => {
+                const isFav = favorites.includes(i.jp);
+                const li = document.createElement('li');
+                li.onclick = () => speak(i.jp);
+                li.innerHTML = `
+                    <div>
+                        <span class="jp-text">${i.jp}</span>
+                        <span class="romaji-text">${i.romaji || ''}</span>
+                        <span class="zh-text">${i.zh}</span>
+                    </div>
+                    <div class="action-group">
+                        <button class="icon-btn ${isFav?'active':''}" onclick="event.stopPropagation(); toggleFav('${i.jp}')">★</button>
+                        <button class="icon-btn" onclick="event.stopPropagation(); showFull('${i.jp}','${i.zh}')">⛶</button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+        }
 
-        // 初始化
-        var cHtml = "";
-        cats.forEach(c => cHtml += `<button class="cat-item ${c==='🌟 全部'?'active':''}" onclick="setCat('${c}')">${c}</button>`);
-        document.getElementById('cat-box').innerHTML = cHtml;
-        drawList('🌟 全部', '');
+        function toggleFav(jp) {
+            const idx = favorites.indexOf(jp);
+            if(idx > -1) favorites.splice(idx, 1);
+            else favorites.push(jp);
+            localStorage.setItem('jp_favs', JSON.stringify(favorites));
+            filterData();
+        }
+
+        function showFull(jp, zh) {
+            document.getElementById('fullscreen-jp').innerText = jp;
+            document.getElementById('fullscreen-zh').innerText = zh;
+            document.getElementById('fullscreen-overlay').style.display = 'flex';
+            speak(jp);
+        }
+
+        function closeFullscreen() { document.getElementById('fullscreen-overlay').style.display = 'none'; }
+
+        loadData();
+
+        // 簡易 PWA 註冊
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('data:text/javascript;base64,');
+        }
     </script>
 </body>
 </html>
-
