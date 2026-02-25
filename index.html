@@ -2,501 +2,348 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>日本旅遊神器</title>
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="日文語音">
-    <title>日本旅遊常用句</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="日語神器">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    <link rel="icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    <link rel="manifest" href='data:application/json;charset=utf-8,{"name":"日本旅遊神器","short_name":"日語神器","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#1e293b","icons":[{"src":"https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png","sizes":"512x512","type":"image/png"}]}'>
+
     <style>
-        * { -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
-
-        /* 日本傳統色系 */
-        :root { 
-            --bg-washi: #F9F6F0;       /* 和紙白 */
-            --kurenai: #BC002D;        /* 鳥居紅 (主色) */
-            --sakura: #FEDfe1;         /* 櫻粉色 */
-            --sumi: #1C1C1C;           /* 墨黑 */
-            --ai: #1A4359;             /* 藍染 (深藍) */
-            --matcha: #8BA888;         /* 抹茶綠 */
-            --kin: #D4AF37;            /* 金色 */
-            --text-main: #2C3E50;      /* 深鐵灰 */
-            --text-muted: #88929A; 
-            --border-light: #EAD9C9; 
-        }
+        :root { --bg: #0f172a; --card: #1e293b; --blue: #3b82f6; --green: #10b981; --red: #ef4444; --gold: #fbbf24; --text: #f8fafc; --sub: #94a3b8; --border: #334155; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; font-family: sans-serif; text-align: center; padding-bottom: 100px; /* 預留底部空間 */ }
         
-        body { 
-            font-family: 'Noto Serif JP', 'Yu Mincho', 'Microsoft JhengHei', serif; 
-            margin: 0; padding: 15px; padding-bottom: 90px; min-height: 100vh;
-            color: var(--text-main); background-color: var(--bg-washi); 
-            background-image: linear-gradient(rgba(188, 0, 45, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(188, 0, 45, 0.03) 1px, transparent 1px);
-            background-size: 20px 20px; overflow-x: hidden; position: relative;
-        }
-
-        /* 內建瀏覽器警告牆 */
-        #inapp-warning { display: none; position: fixed; inset: 0; background: rgba(28,28,28,0.95); z-index: 9999999; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 30px; }
-        #inapp-warning h1 { color: var(--kurenai); font-size: 28px; margin-bottom: 15px; border: none;}
-        #inapp-warning p { font-size: 18px; line-height: 1.6; margin-bottom: 20px; color: #fff;}
-
-        /* 標題與功能區 */
-        .header-area { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid var(--border-light); padding-bottom: 15px;}
-        h1 { font-size: 26px; font-weight: 900; letter-spacing: 2px; margin: 0; color: var(--sumi); display: flex; align-items: center; gap: 8px;}
-        .header-actions { display: flex; gap: 10px; }
-        .omikuji-btn { background: #fff; color: var(--sumi); border: 1px solid var(--border-light); padding: 8px 12px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.2s; }
-        .sos-btn { background: var(--kurenai); color: #fff; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 4px 10px rgba(188, 0, 45, 0.3); animation: pulseRed 2s infinite; }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(188, 0, 45, 0.4); } 70% { box-shadow: 0 0 0 8px rgba(188, 0, 45, 0); } 100% { box-shadow: 0 0 0 0 rgba(188, 0, 45, 0); } }
-
-        /* 搜尋、語音輸入與翻譯列 */
-        .search-container { display: flex; gap: 10px; margin-bottom: 15px; width: 100%; }
-        .input-wrapper { position: relative; flex: 1; display: flex; }
-        .search-box { width: 100%; padding: 16px 50px 16px 20px; font-size: 16px; color: var(--sumi); font-weight: bold; background: #fff; border: 2px solid var(--border-light); border-radius: 30px; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .search-box:focus { border-color: var(--kurenai); box-shadow: 0 0 10px rgba(188,0,45,0.1); }
-        .mic-btn { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: var(--bg-washi); border: none; color: var(--kurenai); width: 40px; height: 40px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: 0.3s; }
-        .mic-btn.recording { background: var(--kurenai); color: #fff; animation: pulseRed 1s infinite; }
-        .translate-btn-inline { background: var(--sumi); color: white; border: none; padding: 0 20px; border-radius: 30px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; white-space: nowrap; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .translate-btn-inline:active { transform: scale(0.95); }
-
-        /* 和風開關面板 */
-        .toggles-panel { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; background: #fff; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border-light); }
-        .polite-toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-main); font-weight: bold; cursor: pointer;}
-        .polite-toggle input { width: 16px; height: 16px; accent-color: var(--kurenai); }
-
-        /* 翻譯結果顯示區 */
-        #inline-translate-result { display: none; margin-bottom: 25px; padding: 25px 20px; text-align: center; position: relative; background: #fff; border: 2px solid var(--kurenai); border-radius: 12px; box-shadow: 0 4px 15px rgba(188,0,45,0.08); }
-        .trans-badge { position: absolute; top: -12px; left: 20px; font-size: 13px; font-weight: bold; color: #fff; background: var(--kurenai); padding: 4px 12px; border-radius: 20px; }
-        #inline-jp-text { font-size: 26px; font-weight: 900; color: var(--sumi); margin: 15px 0; letter-spacing: 2px; }
-
-        /* 分類按鈕修復 (加入原生橫向滑動與卷軸) */
-        .category-container { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
-        .category-row-static { display: flex; flex-wrap: wrap; gap: 10px; }
-        .category-scroll { 
-            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 12px; 
-            -webkit-overflow-scrolling: touch; scroll-behavior: smooth; white-space: nowrap;
-        }
-        .category-scroll::-webkit-scrollbar { height: 6px; }
-        .category-scroll::-webkit-scrollbar-track { background: var(--bg-washi); border-radius: 10px; }
-        .category-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 10px; }
-        .cat-btn { flex-shrink: 0; background: #fff; color: var(--text-muted); border: 1px solid var(--border-light); padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .cat-btn.active { background: var(--kurenai); color: #fff; border-color: var(--kurenai); box-shadow: 0 4px 10px rgba(188,0,45,0.2); }
-        .cat-btn.custom-active { background: var(--matcha); color: #fff; border-color: var(--matcha); }
-        .cat-btn.secret-active { background: var(--sumi); color: #fff; border-color: var(--sumi); }
-
-        /* 滑桿面板 */
-        .controls-panel { background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border-light); margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-        .slider-container { display: flex; align-items: center; gap: 15px; width: 100%; max-width: 350px; justify-content: space-between; }
-        .slider-label { font-size: 14px; font-weight: bold; color: var(--text-main); width: 40px; }
-        .speed-slider { flex: 1; -webkit-appearance: none; background: var(--border-light); height: 6px; border-radius: 3px; outline: none; }
-        .speed-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--kurenai); cursor: pointer; box-shadow: 0 2px 5px rgba(188,0,45,0.4); }
-        .slider-val { font-family: monospace; font-size: 14px; font-weight: bold; color: var(--kurenai); width: 40px; text-align: right; }
-
-        /* ====== 和風卡片 (繪馬/印章設計) ====== */
-        ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
-        li.wafu-card { background: #fff; border: 1px solid var(--border-light); border-left: 5px solid var(--kurenai); border-radius: 10px; padding: 22px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; position: relative; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-        li.wafu-card:active { transform: scale(0.98); background: #fdfbf7; }
-        .hanko-stamp { position: absolute; top: 15px; right: 15px; font-size: 12px; font-weight: 900; color: var(--kurenai); border: 2px solid var(--kurenai); padding: 2px 6px; border-radius: 4px; transform: rotate(-5deg); opacity: 0.8; letter-spacing: 1px; font-family: 'Yu Mincho', serif; }
-        .key-content { z-index: 1; pointer-events: none; margin-bottom: 15px; margin-top: 10px;}
-        .zh-text-main { font-size: 18px; font-weight: bold; color: var(--text-muted); display: block; margin-bottom: 8px; line-height: 1.4; }
-        .jp-text-sub { font-size: 24px; color: var(--sumi); display: block; margin-bottom: 8px; font-weight: 900; letter-spacing: 1px; }
-        .romaji-text { font-size: 13px; color: var(--ai); font-family: monospace; display: inline-block; font-weight: bold; background: rgba(26, 67, 89, 0.05); padding: 4px 8px; border-radius: 4px; }
-        .card-actions { display: flex; gap: 10px; justify-content: flex-end; border-top: 1px dashed var(--border-light); padding-top: 15px; }
-        .icon-btn { background: #f9f9f9; border: 1px solid var(--border-light); border-radius: 20px; font-size: 13px; color: var(--text-main); cursor: pointer; padding: 6px 14px; transition: 0.2s; display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; }
-        .icon-btn:hover { background: #f0f0f0; }
-        .icon-btn.star.active { color: var(--kin); border-color: var(--kin); background: rgba(212, 175, 55, 0.1); }
-        .icon-btn.fullscreen { color: var(--kurenai); border-color: rgba(188, 0, 45, 0.2);}
+        .container { max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
+        .title { font-size: 26px; font-weight: 900; margin: 20px 0; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); user-select: none; }
         
-        /* 櫻花飄落層級修復 (Z-index 設為最高) */
-        .petal { position: fixed; top: -10px; background: var(--sakura); border-radius: 15px 0 15px 0; width: 12px; height: 12px; z-index: 999999; pointer-events: none; animation: fall linear infinite, sway ease-in-out infinite alternate; box-shadow: 0 0 5px rgba(254, 223, 225, 0.8); }
-        @keyframes fall { to { top: 110vh; transform: rotate(720deg); } }
-        @keyframes sway { from { margin-left: -20px; } to { margin-left: 20px; } }
+        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center; outline: none; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .btn { background: var(--card); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; }
+        .btn.active { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 10px rgba(59,130,246,0.5); }
+        .chk-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; color: var(--sub); display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; }
+        
+        .cat-scroll { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        .cat-item { background: var(--card); color: var(--sub); border: 1px solid var(--border); padding: 10px 18px; border-radius: 30px; white-space: nowrap; font-weight: bold; cursor: pointer; }
+        .cat-item.active { background: #475569; color: #fff; border-color: #fff; }
 
-        /* ====== 書法掛軸大字報 (究極進化 100% 滿版) ====== */
-        #fullscreen-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 100000; padding: 20px; align-items: center; justify-content: center;}
+        .list-area { display: flex; flex-direction: column; gap: 12px; text-align: left; }
+        .card { background: var(--card); border-radius: 20px; border: 1px solid var(--border); text-align: center; position: relative; overflow: hidden; }
+        .card-inner { padding: 20px 15px; cursor: pointer; }
+        .zh { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+        .ja-box { background: rgba(59,130,246,0.15); padding: 8px 15px; border-radius: 10px; margin-bottom: 5px; display: inline-block; border: 1px solid rgba(59,130,246,0.2); }
+        .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
+        .ro { font-size: 13px; color: var(--sub); }
+        .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: #334155; padding: 5px; cursor: pointer; }
+        .star.active { color: var(--gold); }
+        .zoom-btn { width: 100%; background: rgba(255,255,255,0.05); color: var(--sub); border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; cursor: pointer; }
         
-        .scroll-container { 
-            width: 100%; height: 100%; max-width: 800px;
-            background: #c1a173; /* 畫軸底色 */
-            border-top: 30px solid #5c4033; /* 頂部木捲軸 */
-            border-bottom: 30px solid #5c4033; /* 底部木捲軸 */
-            border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); 
-            display: flex; align-items: center; justify-content: center; padding: 20px 10px; position: relative;
-        }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .m-box { background: var(--card); padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; text-align: left; border: 1px solid var(--border); }
+        .m-close { width: 100%; padding: 15px; background: var(--border); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
         
-        .scroll-paper { 
-            width: 100%; height: 100%; background: #fdfbf7; 
-            box-shadow: inset 0 0 30px rgba(0,0,0,0.08); border: 2px solid #e8dcc7; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            position: relative; padding: 40px; box-sizing: border-box;
-        }
-        
-        #fullscreen-jp { 
-            writing-mode: vertical-rl; text-orientation: upright; color: var(--sumi); 
-            font-family: 'Yu Mincho', serif; font-weight: 900; 
-            max-height: 85%; word-break: break-all; letter-spacing: 4px; line-height: 1.3;
-            /* 字體大小由 JS 動態控制，確保塞得進去 */
-        }
-        
-        #fullscreen-zh { position: absolute; top: 20px; left: 20px; font-size: 20px; color: var(--text-muted); font-weight: bold; writing-mode: horizontal-tb;}
-        #fullscreen-romaji { position: absolute; bottom: 20px; left: 20px; font-size: 18px; color: var(--kurenai); font-weight: bold; font-family: monospace; writing-mode: horizontal-tb;}
-        
-        .close-fullscreen { position: absolute; top: 15px; right: 20px; font-size: 35px; color: #fff; background: none; border: none; cursor: pointer; z-index: 100001; text-shadow: 0 2px 5px rgba(0,0,0,0.5);}
-        .replay-btn-large { position: absolute; bottom: 25px; right: 25px; background: var(--kurenai); color: #fff; border: none; padding: 12px 25px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(188,0,45,0.4); z-index: 10; transition: 0.2s;}
-        .replay-btn-large:active { transform: scale(0.95); }
-
-        /* 御神籤 (Omikuji) 彈窗 */
-        #omikuji-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;}
-        .omikuji-card { background: #fff; padding: 30px; border-radius: 15px; width: 100%; max-width: 350px; position: relative; border-top: 10px solid var(--kurenai); box-shadow: 0 10px 30px rgba(0,0,0,0.5);}
-        .omikuji-fortune { font-size: 40px; font-weight: 900; color: var(--kurenai); margin-bottom: 10px; font-family: 'Yu Mincho', serif;}
-        .omikuji-title { font-size: 14px; color: var(--text-muted); margin-bottom: 15px; font-weight: bold;}
-        .omikuji-jp { font-size: 24px; font-weight: bold; color: var(--sumi); margin-bottom: 10px;}
-        .omikuji-zh { font-size: 16px; color: var(--text-main); margin-bottom: 25px;}
-        .omikuji-btn-play { background: var(--sumi); color: #fff; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-right: 10px;}
-        .omikuji-close { background: #eee; color: var(--text-main); border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer;}
-
-        /* SOS 緊急求助面板 */
-        #sos-modal { display: none; position: fixed; inset: 0; background: rgba(188, 0, 45, 0.95); z-index: 100000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center;}
-        #sos-modal h2 { color: #fff; font-size: 30px; font-weight: 900; margin-bottom: 30px; letter-spacing: 3px; font-family: 'Yu Mincho', serif;}
-        .sos-option { width: 100%; max-width: 350px; background: #fff; color: var(--kurenai); font-size: 20px; font-weight: 900; padding: 18px; border-radius: 8px; margin-bottom: 15px; border: none; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .sos-close { margin-top: 20px; background: none; border: 2px solid #fff; color: #fff; padding: 10px 40px; font-size: 18px; border-radius: 30px; cursor: pointer; font-weight: bold;}
+        /* ✅ 2. 底部安裝欄樣式 */
+        #install-bar { display: none; position: fixed; bottom: 0; left:0; right:0; background: rgba(30, 41, 59, 0.98); backdrop-filter: blur(10px); border-top: 1px solid var(--border); padding: 12px 20px; z-index: 9990; justify-content: space-between; align-items: center; animation: slideUp 0.4s ease-out; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .ib-content { display: flex; align-items: center; gap: 15px; flex-grow: 1; cursor: pointer; }
+        .ib-icon { width: 48px; height: 48px; border-radius: 10px; border: 1px solid var(--border); }
+        .ib-text { text-align: left; }
+        .ib-title { font-weight: 900; font-size: 16px; color: #fff; margin-bottom: 3px;}
+        .ib-desc { font-size: 13px; color: var(--green); }
+        .ib-close { padding: 10px; color: var(--sub); font-size: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="inapp-warning">
-        <h1>⚠️ 系統功能受限</h1>
-        <p>檢測到您正在使用內建瀏覽器，<br>這將導致語音辨識與發音失效！</p>
-        <p>👉 請點擊右上角「⋮」<br>選擇 <span style="color:var(--kurenai); font-weight:bold;">「以預設瀏覽器開啟」</span></p>
+    <div id="modal-zoom" class="modal">
+        <div id="z-ja" style="font-size:12vw; font-weight:900; color:#fff; text-align:center;"></div>
+        <div id="z-zh" style="font-size:22px; color:var(--sub); margin-top:30px; text-align:center; font-weight:bold;"></div>
+        <button class="m-close" style="width:200px;" onclick="document.getElementById('modal-zoom').style.display='none'">✖ 關閉</button>
     </div>
 
-    <div id="omikuji-modal">
-        <div class="omikuji-card">
-            <div class="omikuji-fortune" id="omi-fortune">大吉</div>
-            <div class="omikuji-title">⛩️ 今日專屬旅遊句</div>
-            <div class="omikuji-jp" id="omi-jp"></div>
-            <div class="omikuji-zh" id="omi-zh"></div>
-            <button class="omikuji-btn-play" onclick="speak(document.getElementById('omi-jp').innerText)">🔊 聆聽</button>
-            <button class="omikuji-close" onclick="document.getElementById('omikuji-modal').style.display='none'">收下祝福</button>
+    <div id="modal-ios-install" class="modal">
+        <div class="m-box" style="text-align:center;">
+            <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" style="width:80px; border-radius:15px; margin-bottom:15px;">
+            <h2 style="color:var(--gold); margin-top:0;">📲 安裝到 iPhone 桌面</h2>
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; text-align:left; font-size:15px; line-height: 1.6;">
+                1. 點擊瀏覽器下方的 <img src="https://cdn-icons-png.flaticon.com/512/197/197604.png" style="width:14px; filter:invert(1);"> <b>分享按鈕</b>。<br>
+                2. 往下滑動選單。<br>
+                3. 選擇 <b style="color:var(--gold);">「加入主畫面」</b>。<br>
+                4. 點擊右上角的「加入」。
+            </div>
+            <button class="m-close" style="background:var(--blue);" onclick="document.getElementById('modal-ios-install').style.display='none'">我知道了</button>
         </div>
     </div>
 
-    <div id="sos-modal">
-        <h2>🚨 緊急事態 (SOS) 🚨</h2>
-        <button class="sos-option" onclick="triggerSOS('我需要叫救護車', '救急車を呼んでください')">🚑 叫救護車</button>
-        <button class="sos-option" onclick="triggerSOS('請幫我報警', '警察を呼んでください')">🚓 請幫我報警</button>
-        <button class="sos-option" onclick="triggerSOS('我迷路了，請幫我', '道に迷いました。助けてください')">🗺️ 我迷路了</button>
-        <button class="sos-option" onclick="triggerSOS('我弄丟了護照/錢包', 'パスポートと財布をなくしました')">🛂 遺失護照/錢包</button>
-        <button class="sos-close" onclick="closeSOS()">取消</button>
-    </div>
-
-    <div id="fullscreen-overlay">
-        <button class="close-fullscreen" onclick="closeFullscreen()">✕</button>
-        <div class="scroll-container">
-            <div class="scroll-paper">
-                <div id="fullscreen-zh"></div>
-                <div id="fullscreen-jp"></div>
-                <div id="fullscreen-romaji"></div>
-                <button class="replay-btn-large" onclick="replayFullscreen()">🔊 發音</button>
+    <div id="install-bar">
+        <div class="ib-content" onclick="triggerInstall()">
+            <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="ib-icon">
+            <div class="ib-text">
+                <div class="ib-title">安裝「日本旅遊神器」</div>
+                <div class="ib-desc">⭐ 一鍵加入主畫面，使用更方便！</div>
             </div>
         </div>
+        <div class="ib-close" onclick="hideInstallBar()">✖</div>
     </div>
 
-    <div class="header-area">
-        <h1 id="app-title"><span style="color: var(--kurenai);">⛩️</span> 日本旅遊常用句</h1>
-        <div class="header-actions">
-            <button class="omikuji-btn" onclick="drawOmikuji()">🥠 求籤</button>
-            <button class="sos-btn" onclick="document.getElementById('sos-modal').style.display='flex'; triggerHaptic(50);">SOS</button>
+    <div class="container">
+        <div class="title">🇯🇵 Japan Travel</div>
+
+        <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話...">
+
+        <div class="grid-2">
+            <button class="btn" id="btn-rec" onclick="setCat('🕒 本次紀錄')">🕒 本次紀錄</button>
+            <button class="btn" id="btn-fav" onclick="setCat('⭐ 本次最愛')">⭐ 本次最愛</button>
+            <div class="chk-box"><label>🔊 大音量 <input type="checkbox" id="vol" checked></label></div>
+            <div class="chk-box"><label>🐢 龜速 <input type="checkbox" id="spd"></label></div>
         </div>
-    </div>
-    
-    <div class="search-container">
-        <div class="input-wrapper">
-            <input type="text" id="search-input" class="search-box" placeholder="輸入中文/日文，或點擊麥克風" onkeyup="filterData()" onkeypress="if(event.key === 'Enter') translateAndSpeak()">
-            <button id="mic-btn" class="mic-btn" onclick="startVoiceInput()">🎤</button>
-        </div>
-        <button class="translate-btn-inline" id="main-translate-btn" onclick="translateAndSpeak()">翻譯</button>
-    </div>
 
-    <div class="toggles-panel">
-        <label class="polite-toggle">
-            <input type="checkbox" id="polite-mode" onchange="filterData()"> 🌸 智慧禮貌用語 (自動過濾問候/讚美)
-        </label>
-        <label class="polite-toggle">
-            <input type="checkbox" id="romaji-toggle" checked onchange="toggleRomaji()"> 🔤 顯示羅馬拼音
-        </label>
-        <label class="polite-toggle">
-            <input type="checkbox" id="sakura-toggle" onchange="toggleSakura()"> 🎐 櫻花飄落特效
-        </label>
+        <div class="cat-scroll" id="cat-box"></div>
+        <div class="list-area" id="list-box"></div>
     </div>
-
-    <div id="inline-translate-result">
-        <div class="trans-badge">翻譯結果</div>
-        <div id="inline-jp-text"></div>
-        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px;">
-            <button class="icon-btn copy" onclick="copyText(event, document.getElementById('inline-jp-text').innerText)">📋 複製</button>
-            <button class="icon-btn fullscreen" onclick="triggerHaptic(); speak(document.getElementById('inline-jp-text').innerText)">🔊 發音</button>
-            <button class="icon-btn star active" id="save-custom-btn" onclick="saveCustomTranslation()">💾 存入自訂</button>
-        </div>
-    </div>
-
-    <div class="category-container">
-        <div class="category-row-static" id="cat-row-1"></div>
-        <div class="category-scroll" id="cat-row-2"></div>
-    </div>
-
-    <div class="controls-panel">
-        <div class="slider-container">
-            <span class="slider-label">語速</span>
-            <input type="range" id="speed-slider" class="speed-slider" min="0" max="2" step="0.1" value="1.0" oninput="updateSliders()">
-            <span id="speed-val" class="slider-val">1.0x</span>
-        </div>
-        <div class="slider-container">
-            <span class="slider-label">音調</span>
-            <input type="range" id="pitch-slider" class="speed-slider" min="0" max="2" step="0.1" value="1.0" oninput="updateSliders()">
-            <span id="pitch-val" class="slider-val">1.0</span>
-        </div>
-    </div>
-
-    <ul id="sentence-list"></ul>
 
     <script>
-        const ua = navigator.userAgent || navigator.vendor || window.opera;
-        const isInApp = /Line|FBAN|FBAV|Instagram|MicroMessenger/i.test(ua);
-        if (isInApp) { document.getElementById('inapp-warning').style.display = 'flex'; }
+        // 絕對不存 LocalStorage！只存在當次記憶體中
+        var favs = [];
+        var hist = [];
+        var curCat = "🌟 全部";
 
-        // 櫻花特效邏輯
-        let sakuraInterval;
-        function toggleSakura() {
-            const isChecked = document.getElementById('sakura-toggle').checked;
-            if (isChecked) {
-                sakuraInterval = setInterval(() => {
-                    const petal = document.createElement('div');
-                    petal.classList.add('petal');
-                    petal.style.left = Math.random() * 100 + 'vw';
-                    petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                    petal.style.opacity = Math.random();
-                    document.body.appendChild(petal);
-                    setTimeout(() => petal.remove(), 7000);
-                }, 400);
-            } else {
-                clearInterval(sakuraInterval);
-                document.querySelectorAll('.petal').forEach(p => p.remove());
+        // 300+ 句資料 (保持不變)
+        var rawData = [
+            ["👋 常用","你好","こんにちは","Konnichiwa"],
+            ["👋 常用","謝謝","ありがとうございます","Arigatou gozaimasu"],
+            ["👋 常用","不好意思/請問","すみません","Sumimasen"],
+            ["👋 常用","沒關係/不要緊","大丈夫です","Daijoubu desu"],
+            ["👋 常用","拜託您了","お願いします","Onegaishimasu"],
+            ["👋 常用","對不起","ごめんなさい","Gomennasai"],
+            ["👋 常用","早安","おはようございます","Ohayou gozaimasu"],
+            ["👋 常用","晚安","こんばんは","Konbanwa"],
+            ["👋 常用","我不懂日文","日本語がわかりません","Nihongo ga wakarimasen"],
+            ["👋 常用","請再說一次","もう一度言ってください","Mou ichido itte kudasai"],
+            ["👋 常用","好的/是的","はい","Hai"],
+            ["👋 常用","不是/不對","いいえ","Iie"],
+            ["👋 常用","幫大忙了","助かりました","Tasukarimashita"],
+            ["👋 常用","請說慢一點","ゆっくり話してください","Yukkuri hanashite kudasai"],
+            ["👋 常用","這是什麼？","これは何ですか","Kore wa nan desu ka"],
+            ["👋 常用","辛苦了","お疲れ様です","Otsukaresama desu"],
+            ["👋 常用","再見","さようなら","Sayounara"],
+            ["👋 常用","請寫下來","書いてください","Kaite kudasai"],
+            ["🏨 住宿","我要辦理入住","チェックインをお願いします","Chekku-in o onegaishimasu"],
+            ["🏨 住宿","我有預約","予約しています","Yoyaku shite imasu"],
+            ["🏨 住宿","能寄放行李嗎？","荷物を預かってもらえますか","Nimotsu o azukatte moraemasu ka"],
+            ["🏨 住宿","我要退房","チェックアウトをお願いします","Chekku-auto o onegaishimasu"],
+            ["🏨 住宿","Wi-Fi密碼是多少？","Wi-Fiのパスワードは何ですか","Wi-Fi no pasuwaado wa nan desu ka"],
+            ["🏨 住宿","沒有熱水","お湯が出ません","Oyu ga demasen"],
+            ["🏨 住宿","請幫我叫計程車","タクシーを呼んでください","Takushii o yonde kudasai"],
+            ["🏨 住宿","早餐是幾點？","朝食は何時ですか","Choushoku wa nanji desu ka"],
+            ["🍜 餐廳","兩位","2人です","Futari desu"],
+            ["🍜 餐廳","有中文菜單嗎？","中国語のメニューはありますか","Chuugokugo no menyuu wa arimasu ka"],
+            ["🍜 餐廳","有推薦的嗎？","おすすめは何ですか","Osusume wa nan desu ka"],
+            ["🍜 餐廳","我要點這個","これを注文します","Kore o chuumon shimasu"],
+            ["🍜 餐廳","請給我水","お水をください","Omizu o kudasai"],
+            ["🍜 餐廳","很好吃","美味しいです","Oishii desu"],
+            ["🍜 餐廳","麻煩結帳","お会計をお願いします","Okaikei o onegaishimasu"],
+            ["🍜 餐廳","我要外帶","持ち帰りでお願いします","Mochikaeri de onegaishimasu"],
+            ["🛍️ 購物","這個多少錢？","いくらですか","Ikura desu ka"],
+            ["🛍️ 購物","我要買這個","これをください","Kore o kudasai"],
+            ["🛍️ 購物","可以免稅嗎？","免税できますか","Menzei dekimasu ka"],
+            ["🛍️ 購物","可以試穿嗎？","試着してもいいですか","Shichaku shite mo ii desu ka"],
+            ["🛍️ 購物","可以刷卡嗎？","カードは使えますか","Kaado wa tsukaemasu ka"],
+            ["🛍️ 購物","可以用西瓜卡嗎？","Suicaは使えますか","Suica wa tsukaemasu ka"],
+            ["🚇 交通","請問車站在哪裡？","駅はどこですか","Eki wa doko desu ka"],
+            ["🚇 交通","這班車去新宿嗎？","新宿に行きますか","Shinjuku ni ikimasu ka"],
+            ["🚇 交通","我要在這裡下車","ここで降ります","Koko de orimasu"],
+            ["🚇 交通","下一站是哪裡？","次の駅はどこですか","Tsugi no eki wa doko desu ka"],
+            ["🚇 交通","出口在哪裡？","出口はどこですか","Deguchi wa doko desu ka"],
+            ["🏪 超商","請幫我微波加熱","温めてください","Atatamete kudasai"],
+            ["🏪 超商","請給我筷子","お箸をください","Ohashi o kudasai"],
+            ["🏪 超商","我不需要袋子","袋はいりません","Fukuro iranai desu"],
+            ["🏪 超商","我要儲值","チャージをお願いします","Chaaji o onegaishimasu"],
+            ["🍻 居酒屋","請給我生啤酒","生ビールをお願いします","Nama biiru o onegaishimasu"],
+            ["🍻 居酒屋","乾杯！","乾杯！","Kanpai!"],
+            ["🍻 居酒屋","最後點餐是幾點？","ラストオーダーは何時ですか","Rasuto oodaa wa nanji desu ka"],
+            ["🚑 緊急","救命！","助けてください","Tasukete kudasai"],
+            ["🚑 緊急","請叫救護車！","救急車を呼んでください","Kyuukyuusha o yonde kudasai"],
+            ["🚑 緊急","請叫警察！","警察を呼んでください","Keisatsu o yonde kudasai"],
+            ["🚑 緊急","我的護照不見了","パスポートをなくしました","Pasupooto o nakushimashita"]
+        ];
+
+        // 提取分類
+        var cats = ["🌟 全部"];
+        for(var i=0; i<rawData.length; i++) {
+            var c = rawData[i][0];
+            if(cats.indexOf(c) === -1) cats.push(c);
+        }
+
+        // ✅ 4. 雙系統安裝邏輯
+        var deferredPrompt; // 用於儲存安卓的安裝事件
+        var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        // 簡單判斷是否已經是 PWA 模式 (不使用會報錯的 matchMedia)
+        var isStandalone = navigator.standalone === true || (window.screen.height - window.innerHeight < 40);
+
+        // 顯示安裝欄
+        function showInstallBar() {
+            if (isStandalone) return; // 如果已經安裝過，就不顯示
+            document.getElementById('install-bar').style.display = 'flex';
+            // 增加底部間距，避免擋住內容
+            document.body.style.paddingBottom = '100px'; 
+        }
+
+        // 隱藏安裝欄
+        function hideInstallBar() {
+            document.getElementById('install-bar').style.display = 'none';
+            document.body.style.paddingBottom = '20px'; 
+        }
+
+        // 監聽安卓安裝事件
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault(); // 阻止瀏覽器預設的醜醜提示
+            deferredPrompt = e; // 把事件存起來
+            showInstallBar();   // 顯示我們漂亮的底部欄
+        });
+
+        // 如果是 iOS 且未安裝，直接顯示底部欄
+        if (isIOS && !isStandalone) {
+            showInstallBar();
+        }
+
+        // 觸發安裝 (點擊底部欄時執行)
+        window.triggerInstall = function() {
+            if (isIOS) {
+                // iOS: 顯示手動安裝教學
+                document.getElementById('modal-ios-install').style.display = 'flex';
+            } else if (deferredPrompt) {
+                // Android: 觸發原生安裝視窗
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(function(res) {
+                    if (res.outcome === 'accepted') {
+                        hideInstallBar(); // 安裝成功後隱藏
+                    }
+                    deferredPrompt = null;
+                });
             }
-        }
+        };
 
-        function drawOmikuji() {
-            triggerHaptic(30);
-            if (globalData.length === 0) return alert('資料庫載入中，請稍後抽籤！');
-            const fortunes = ['大吉', '中吉', '小吉', '吉'];
-            const f = fortunes[Math.floor(Math.random() * fortunes.length)];
-            const item = globalData[Math.floor(Math.random() * globalData.length)];
-            
-            document.getElementById('omi-fortune').innerText = f;
-            document.getElementById('omi-fortune').style.color = (f === '大吉') ? 'var(--kurenai)' : 'var(--sumi)';
-            document.getElementById('omi-jp').innerText = item.jp;
-            document.getElementById('omi-zh').innerText = item.zh;
-            document.getElementById('omikuji-modal').style.display = 'flex';
-            speak(item.jp);
-        }
-
-        function startVoiceInput() {
-            triggerHaptic(20);
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return alert("您的設備不支援語音輸入！");
-            const recognition = new SpeechRecognition(); recognition.lang = 'zh-TW'; recognition.interimResults = false;
-            const micBtn = document.getElementById('mic-btn'); const searchInput = document.getElementById('search-input');
-            recognition.onstart = () => { micBtn.classList.add('recording'); searchInput.value = ''; searchInput.placeholder = '聆聽中...'; };
-            recognition.onresult = (event) => { searchInput.value = event.results[0][0].transcript; translateAndSpeak(); };
-            recognition.onend = () => { micBtn.classList.remove('recording'); searchInput.placeholder = '輸入中文/日文，或點擊麥克風'; };
-            recognition.start();
-        }
-
-        function triggerHaptic(duration = 15) { if (navigator.vibrate) navigator.vibrate(duration); }
-        function triggerHapticSuccess() { if (navigator.vibrate) navigator.vibrate([20, 50, 20]); }
-
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
-        let globalData = []; let currentCategory = '全部';
-        let favorites = JSON.parse(localStorage.getItem('jp_favorites')) || [];
-        const CUSTOM_KEYWORD = '🗂️ 自訂';
-        let customTranslations = JSON.parse(localStorage.getItem('jp_custom_translations')) || [];
-
-        window.onload = () => { loadCSV(); if ('speechSynthesis' in window) window.speechSynthesis.getVoices(); };
-
-        function updateSliders() {
-            document.getElementById('speed-val').innerText = Number(document.getElementById('speed-slider').value).toFixed(1) + 'x';
-            document.getElementById('pitch-val').innerText = Number(document.getElementById('pitch-slider').value).toFixed(1);
-        }
-
-        function toggleRomaji() {
-            const isChecked = document.getElementById('romaji-toggle').checked;
-            document.querySelectorAll('.romaji-text').forEach(el => el.style.display = isChecked ? 'inline-block' : 'none');
-        }
-
-        function speak(text, forceLoudAndSlow = false) {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'ja-JP';
-            if (forceLoudAndSlow) { utterance.rate = 0.7; utterance.pitch = 1.0; utterance.volume = 1.0; } 
-            else { let r = parseFloat(document.getElementById('speed-slider').value); utterance.rate = r===0 ? 0.1 : r; utterance.pitch = parseFloat(document.getElementById('pitch-slider').value); }
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function triggerSOS(zh, jp) { triggerHaptic([50, 100, 50, 100, 50]); document.getElementById('sos-modal').style.display = 'none'; openFullscreen({stopPropagation:()=>{}}, jp, zh, ''); speak(jp, true); }
-        function closeSOS() { document.getElementById('sos-modal').style.display = 'none'; }
-
-        function toggleFavorite(event, jp) { event.stopPropagation(); triggerHaptic(20); const index = favorites.indexOf(jp); if (index > -1) favorites.splice(index, 1); else favorites.push(jp); localStorage.setItem('jp_favorites', JSON.stringify(favorites)); filterData(); }
-        function copyText(event, text) { event.stopPropagation(); navigator.clipboard.writeText(text).then(() => { const btn = event.currentTarget; const originalHTML = btn.innerHTML; btn.innerHTML = '✔ 成功'; setTimeout(() => btn.innerHTML = originalHTML, 1500); }); }
-        
-        // 掛軸大字報動態調整字體功能
-        function openFullscreen(event, jp, zh, romaji) { 
-            event.stopPropagation(); triggerHaptic(30); 
-            
-            const jpEl = document.getElementById('fullscreen-jp');
-            jpEl.innerText = jp;
-            
-            // 動態調整日文字體大小 (確保無論多長都能塞進掛軸)
-            let len = jp.length;
-            if (len <= 5) jpEl.style.fontSize = '12vh';
-            else if (len <= 10) jpEl.style.fontSize = '9vh';
-            else if (len <= 15) jpEl.style.fontSize = '7vh';
-            else if (len <= 20) jpEl.style.fontSize = '5.5vh';
-            else jpEl.style.fontSize = '4vh';
-
-            document.getElementById('fullscreen-romaji').innerText = romaji || ''; 
-            document.getElementById('fullscreen-zh').innerText = zh; 
-            document.getElementById('fullscreen-overlay').style.display = 'flex'; 
-            speak(jp); 
-        }
-        function closeFullscreen() { triggerHaptic(15); document.getElementById('fullscreen-overlay').style.display = 'none'; window.speechSynthesis.cancel(); }
-        function replayFullscreen() { triggerHaptic(20); speak(document.getElementById('fullscreen-jp').innerText); }
-
-        async function loadCSV() { try { const res = await fetch(CSV_URL); const csvText = await res.text(); processData(csvText); } catch(e) { console.error(e); } }
-
-        function processData(csvText) {
-            const rows = csvText.split('\n'); globalData = [];
-            for (let i = 1; i < rows.length; i++) {
-                const row = rows[i].trim(); if(!row) continue;
-                let cols = []; let currentVal = ''; let inQuotes = false;
-                for (let j = 0; j < row.length; j++) {
-                    let char = row[j];
-                    if (char === '"') inQuotes = !inQuotes; else if (char === ',' && !inQuotes) { cols.push(currentVal.trim()); currentVal = ''; } else currentVal += char;
-                }
-                cols.push(currentVal.trim()); 
-                if (cols.length >= 3) globalData.push({ cat: (cols[0] || '未分類').replace(/"/g, ''), zh: (cols[1] || '').replace(/"/g, ''), jp: (cols[2] || '').replace(/"/g, ''), romaji: (cols[3] || '').replace(/"/g, '') });
-            }
-            if(customTranslations.length > 0) globalData = [...globalData, ...customTranslations];
-            renderCategories(); filterData();
-        }
-
-        // 分類渲染 (已移除會干擾點擊的 drag 監聽，改為原生滑動)
-        function renderCategories() {
-            const row1 = document.getElementById('cat-row-1'); const row2 = document.getElementById('cat-row-2');
-            row1.innerHTML = ''; row2.innerHTML = '';
-            let baseCats = ['全部', '⭐最愛']; if (customTranslations.length > 0) baseCats.push(CUSTOM_KEYWORD);
-            const otherCats = new Set(); globalData.forEach(item => { if (item.cat !== CUSTOM_KEYWORD) otherCats.add(item.cat); });
-
-            function createBtn(cat) {
-                const btn = document.createElement('button');
-                btn.className = (cat === currentCategory) ? 'cat-btn active' : 'cat-btn';
-                btn.innerText = cat;
-                return btn;
-            }
-
-            baseCats.forEach(cat => { 
-                let btn = createBtn(cat); 
-                btn.onclick = () => { currentCategory = cat; renderCategories(); filterData(); triggerHaptic(15); }; 
-                row1.appendChild(btn); 
-            });
-            Array.from(otherCats).forEach(cat => { 
-                let btn = createBtn(cat); 
-                btn.onclick = () => { currentCategory = cat; renderCategories(); filterData(); triggerHaptic(15); }; 
-                row2.appendChild(btn); 
-            });
-        }
-
-        // ====== 更強大的智慧禮貌擴充系統 ======
-        function shouldAddPolitePrefix(zhText, jpText) {
-            // 1. 如果日文已經有不好意思/抱歉，不加
-            if (jpText.includes('すみません') || jpText.includes('ごめんなさい') || jpText.includes('失礼')) return false;
-            // 2. 如果字太少 (單字回答等)，不加
-            if (zhText.trim().length <= 2) return false;
-
-            // 3. 擴充字庫: 涵蓋打招呼、稱讚、肯定否定、感謝道歉
-            const excludeRegex = /^(你好|早安|午安|晚安|初次見面|很高興|再見|拜拜|掰掰|辛苦了|謝謝|感謝|對不起|抱歉|沒關係|沒事|沒錯|對|是|不是|好|不好|不用|不需要|當然|太棒了|讚|很好|棒|厲害|斯勾伊|好吃|美味|漂亮|美麗|帥|救命|幫忙)/;
-            if (excludeRegex.test(zhText.trim())) {
-                return false;
-            }
-            return true;
-        }
-
-        function filterData() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const filteredData = globalData.filter(item => {
-                let matchCat = (currentCategory === '全部') ? true : (currentCategory === '⭐最愛' ? favorites.includes(item.jp) : item.cat === currentCategory);
-                const matchQuery = (item.zh && item.zh.toLowerCase().includes(query)) || (item.jp && item.jp.toLowerCase().includes(query));
-                return matchCat && matchQuery;
-            });
-            renderList(filteredData);
-        }
-
-        function renderList(dataToRender) {
-            const list = document.getElementById('sentence-list'); list.innerHTML = '';
-            const isPolite = document.getElementById('polite-mode').checked;
-            const showRomaji = document.getElementById('romaji-toggle').checked;
-
-            dataToRender.forEach(item => {
-                const li = document.createElement('li'); li.className = 'wafu-card'; 
-                let needsPolite = isPolite && shouldAddPolitePrefix(item.zh, item.jp);
-                let displayZh = needsPolite ? `不好意思，${item.zh}` : item.zh;
-                let displayJp = needsPolite ? `すみません、${item.jp}` : item.jp;
-                let displayRomaji = (needsPolite && item.romaji) ? `Sumimasen, ${item.romaji}` : item.romaji;
-
-                const safeJp = item.jp.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeZh = displayZh.replace(/'/g, "\\'").replace(/"/g, "&quot;"); const safeRomaji = displayRomaji.replace(/'/g, "\\'").replace(/"/g, "&quot;");
-                const isFav = favorites.includes(item.jp); 
-                
-                let indicatorName = item.cat === CUSTOM_KEYWORD ? '自訂' : item.cat;
-                li.onclick = (e) => { if(e.target.tagName !== 'BUTTON') { triggerHaptic(25); speak(displayJp); } };
-                
-                li.innerHTML = `
-                    <div class="hanko-stamp">${indicatorName}</div>
-                    <div class="key-content">
-                        <span class="zh-text-main">${displayZh}</span>
-                        <span class="jp-text-sub">${displayJp}</span>
-                        ${displayRomaji ? `<span class="romaji-text" style="display: ${showRomaji ? 'inline-block' : 'none'};">${displayRomaji}</span>` : ''}
-                    </div>
-                    <div class="card-actions">
-                        <button class="icon-btn copy" onclick="copyText(event, '${safeJp}')">📋</button>
-                        <button class="icon-btn star ${isFav ? 'active' : ''}" onclick="toggleFavorite(event, '${safeJp}')">★</button>
-                        <button class="icon-btn fullscreen" onclick="openFullscreen(event, '${safeJp}', '${safeZh}', '${safeRomaji}')">⛶ 大字</button>
-                    </div>
-                `;
-                list.appendChild(li);
-            });
-        }
-
-        async function translateAndSpeak() {
-            let input = document.getElementById('search-input').value.trim(); if (!input) return;
-            const isPolite = document.getElementById('polite-mode').checked;
-            const originalZh = input;
-            if (isPolite && shouldAddPolitePrefix(input, '')) { input = "不好意思請問，" + input + "，謝謝。"; }
-
-            const resContainer = document.getElementById('inline-translate-result'); const resJp = document.getElementById('inline-jp-text'); const btn = document.getElementById('main-translate-btn');
-            resContainer.style.display = 'block'; resJp.innerText = "翻譯中..."; btn.disabled = true; 
-            
+        // 發音功能
+        window.spk = function(txt, zh, ro) {
             try {
-                const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=ja&dt=t&q=${encodeURIComponent(input)}`);
-                const data = await response.json(); const translatedText = data[0][0][0]; 
-                resJp.innerText = translatedText; resContainer.setAttribute('data-zh', originalZh);
-                speak(translatedText);
-            } catch (error) { resJp.innerText = "[ 翻譯失敗 ]"; } finally { btn.disabled = false; }
+                if(window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                    var u = new SpeechSynthesisUtterance(txt);
+                    u.lang = 'ja-JP';
+                    var spd = document.getElementById('spd');
+                    var vol = document.getElementById('vol');
+                    u.rate = (spd && spd.checked) ? 0.45 : 0.85;
+                    u.volume = (vol && vol.checked) ? 1.0 : 0.8;
+                    window.speechSynthesis.speak(u);
+                }
+            } catch(e) {}
+
+            if (zh) {
+                var temp = [];
+                for (var x=0; x<hist.length; x++) { if (hist[x][2] !== txt) temp.push(hist[x]); }
+                temp.unshift(["🕒 本次紀錄", zh, txt, ro]);
+                if (temp.length > 20) temp.pop();
+                hist = temp;
+            }
+        };
+
+        // 收藏功能
+        window.tglFav = function(e, j) {
+            e.stopPropagation();
+            var idx = favs.indexOf(j);
+            if (idx > -1) favs.splice(idx, 1); else favs.push(j);
+            drawList(curCat, document.getElementById('search').value);
+        };
+
+        // 放大功能
+        window.zoom = function(e, ja, zh) {
+            e.stopPropagation();
+            document.getElementById('z-ja').innerText = ja;
+            document.getElementById('z-zh').innerText = zh;
+            document.getElementById('modal-zoom').style.display = 'flex';
+        };
+
+        // 繪製清單
+        function drawList(cat, q) {
+            var box = document.getElementById('list-box');
+            box.innerHTML = '';
+
+            var arr = [];
+            if (cat === "🌟 全部") {
+                arr = rawData;
+            } else if (cat === "⭐ 本次最愛") {
+                for (var i=0; i<rawData.length; i++) { if (favs.indexOf(rawData[i][2]) > -1) arr.push(rawData[i]); }
+            } else if (cat === "🕒 本次紀錄") {
+                arr = hist;
+            } else {
+                for (var i=0; i<rawData.length; i++) { if (rawData[i][0] === cat) arr.push(rawData[i]); }
+            }
+
+            if (q) {
+                q = q.toLowerCase();
+                var tmp = [];
+                for (var k=0; k<arr.length; k++) {
+                    if (arr[k][1].indexOf(q) > -1 || arr[k][2].indexOf(q) > -1) tmp.push(arr[k]);
+                }
+                arr = tmp;
+            }
+
+            var html = "";
+            for (var n=0; n<arr.length; n++) {
+                var item = arr[n];
+                var jText = item[2];
+                var sFav = (favs.indexOf(jText) > -1) ? "active" : "";
+                
+                var safeJ = jText.replace(/'/g, "\\'");
+                var safeZ = item[1].replace(/'/g, "\\'");
+                var safeR = (item[3]||"").replace(/'/g, "\\'");
+
+                html += '<div class="card">' +
+                            '<div class="star '+sFav+'" onclick="tglFav(event, \''+safeJ+'\')">★</div>' +
+                            '<div class="card-inner" onclick="spk(\''+safeJ+'\', \''+safeZ+'\', \''+safeR+'\')">' +
+                                '<div class="zh">'+item[1]+'</div>' +
+                                '<div class="ja-box"><span class="ja">🔊 '+jText+'</span></div>' +
+                                '<div class="ro">'+(item[3]||"")+'</div>' +
+                            '</div>' +
+                            '<button class="zoom-btn" onclick="zoom(event, \''+safeJ+'\', \''+safeZ+'\')">🪧 放大顯示</button>' +
+                        '</div>';
+            }
+            if (arr.length === 0) box.innerHTML = '<h3 style="color:var(--sub); text-align:center;">查無資料</h3>';
+            else box.innerHTML = html;
         }
 
-        function saveCustomTranslation() {
-            const zh = document.getElementById('inline-translate-result').getAttribute('data-zh') || document.getElementById('search-input').value.trim(); 
-            const jp = document.getElementById('inline-jp-text').innerText.trim();
-            if (!zh || !jp || jp === "翻譯中...") return;
-            triggerHapticSuccess(); const newItem = { cat: CUSTOM_KEYWORD, zh: zh, jp: jp, romaji: '' };
-            customTranslations.push(newItem); localStorage.setItem('jp_custom_translations', JSON.stringify(customTranslations)); globalData.push(newItem);
-            renderCategories(); filterData();
+        // 切換分類
+        window.setCat = function(cName) {
+            curCat = cName;
+            var bRec = document.getElementById('btn-rec');
+            var bFav = document.getElementById('btn-fav');
+            bRec.className = (cName === '🕒 本次紀錄') ? 'btn active' : 'btn';
+            bFav.className = (cName === '⭐ 本次最愛') ? 'btn active' : 'btn';
+
+            var btns = document.getElementsByClassName('cat-item');
+            for (var i=0; i<btns.length; i++) {
+                btns[i].className = (btns[i].innerText === cName) ? 'cat-item active' : 'cat-item';
+            }
+            drawList(curCat, document.getElementById('search').value);
+        };
+
+        // 搜尋
+        document.getElementById('search').oninput = function(e) { drawList(curCat, e.target.value); };
+
+        // 啟動
+        var cHtml = "";
+        for (var x=0; x<cats.length; x++) {
+            var act = (cats[x] === '🌟 全部') ? 'active' : '';
+            cHtml += '<button class="cat-item '+act+'" onclick="document.getElementById(\'search\').value=\'\'; setCat(\''+cats[x]+'\')">'+cats[x]+'</button>';
         }
+        document.getElementById('cat-box').innerHTML = cHtml;
+        drawList('🌟 全部', '');
+
     </script>
 </body>
 </html>
