@@ -1,21 +1,16 @@
 {
-  "name": "日文常用句發音",
-  "short_name": "日文發音",
-  "description": "幫助你快速翻譯與發音日文常用句",
-  "start_url": "./index.html",
+  "name": "日本旅遊常用句",
+  "short_name": "日文常用句",
+  "description": "日本旅遊必備語音翻譯工具",
+  "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#f5f5f7",
-  "theme_color": "#0070f3",
+  "background_color": "#0f172a",
+  "theme_color": "#00f0ff",
   "icons": [
     {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇯🇵</text></svg>",
-      "sizes": "192x192",
-      "type": "image/svg+xml"
-    },
-    {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇯🇵</text></svg>",
+      "src": "https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/png"
     }
   ]
 }
