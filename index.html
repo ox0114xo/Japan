@@ -10,20 +10,21 @@
     <meta name="apple-mobile-web-app-title" content="日語神器">
     <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
     <link rel="icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    
     <link rel="manifest" href='data:application/json;charset=utf-8,{"name":"日本旅遊神器","short_name":"日語神器","start_url":".","display":"standalone","background_color":"#0f172a","theme_color":"#1e293b","icons":[{"src":"https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png","sizes":"512x512","type":"image/png"}]}'>
 
     <style>
         :root { --bg: #0f172a; --card: #1e293b; --blue: #3b82f6; --green: #10b981; --red: #ef4444; --gold: #fbbf24; --text: #f8fafc; --sub: #94a3b8; --border: #334155; }
-        body { background-color: var(--bg); color: var(--text); margin: 0; font-family: sans-serif; text-align: center; padding-bottom: 100px; /* 預留底部空間 */ }
+        body { background-color: var(--bg); color: var(--text); margin: 0; font-family: sans-serif; text-align: center; padding-bottom: 120px; }
         
         .container { max-width: 500px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
-        .title { font-size: 26px; font-weight: 900; margin: 20px 0; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); user-select: none; }
+        .title { font-size: 26px; font-weight: 900; margin: 20px 0; color: #fff; text-shadow: 0 0 10px rgba(59,130,246,0.5); }
         
-        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center; outline: none; }
+        .search { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: #fff; margin-bottom: 15px; font-size: 16px; text-align: center; outline: none; box-sizing: border-box; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .btn { background: var(--card); border: 1px solid var(--border); color: #fff; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .btn.active { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 10px rgba(59,130,246,0.5); }
+        .btn.active { background: var(--blue); border-color: var(--blue); }
         .chk-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; font-size: 14px; color: var(--sub); display: flex; justify-content: center; align-items: center; gap: 5px; font-weight: bold; }
         
         .cat-scroll { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; }
@@ -38,66 +39,65 @@
         .ja-box { background: rgba(59,130,246,0.15); padding: 8px 15px; border-radius: 10px; margin-bottom: 5px; display: inline-block; border: 1px solid rgba(59,130,246,0.2); }
         .ja { font-size: 18px; color: #93c5fd; font-weight: bold; }
         .ro { font-size: 13px; color: var(--sub); }
-        .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: #334155; padding: 5px; cursor: pointer; }
+        .star { position: absolute; top: 12px; left: 12px; font-size: 26px; color: #334155; padding: 5px; cursor: pointer; z-index: 10; }
         .star.active { color: var(--gold); }
         .zoom-btn { width: 100%; background: rgba(255,255,255,0.05); color: var(--sub); border: none; border-top: 1px solid var(--border); padding: 15px; font-weight: bold; font-size: 14px; cursor: pointer; }
         
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 999; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .m-box { background: var(--card); padding: 25px; border-radius: 20px; width: 100%; max-width: 350px; text-align: left; border: 1px solid var(--border); }
-        .m-close { width: 100%; padding: 15px; background: var(--border); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
+        .m-close { width: 100%; padding: 15px; background: var(--blue); color: #fff; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; font-size: 16px; cursor: pointer; }
         
-        /* ✅ 2. 底部安裝欄樣式 */
-        #install-bar { display: none; position: fixed; bottom: 0; left:0; right:0; background: rgba(30, 41, 59, 0.98); backdrop-filter: blur(10px); border-top: 1px solid var(--border); padding: 12px 20px; z-index: 9990; justify-content: space-between; align-items: center; animation: slideUp 0.4s ease-out; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+        /* 底部安裝欄 */
+        #install-bar { display: none; position: fixed; bottom: 0; left:0; right:0; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); padding: 15px 20px; z-index: 9990; justify-content: space-between; align-items: center; animation: slideUp 0.5s ease-out; box-shadow: 0 -10px 30px rgba(0,0,0,0.5); padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .ib-content { display: flex; align-items: center; gap: 15px; flex-grow: 1; cursor: pointer; }
-        .ib-icon { width: 48px; height: 48px; border-radius: 10px; border: 1px solid var(--border); }
-        .ib-text { text-align: left; }
-        .ib-title { font-weight: 900; font-size: 16px; color: #fff; margin-bottom: 3px;}
-        .ib-desc { font-size: 13px; color: var(--green); }
-        .ib-close { padding: 10px; color: var(--sub); font-size: 20px; cursor: pointer; }
+        .ib-icon { width: 50px; height: 50px; border-radius: 12px; border: 1px solid var(--border); }
+        .ib-title { font-weight: 900; font-size: 16px; color: #fff; }
+        .ib-desc { font-size: 12px; color: var(--green); margin-top: 2px; }
+        .ib-btn { background: var(--blue); color: #fff; padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 14px; margin-right: 10px; }
+        .ib-close { color: var(--sub); font-size: 20px; padding: 5px; }
     </style>
 </head>
 <body>
-
-    <div id="modal-zoom" class="modal">
-        <div id="z-ja" style="font-size:12vw; font-weight:900; color:#fff; text-align:center;"></div>
-        <div id="z-zh" style="font-size:22px; color:var(--sub); margin-top:30px; text-align:center; font-weight:bold;"></div>
-        <button class="m-close" style="width:200px;" onclick="document.getElementById('modal-zoom').style.display='none'">✖ 關閉</button>
-    </div>
-
-    <div id="modal-ios-install" class="modal">
-        <div class="m-box" style="text-align:center;">
-            <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" style="width:80px; border-radius:15px; margin-bottom:15px;">
-            <h2 style="color:var(--gold); margin-top:0;">📲 安裝到 iPhone 桌面</h2>
-            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; text-align:left; font-size:15px; line-height: 1.6;">
-                1. 點擊瀏覽器下方的 <img src="https://cdn-icons-png.flaticon.com/512/197/197604.png" style="width:14px; filter:invert(1);"> <b>分享按鈕</b>。<br>
-                2. 往下滑動選單。<br>
-                3. 選擇 <b style="color:var(--gold);">「加入主畫面」</b>。<br>
-                4. 點擊右上角的「加入」。
-            </div>
-            <button class="m-close" style="background:var(--blue);" onclick="document.getElementById('modal-ios-install').style.display='none'">我知道了</button>
-        </div>
-    </div>
 
     <div id="install-bar">
         <div class="ib-content" onclick="triggerInstall()">
             <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="ib-icon">
             <div class="ib-text">
-                <div class="ib-title">安裝「日本旅遊神器」</div>
-                <div class="ib-desc">⭐ 一鍵加入主畫面，使用更方便！</div>
+                <div class="ib-title">安裝旅遊神器</div>
+                <div class="ib-desc">✨ 點擊此處一鍵安裝至桌面</div>
             </div>
         </div>
-        <div class="ib-close" onclick="hideInstallBar()">✖</div>
+        <div class="ib-btn" onclick="triggerInstall()">安裝</div>
+        <div class="ib-close" onclick="hideInstallBar()">✕</div>
+    </div>
+
+    <div id="modal-ios" class="modal">
+        <div class="m-box" style="text-align:center;">
+            <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" style="width:70px; border-radius:15px; margin-bottom:15px;">
+            <h2 style="color:var(--gold); margin-top:0;">iPhone 安裝教學</h2>
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; text-align:left; font-size:15px; line-height: 1.8;">
+                1. 點擊瀏覽器下方的 <b>「分享鈕」</b> <img src="https://cdn-icons-png.flaticon.com/512/197/197604.png" style="width:16px; filter:invert(1);"><br>
+                2. 選單往下滑，點擊 <b style="color:var(--blue);">「加入主畫面」</b><br>
+                3. 點擊右上角 <b style="color:var(--blue);">「加入」</b> 即可完成！
+            </div>
+            <button class="m-close" onclick="document.getElementById('modal-ios').style.display='none'">我知道了</button>
+        </div>
+    </div>
+
+    <div id="modal-zoom" class="modal">
+        <div id="z-ja" style="font-size:12vw; font-weight:900; color:#fff; text-align:center;"></div>
+        <div id="z-zh" style="font-size:22px; color:var(--sub); margin-top:30px; text-align:center; font-weight:bold;"></div>
+        <button class="m-close" style="width:150px; background:var(--border);" onclick="document.getElementById('modal-zoom').style.display='none'">關閉</button>
     </div>
 
     <div class="container">
         <div class="title">🇯🇵 Japan Travel</div>
-
-        <input type="text" id="search" class="search" placeholder="🔍 搜尋你想說的話...">
+        <input type="text" id="search" class="search" placeholder="🔍 搜尋中日文關鍵字...">
 
         <div class="grid-2">
-            <button class="btn" id="btn-rec" onclick="setCat('🕒 本次紀錄')">🕒 本次紀錄</button>
-            <button class="btn" id="btn-fav" onclick="setCat('⭐ 本次最愛')">⭐ 本次最愛</button>
+            <button class="btn" id="btn-rec" onclick="setCat('🕒 歷史紀錄')">🕒 歷史紀錄</button>
+            <button class="btn" id="btn-fav" onclick="setCat('⭐ 收藏清單')">⭐ 收藏清單</button>
             <div class="chk-box"><label>🔊 大音量 <input type="checkbox" id="vol" checked></label></div>
             <div class="chk-box"><label>🐢 龜速 <input type="checkbox" id="spd"></label></div>
         </div>
@@ -107,160 +107,90 @@
     </div>
 
     <script>
-        // 絕對不存 LocalStorage！只存在當次記憶體中
-        var favs = [];
-        var hist = [];
+        // ✅ 永久儲存：從 LocalStorage 讀取資料
+        var favs = JSON.parse(localStorage.getItem('jap_favs') || '[]');
+        var hist = JSON.parse(localStorage.getItem('jap_hist') || '[]');
         var curCat = "🌟 全部";
 
-        // 300+ 句資料 (保持不變)
         var rawData = [
             ["👋 常用","你好","こんにちは","Konnichiwa"],
             ["👋 常用","謝謝","ありがとうございます","Arigatou gozaimasu"],
-            ["👋 常用","不好意思/請問","すみません","Sumimasen"],
-            ["👋 常用","沒關係/不要緊","大丈夫です","Daijoubu desu"],
-            ["👋 常用","拜託您了","お願いします","Onegaishimasu"],
+            ["👋 常用","不好意思","すみません","Sumimasen"],
             ["👋 常用","對不起","ごめんなさい","Gomennasai"],
-            ["👋 常用","早安","おはようございます","Ohayou gozaimasu"],
-            ["👋 常用","晚安","こんばんは","Konbanwa"],
+            ["👋 常用","請問這個多少錢？","これはいくらですか？","Kore wa ikura desu ka?"],
+            ["👋 常用","請給我這個","これをください","Kore o kudasai"],
             ["👋 常用","我不懂日文","日本語がわかりません","Nihongo ga wakarimasen"],
-            ["👋 常用","請再說一次","もう一度言ってください","Mou ichido itte kudasai"],
-            ["👋 常用","好的/是的","はい","Hai"],
-            ["👋 常用","不是/不對","いいえ","Iie"],
-            ["👋 常用","幫大忙了","助かりました","Tasukarimashita"],
-            ["👋 常用","請說慢一點","ゆっくり話してください","Yukkuri hanashite kudasai"],
-            ["👋 常用","這是什麼？","これは何ですか","Kore wa nan desu ka"],
-            ["👋 常用","辛苦了","お疲れ様です","Otsukaresama desu"],
-            ["👋 常用","再見","さようなら","Sayounara"],
-            ["👋 常用","請寫下來","書いてください","Kaite kudasai"],
-            ["🏨 住宿","我要辦理入住","チェックインをお願いします","Chekku-in o onegaishimasu"],
-            ["🏨 住宿","我有預約","予約しています","Yoyaku shite imasu"],
-            ["🏨 住宿","能寄放行李嗎？","荷物を預かってもらえますか","Nimotsu o azukatte moraemasu ka"],
-            ["🏨 住宿","我要退房","チェックアウトをお願いします","Chekku-auto o onegaishimasu"],
-            ["🏨 住宿","Wi-Fi密碼是多少？","Wi-Fiのパスワードは何ですか","Wi-Fi no pasuwaado wa nan desu ka"],
-            ["🏨 住宿","沒有熱水","お湯が出ません","Oyu ga demasen"],
-            ["🏨 住宿","請幫我叫計程車","タクシーを呼んでください","Takushii o yonde kudasai"],
-            ["🏨 住宿","早餐是幾點？","朝食は何時ですか","Choushoku wa nanji desu ka"],
-            ["🍜 餐廳","兩位","2人です","Futari desu"],
-            ["🍜 餐廳","有中文菜單嗎？","中国語のメニューはありますか","Chuugokugo no menyuu wa arimasu ka"],
-            ["🍜 餐廳","有推薦的嗎？","おすすめは何ですか","Osusume wa nan desu ka"],
-            ["🍜 餐廳","我要點這個","これを注文します","Kore o chuumon shimasu"],
-            ["🍜 餐廳","請給我水","お水をください","Omizu o kudasai"],
-            ["🍜 餐廳","很好吃","美味しいです","Oishii desu"],
-            ["🍜 餐廳","麻煩結帳","お会計をお願いします","Okaikei o onegaishimasu"],
-            ["🍜 餐廳","我要外帶","持ち帰りでお願いします","Mochikaeri de onegaishimasu"],
-            ["🛍️ 購物","這個多少錢？","いくらですか","Ikura desu ka"],
-            ["🛍️ 購物","我要買這個","これをください","Kore o kudasai"],
-            ["🛍️ 購物","可以免稅嗎？","免税できますか","Menzei dekimasu ka"],
-            ["🛍️ 購物","可以試穿嗎？","試着してもいいですか","Shichaku shite mo ii desu ka"],
-            ["🛍️ 購物","可以刷卡嗎？","カードは使えますか","Kaado wa tsukaemasu ka"],
-            ["🛍️ 購物","可以用西瓜卡嗎？","Suicaは使えますか","Suica wa tsukaemasu ka"],
-            ["🚇 交通","請問車站在哪裡？","駅はどこですか","Eki wa doko desu ka"],
-            ["🚇 交通","這班車去新宿嗎？","新宿に行きますか","Shinjuku ni ikimasu ka"],
-            ["🚇 交通","我要在這裡下車","ここで降ります","Koko de orimasu"],
-            ["🚇 交通","下一站是哪裡？","次の駅はどこですか","Tsugi no eki wa doko desu ka"],
-            ["🚇 交通","出口在哪裡？","出口はどこですか","Deguchi wa doko desu ka"],
-            ["🏪 超商","請幫我微波加熱","温めてください","Atatamete kudasai"],
-            ["🏪 超商","請給我筷子","お箸をください","Ohashi o kudasai"],
-            ["🏪 超商","我不需要袋子","袋はいりません","Fukuro iranai desu"],
-            ["🏪 超商","我要儲值","チャージをお願いします","Chaaji o onegaishimasu"],
-            ["🍻 居酒屋","請給我生啤酒","生ビールをお願いします","Nama biiru o onegaishimasu"],
-            ["🍻 居酒屋","乾杯！","乾杯！","Kanpai!"],
-            ["🍻 居酒屋","最後點餐是幾點？","ラストオーダーは何時ですか","Rasuto oodaa wa nanji desu ka"],
-            ["🚑 緊急","救命！","助けてください","Tasukete kudasai"],
-            ["🚑 緊急","請叫救護車！","救急車を呼んでください","Kyuukyuusha o yonde kudasai"],
-            ["🚑 緊急","請叫警察！","警察を呼んでください","Keisatsu o yonde kudasai"],
-            ["🚑 緊急","我的護照不見了","パスポートをなくしました","Pasupooto o nakushimashita"]
+            ["👋 常用","可以使用信用卡嗎？","クレジットカードは使えますか？","Kurejitto kaado wa tsukaemasu ka?"],
+            ["👋 常用","車站點在哪裡？","駅はどこですか？","Eki wa doko desu ka?"],
+            ["👋 常用","廁所在哪裡？","お手洗いはどこですか？","Otearai wa doko desu ka?"],
+            ["👋 常用","請幫幫我","助けてください","Tasukete kudasai"],
+            ["👋 常用","可以免稅嗎？","免税できますか？","Menzei dekimasu ka?"],
+            ["👋 常用","推薦的是什麼？","おすすめは何ですか？","Osusume wa nan desu ka?"],
+            ["👋 常用","我要點餐","注文をお願いします","Chuumon o onegaishimasu"],
+            ["👋 常用","結帳","お会計をお願いします","Okaikei o onegaishimasu"],
+            ["👋 常用","很好吃","美味しいです","Oishii desu"]
         ];
 
-        // 提取分類
         var cats = ["🌟 全部"];
-        for(var i=0; i<rawData.length; i++) {
-            var c = rawData[i][0];
-            if(cats.indexOf(c) === -1) cats.push(c);
-        }
+        rawData.forEach(d => { if(cats.indexOf(d[0])===-1) cats.push(d[0]); });
 
-        // ✅ 4. 雙系統安裝邏輯
-        var deferredPrompt; // 用於儲存安卓的安裝事件
-        var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        // 簡單判斷是否已經是 PWA 模式 (不使用會報錯的 matchMedia)
-        var isStandalone = navigator.standalone === true || (window.screen.height - window.innerHeight < 40);
-
-        // 顯示安裝欄
-        function showInstallBar() {
-            if (isStandalone) return; // 如果已經安裝過，就不顯示
+        // 安裝邏輯
+        var deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
             document.getElementById('install-bar').style.display = 'flex';
-            // 增加底部間距，避免擋住內容
-            document.body.style.paddingBottom = '100px'; 
-        }
-
-        // 隱藏安裝欄
-        function hideInstallBar() {
-            document.getElementById('install-bar').style.display = 'none';
-            document.body.style.paddingBottom = '20px'; 
-        }
-
-        // 監聽安卓安裝事件
-        window.addEventListener('beforeinstallprompt', function(e) {
-            e.preventDefault(); // 阻止瀏覽器預設的醜醜提示
-            deferredPrompt = e; // 把事件存起來
-            showInstallBar();   // 顯示我們漂亮的底部欄
         });
 
-        // 如果是 iOS 且未安裝，直接顯示底部欄
-        if (isIOS && !isStandalone) {
-            showInstallBar();
+        if (window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches) {
+            // 已安裝則不顯示
+        } else if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+            setTimeout(() => document.getElementById('install-bar').style.display = 'flex', 2000);
         }
 
-        // 觸發安裝 (點擊底部欄時執行)
         window.triggerInstall = function() {
-            if (isIOS) {
-                // iOS: 顯示手動安裝教學
-                document.getElementById('modal-ios-install').style.display = 'flex';
+            if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+                document.getElementById('modal-ios').style.display = 'flex';
             } else if (deferredPrompt) {
-                // Android: 觸發原生安裝視窗
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(function(res) {
-                    if (res.outcome === 'accepted') {
-                        hideInstallBar(); // 安裝成功後隱藏
-                    }
+                deferredPrompt.userChoice.then((choice) => {
+                    if (choice.outcome === 'accepted') hideInstallBar();
                     deferredPrompt = null;
                 });
             }
         };
 
-        // 發音功能
+        window.hideInstallBar = () => {
+            document.getElementById('install-bar').style.display = 'none';
+            document.body.style.paddingBottom = '20px';
+        };
+
+        // 發音與歷史紀錄存檔
         window.spk = function(txt, zh, ro) {
-            try {
-                if(window.speechSynthesis) {
-                    window.speechSynthesis.cancel();
-                    var u = new SpeechSynthesisUtterance(txt);
-                    u.lang = 'ja-JP';
-                    var spd = document.getElementById('spd');
-                    var vol = document.getElementById('vol');
-                    u.rate = (spd && spd.checked) ? 0.45 : 0.85;
-                    u.volume = (vol && vol.checked) ? 1.0 : 0.8;
-                    window.speechSynthesis.speak(u);
-                }
-            } catch(e) {}
+            window.speechSynthesis.cancel();
+            var u = new SpeechSynthesisUtterance(txt);
+            u.lang = 'ja-JP';
+            u.rate = document.getElementById('spd').checked ? 0.5 : 0.9;
+            u.volume = document.getElementById('vol').checked ? 1.0 : 0.7;
+            window.speechSynthesis.speak(u);
 
             if (zh) {
-                var temp = [];
-                for (var x=0; x<hist.length; x++) { if (hist[x][2] !== txt) temp.push(hist[x]); }
-                temp.unshift(["🕒 本次紀錄", zh, txt, ro]);
-                if (temp.length > 20) temp.pop();
-                hist = temp;
+                hist = hist.filter(h => h[2] !== txt);
+                hist.unshift(["🕒 歷史紀錄", zh, txt, ro]);
+                if (hist.length > 50) hist.pop();
+                localStorage.setItem('jap_hist', JSON.stringify(hist)); // ✅ 存檔
             }
         };
 
-        // 收藏功能
+        // 收藏存檔
         window.tglFav = function(e, j) {
             e.stopPropagation();
-            var idx = favs.indexOf(j);
-            if (idx > -1) favs.splice(idx, 1); else favs.push(j);
+            if (favs.indexOf(j) > -1) favs = favs.filter(f => f !== j);
+            else favs.push(j);
+            localStorage.setItem('jap_favs', JSON.stringify(favs)); // ✅ 存檔
             drawList(curCat, document.getElementById('search').value);
         };
 
-        // 放大功能
         window.zoom = function(e, ja, zh) {
             e.stopPropagation();
             document.getElementById('z-ja').innerText = ja;
@@ -268,82 +198,53 @@
             document.getElementById('modal-zoom').style.display = 'flex';
         };
 
-        // 繪製清單
         function drawList(cat, q) {
             var box = document.getElementById('list-box');
             box.innerHTML = '';
-
             var arr = [];
-            if (cat === "🌟 全部") {
-                arr = rawData;
-            } else if (cat === "⭐ 本次最愛") {
-                for (var i=0; i<rawData.length; i++) { if (favs.indexOf(rawData[i][2]) > -1) arr.push(rawData[i]); }
-            } else if (cat === "🕒 本次紀錄") {
-                arr = hist;
-            } else {
-                for (var i=0; i<rawData.length; i++) { if (rawData[i][0] === cat) arr.push(rawData[i]); }
-            }
+            if (cat === "🌟 全部") arr = rawData;
+            else if (cat === "⭐ 收藏清單") arr = rawData.filter(d => favs.indexOf(d[2]) > -1);
+            else if (cat === "🕒 歷史紀錄") arr = hist;
+            else arr = rawData.filter(d => d[0] === cat);
 
             if (q) {
                 q = q.toLowerCase();
-                var tmp = [];
-                for (var k=0; k<arr.length; k++) {
-                    if (arr[k][1].indexOf(q) > -1 || arr[k][2].indexOf(q) > -1) tmp.push(arr[k]);
-                }
-                arr = tmp;
+                arr = arr.filter(d => d[1].indexOf(q) > -1 || d[2].toLowerCase().indexOf(q) > -1);
             }
 
-            var html = "";
-            for (var n=0; n<arr.length; n++) {
-                var item = arr[n];
-                var jText = item[2];
-                var sFav = (favs.indexOf(jText) > -1) ? "active" : "";
-                
-                var safeJ = jText.replace(/'/g, "\\'");
-                var safeZ = item[1].replace(/'/g, "\\'");
-                var safeR = (item[3]||"").replace(/'/g, "\\'");
-
-                html += '<div class="card">' +
-                            '<div class="star '+sFav+'" onclick="tglFav(event, \''+safeJ+'\')">★</div>' +
-                            '<div class="card-inner" onclick="spk(\''+safeJ+'\', \''+safeZ+'\', \''+safeR+'\')">' +
-                                '<div class="zh">'+item[1]+'</div>' +
-                                '<div class="ja-box"><span class="ja">🔊 '+jText+'</span></div>' +
-                                '<div class="ro">'+(item[3]||"")+'</div>' +
-                            '</div>' +
-                            '<button class="zoom-btn" onclick="zoom(event, \''+safeJ+'\', \''+safeZ+'\')">🪧 放大顯示</button>' +
-                        '</div>';
-            }
-            if (arr.length === 0) box.innerHTML = '<h3 style="color:var(--sub); text-align:center;">查無資料</h3>';
-            else box.innerHTML = html;
+            arr.forEach(item => {
+                var isFav = favs.indexOf(item[2]) > -1 ? "active" : "";
+                var card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="star ${isFav}" onclick="tglFav(event, '${item[2]}')">★</div>
+                    <div class="card-inner" onclick="spk('${item[2]}', '${item[1]}', '${item[3]}')">
+                        <div class="zh">${item[1]}</div>
+                        <div class="ja-box"><span class="ja">🔊 ${item[2]}</span></div>
+                        <div class="ro">${item[3]||''}</div>
+                    </div>
+                    <button class="zoom-btn" onclick="zoom(event, '${item[2]}', '${item[1]}')">🪧 放大顯示</button>
+                `;
+                box.appendChild(card);
+            });
         }
 
-        // 切換分類
         window.setCat = function(cName) {
             curCat = cName;
-            var bRec = document.getElementById('btn-rec');
-            var bFav = document.getElementById('btn-fav');
-            bRec.className = (cName === '🕒 本次紀錄') ? 'btn active' : 'btn';
-            bFav.className = (cName === '⭐ 本次最愛') ? 'btn active' : 'btn';
-
-            var btns = document.getElementsByClassName('cat-item');
-            for (var i=0; i<btns.length; i++) {
-                btns[i].className = (btns[i].innerText === cName) ? 'cat-item active' : 'cat-item';
-            }
+            document.getElementById('btn-rec').className = (cName === '🕒 歷史紀錄') ? 'btn active' : 'btn';
+            document.getElementById('btn-fav').className = (cName === '⭐ 收藏清單') ? 'btn active' : 'btn';
+            document.querySelectorAll('.cat-item').forEach(b => b.className = (b.innerText === cName) ? 'cat-item active' : 'cat-item');
             drawList(curCat, document.getElementById('search').value);
         };
 
-        // 搜尋
-        document.getElementById('search').oninput = function(e) { drawList(curCat, e.target.value); };
+        document.getElementById('search').oninput = (e) => drawList(curCat, e.target.value);
 
-        // 啟動
+        // 初始化
         var cHtml = "";
-        for (var x=0; x<cats.length; x++) {
-            var act = (cats[x] === '🌟 全部') ? 'active' : '';
-            cHtml += '<button class="cat-item '+act+'" onclick="document.getElementById(\'search\').value=\'\'; setCat(\''+cats[x]+'\')">'+cats[x]+'</button>';
-        }
+        cats.forEach(c => cHtml += `<button class="cat-item ${c==='🌟 全部'?'active':''}" onclick="setCat('${c}')">${c}</button>`);
         document.getElementById('cat-box').innerHTML = cHtml;
         drawList('🌟 全部', '');
-
     </script>
 </body>
 </html>
+
