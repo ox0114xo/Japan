@@ -1,6 +1,7 @@
 {
   "name": "日本旅遊常用句",
   "short_name": "日文旅遊",
+  "description": "日本旅遊必備，包含常用語、收藏功能與隱藏模式",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0f172a",
