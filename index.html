@@ -14,14 +14,46 @@
         :root { 
             --bg-dark: #0f172a; --neon-blue: #00f0ff; --neon-purple: #b026ff; 
             --neon-green: #39ff14; --neon-red: #ff3333; --btn-depth: #1e3a8a; 
-            --text-main: #e2e8f0; --text-muted: #94a3b8; 
+            --text-main: #e2e8f0; --text-muted: #94a3b8;
+            --base-font: 1rem;
         }
-        
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-dark); background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 70%); color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; line-height: 1.6; padding-bottom: 80px; min-height: 100vh; }
+
+        /* ===== 淺色模式 ===== */
+        body.light-mode {
+            --bg-dark: #f0f4ff;
+            --btn-depth: #b0c4f8;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --neon-blue: #0066cc;
+            --neon-purple: #7c3aed;
+            --neon-green: #16a34a;
+            --neon-red: #dc2626;
+        }
+        body.light-mode { background-image: radial-gradient(circle at 50% 0%, #dde8ff 0%, #f0f4ff 70%); }
+        body.light-mode li { background: linear-gradient(145deg, #ffffff, #e8f0ff); border-color: rgba(0,102,204,0.3); }
+        body.light-mode .search-box { background: rgba(255,255,255,0.8); color: #1e293b; border-color: var(--neon-purple); }
+        body.light-mode .cat-btn { background: rgba(255,255,255,0.6); color: var(--text-muted); border-color: #cbd5e1; }
+        body.light-mode .cat-btn.active { background: rgba(0,102,204,0.1); }
+        body.light-mode .panel { background: rgba(255,255,255,0.95); border-color: rgba(0,102,204,0.2); }
+        body.light-mode .panel-header { border-color: rgba(0,102,204,0.1); }
+        body.light-mode .toolbar { background: rgba(240,244,255,0.95); border-color: rgba(0,102,204,0.15); }
+        body.light-mode #clear-cache-btn { background: rgba(240,244,255,0.9); }
+        body.light-mode .cat-container::after { background: linear-gradient(to right, transparent, #f0f4ff); }
+
+        body { 
+            font-family: 'Segoe UI', Roboto, sans-serif; 
+            background-color: var(--bg-dark); 
+            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, var(--bg-dark) 70%); 
+            color: var(--text-main); padding: 15px; max-width: 600px; margin: 0 auto; 
+            line-height: 1.6; padding-bottom: 100px; min-height: 100vh;
+            font-size: var(--base-font);
+            transition: background-color 0.3s, color 0.3s;
+        }
         
         .header { text-align: center; margin-bottom: 20px; padding-top: 10px; }
         .logo { width: 70px; height: 70px; border-radius: 18px; box-shadow: 0 0 15px var(--neon-blue); margin-bottom: 12px; border: 2px solid var(--neon-blue); cursor: pointer; }
         h1 { color: #fff; text-shadow: 0 0 10px var(--neon-blue); font-size: 22px; margin: 0; user-select: none; cursor: pointer; }
+        body.light-mode h1 { color: var(--neon-blue); }
 
         .cat-container { position: relative; width: 100%; overflow: hidden; margin-bottom: 15px; }
         .cat-container::after {
@@ -29,13 +61,11 @@
             background: linear-gradient(to right, transparent, var(--bg-dark));
             pointer-events: none; z-index: 2;
         }
-
         .cat-row { 
             display: flex; overflow-x: auto; gap: 12px; padding: 5px 40px 10px 5px; 
             scrollbar-width: none; justify-content: flex-start; -webkit-overflow-scrolling: touch;
         }
         .cat-row::-webkit-scrollbar { display: none; }
-        
         .cat-btn { white-space: nowrap; background: rgba(0,0,0,0.5); color: var(--text-muted); border: 1px solid #334155; padding: 8px 20px; border-radius: 20px; font-size: 14px; cursor: pointer; transition: 0.3s; }
         .cat-btn.active { color: var(--neon-blue); border-color: var(--neon-blue); background: rgba(0, 240, 255, 0.1); font-weight: bold; }
         .cat-btn.secret-active { color: var(--neon-red); border-color: var(--neon-red); background: rgba(255, 51, 51, 0.1); }
@@ -55,45 +85,116 @@
         
         .play-icon { font-size: 22px; margin-right: 15px; color: var(--neon-blue); opacity: 0.8; }
         .content { flex: 1; }
-        .zh { font-size: 20px; font-weight: bold; color: #fff; display: block; margin-bottom: 5px; }
-        .jp { font-size: 16px; color: var(--text-main); display: block; margin-bottom: 3px; }
-        .romaji { font-size: 12px; color: var(--neon-blue); font-family: monospace; display: block; opacity: 0.8; }
+        .zh { font-size: calc(var(--base-font) * 1.25); font-weight: bold; color: #fff; display: block; margin-bottom: 5px; }
+        body.light-mode .zh { color: #1e293b; }
+        .jp { font-size: var(--base-font); color: var(--text-main); display: block; margin-bottom: 3px; }
+        .romaji { font-size: calc(var(--base-font) * 0.75); color: var(--neon-blue); font-family: monospace; display: block; opacity: 0.8; }
 
-        .actions { display: flex; gap: 10px; }
-        .btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: #64748b; padding: 8px; font-size: 18px; }
+        .actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+        .btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: #64748b; padding: 8px; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .btn:hover { opacity: 0.8; }
         .btn.fav-on { color: #fbbf24; border-color: #fbbf24; }
+        .btn.copy-flash { color: var(--neon-green); border-color: var(--neon-green); }
 
-        /* 全螢幕直式字幕 - 初始字體設為 1px 以便 JS 計算 */
+        /* 全螢幕直式字幕 */
         #fs-overlay { display: none; position: fixed; inset: 0; background: #000; z-index: 10000; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; overflow: hidden; }
-        #fs-jp { 
-            writing-mode: vertical-rl; text-orientation: upright;
-            color: var(--neon-green); font-weight: bold; 
-            line-height: 1.1; letter-spacing: 0.1em;
-            text-shadow: 0 0 20px var(--neon-green);
-            white-space: nowrap; /* 確保不換行以便計算單行最大化 */
-        }
+        #fs-jp { writing-mode: vertical-rl; text-orientation: upright; color: var(--neon-green); font-weight: bold; line-height: 1.1; letter-spacing: 0.1em; text-shadow: 0 0 20px var(--neon-green); white-space: nowrap; }
         #fs-zh { font-size: 5vw; color: #fff; opacity: 0.7; border-top: 1px solid #333; padding-top: 15px; width: 80%; text-align: center; margin-top: 20px; }
 
+        /* ===== 工具列 ===== */
+        .toolbar {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 600px;
+            background: rgba(15,23,42,0.92); border-top: 1px solid rgba(0,240,255,0.15);
+            backdrop-filter: blur(10px); display: flex; justify-content: space-around; align-items: center;
+            padding: 8px 10px; box-sizing: border-box; z-index: 1000;
+        }
+        .tool-btn {
+            background: none; border: none; color: var(--text-muted); font-size: 22px;
+            cursor: pointer; padding: 8px 12px; border-radius: 10px; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
+        }
+        .tool-btn span { font-size: 10px; }
+        .tool-btn:hover, .tool-btn.active { color: var(--neon-blue); background: rgba(0,240,255,0.08); }
+
+        /* ===== 面板 ===== */
+        .panel {
+            display: none; position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+            width: calc(100% - 30px); max-width: 570px;
+            background: rgba(15,23,42,0.97); border: 1px solid rgba(0,240,255,0.2);
+            border-radius: 18px; z-index: 999; backdrop-filter: blur(10px);
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            max-height: 60vh; overflow-y: auto;
+        }
+        .panel.open { display: block; }
+        .panel-header { padding: 16px 20px; border-bottom: 1px solid rgba(0,240,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .panel-header h3 { margin: 0; color: var(--neon-blue); font-size: 16px; }
+        .panel-close { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        .panel-body { padding: 20px; }
+
+        /* 匯率換算 */
+        .rate-display { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .rate-card { background: rgba(0,240,255,0.05); border: 1px solid rgba(0,240,255,0.15); border-radius: 10px; padding: 12px; text-align: center; }
+        .rate-card .label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+        .rate-card .value { font-size: 20px; font-weight: bold; color: var(--neon-blue); }
+        .rate-card .sub { font-size: 11px; color: var(--text-muted); }
+        .rate-input-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .rate-input { flex: 1; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,240,255,0.3); border-radius: 10px; color: #fff; font-size: 18px; outline: none; text-align: right; }
+        .rate-label { color: var(--text-muted); font-size: 14px; min-width: 40px; text-align: center; }
+        .rate-result { text-align: center; color: var(--neon-green); font-size: 22px; font-weight: bold; padding: 10px; }
+        .rate-update { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+        /* 字體大小 */
+        .font-row { display: flex; align-items: center; gap: 15px; justify-content: center; padding: 10px 0; }
+        .font-btn { background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; color: var(--text-main); padding: 10px 20px; font-size: 18px; cursor: pointer; transition: 0.2s; }
+        .font-btn:hover { border-color: var(--neon-blue); color: var(--neon-blue); }
+        .font-preview { flex: 1; text-align: center; color: var(--neon-blue); font-size: var(--base-font); }
+
+        /* 設定列表 */
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .setting-row:last-child { border: none; }
+        .setting-label { color: var(--text-main); font-size: 15px; }
+        .toggle { width: 44px; height: 24px; background: #334155; border-radius: 12px; cursor: pointer; position: relative; transition: 0.3s; border: none; }
+        .toggle.on { background: var(--neon-blue); }
+        .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 9px; top: 3px; left: 3px; transition: 0.3s; }
+        .toggle.on::after { left: 23px; }
+
+        /* 離線狀態 */
+        .offline-badge { display: none; background: var(--neon-red); color: white; font-size: 11px; padding: 3px 8px; border-radius: 8px; margin-left: 8px; }
+        .offline-badge.show { display: inline; }
+
         #clear-cache-btn {
-            position: fixed; bottom: 20px; left: 20px; 
+            position: fixed; bottom: 75px; left: 20px; 
             background: rgba(15, 23, 42, 0.8); border: 1px solid var(--neon-red); 
             color: var(--neon-red); padding: 8px 12px; border-radius: 8px; 
             font-size: 12px; cursor: pointer; z-index: 1001; 
             backdrop-filter: blur(5px); transition: 0.5s; opacity: 0; pointer-events: none;
         }
         #clear-cache-btn.visible { opacity: 1; pointer-events: auto; }
+
+        /* 複製提示 */
+        .toast {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-80px);
+            background: var(--neon-green); color: #000; padding: 10px 20px; border-radius: 20px;
+            font-weight: bold; font-size: 14px; z-index: 99999; transition: transform 0.3s;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body>
 
+    <!-- 全螢幕字幕 -->
     <div id="fs-overlay" onclick="this.style.display='none'">
         <div id="fs-jp"></div>
         <div id="fs-zh"></div>
     </div>
 
+    <!-- 複製提示 -->
+    <div class="toast" id="toast">✓ 已複製！</div>
+
     <div class="header">
         <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="logo" onclick="location.reload()">
-        <h1 id="app-title">日本旅遊常用句</h1>
+        <h1 id="app-title">日本旅遊常用句 <span class="offline-badge" id="offline-badge">離線</span></h1>
     </div>
 
     <div class="cat-container">
@@ -110,16 +211,243 @@
     </div>
 
     <div id="loading" style="text-align: center; padding: 40px; color: var(--neon-blue); font-family: monospace;">📡 連線中...</div>
-
     <ul id="list"></ul>
     <button id="clear-cache-btn" onclick="clearAllCache()">🧹 清除暫存</button>
 
+    <!-- 底部工具列 -->
+    <div class="toolbar">
+        <button class="tool-btn" onclick="openPanel('currency')" id="tb-currency">
+            💱<span>匯率</span>
+        </button>
+        <button class="tool-btn" onclick="openPanel('font')" id="tb-font">
+            🔤<span>字體</span>
+        </button>
+        <button class="tool-btn" onclick="openPanel('settings')" id="tb-settings">
+            ⚙️<span>設定</span>
+        </button>
+    </div>
+
+    <!-- 匯率面板 -->
+    <div class="panel" id="panel-currency">
+        <div class="panel-header">
+            <h3>💱 匯率換算</h3>
+            <button class="panel-close" onclick="closePanel()">✕</button>
+        </div>
+        <div class="panel-body">
+            <div class="rate-display">
+                <div class="rate-card">
+                    <div class="label">1 TWD =</div>
+                    <div class="value" id="rate-twd-to-jpy">—</div>
+                    <div class="sub">日圓 (JPY)</div>
+                </div>
+                <div class="rate-card">
+                    <div class="label">1 JPY =</div>
+                    <div class="value" id="rate-jpy-to-twd">—</div>
+                    <div class="sub">台幣 (TWD)</div>
+                </div>
+            </div>
+            <div class="rate-input-row">
+                <input class="rate-input" id="twd-input" type="number" placeholder="0" oninput="calcCurrency('twd')">
+                <span class="rate-label">TWD</span>
+            </div>
+            <div class="rate-result" id="jpy-result">= — JPY</div>
+            <hr style="border-color: rgba(255,255,255,0.05); margin: 15px 0;">
+            <div class="rate-input-row">
+                <input class="rate-input" id="jpy-input" type="number" placeholder="0" oninput="calcCurrency('jpy')">
+                <span class="rate-label">JPY</span>
+            </div>
+            <div class="rate-result" id="twd-result">= — TWD</div>
+            <div class="rate-update" id="rate-update-time">匯率載入中...</div>
+        </div>
+    </div>
+
+    <!-- 字體大小面板 -->
+    <div class="panel" id="panel-font">
+        <div class="panel-header">
+            <h3>🔤 字體大小</h3>
+            <button class="panel-close" onclick="closePanel()">✕</button>
+        </div>
+        <div class="panel-body">
+            <div class="font-row">
+                <button class="font-btn" onclick="changeFont(-0.1)">A−</button>
+                <div class="font-preview" id="font-preview">中文 あいう ABC</div>
+                <button class="font-btn" onclick="changeFont(0.1)">A+</button>
+            </div>
+            <div style="text-align:center; color: var(--text-muted); font-size: 13px; margin-top: 10px;">
+                目前大小：<span id="font-size-label">16px</span>
+            </div>
+            <div style="display:flex; justify-content:center; margin-top: 15px;">
+                <button class="font-btn" onclick="resetFont()" style="font-size:14px;">重設預設</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 設定面板 -->
+    <div class="panel" id="panel-settings">
+        <div class="panel-header">
+            <h3>⚙️ 設定</h3>
+            <button class="panel-close" onclick="closePanel()">✕</button>
+        </div>
+        <div class="panel-body">
+            <div class="setting-row">
+                <span class="setting-label">🌙 深色 / ☀️ 淺色模式</span>
+                <button class="toggle" id="toggle-theme" onclick="toggleTheme()"></button>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">🔊 點擊自動播放語音</span>
+                <button class="toggle on" id="toggle-auto-play" onclick="toggleAutoPlay()"></button>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">📖 顯示羅馬拼音</span>
+                <button class="toggle on" id="toggle-romaji" onclick="toggleRomaji()"></button>
+            </div>
+            <div class="setting-row">
+                <span class="setting-label">🧹 清除全部資料</span>
+                <button class="font-btn" onclick="clearAllCache()" style="font-size:13px; padding: 8px 14px;">清除</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
-        let raw = [], curCat = '全部', favs = JSON.parse(localStorage.getItem('jp_f')) || [], transHistory = JSON.parse(localStorage.getItem('jp_trans_hist')) || [], unlocked = false, clicks = 0;
+        let raw = [], curCat = '全部', 
+            favs = JSON.parse(localStorage.getItem('jp_f')) || [], 
+            transHistory = JSON.parse(localStorage.getItem('jp_trans_hist')) || [], 
+            unlocked = false, clicks = 0,
+            autoPlay = localStorage.getItem('jp_autoplay') !== 'false',
+            showRomaji = localStorage.getItem('jp_romaji') !== 'false',
+            exchangeRate = null,
+            currentFontSize = parseFloat(localStorage.getItem('jp_fontsize')) || 1.0,
+            currentPanel = null;
 
-        function play(t) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ja-JP'; window.speechSynthesis.speak(u); }
+        // ===== 語音 =====
+        function play(t) { 
+            window.speechSynthesis.cancel(); 
+            const u = new SpeechSynthesisUtterance(t); 
+            u.lang = 'ja-JP'; 
+            window.speechSynthesis.speak(u); 
+        }
 
+        // ===== 主題 =====
+        function applyTheme() {
+            const isLight = localStorage.getItem('jp_theme') === 'light';
+            document.body.classList.toggle('light-mode', isLight);
+            const btn = document.getElementById('toggle-theme');
+            if (btn) btn.classList.toggle('on', isLight);
+        }
+        function toggleTheme() {
+            const isLight = document.body.classList.toggle('light-mode');
+            localStorage.setItem('jp_theme', isLight ? 'light' : 'dark');
+            document.getElementById('toggle-theme').classList.toggle('on', isLight);
+        }
+
+        // ===== 字體大小 =====
+        function applyFont() {
+            document.documentElement.style.setProperty('--base-font', currentFontSize + 'rem');
+            const px = Math.round(currentFontSize * 16);
+            const el = document.getElementById('font-size-label');
+            const prev = document.getElementById('font-preview');
+            if (el) el.textContent = px + 'px';
+            if (prev) prev.style.fontSize = currentFontSize + 'rem';
+        }
+        function changeFont(delta) {
+            currentFontSize = Math.max(0.7, Math.min(1.6, currentFontSize + delta));
+            currentFontSize = Math.round(currentFontSize * 10) / 10;
+            localStorage.setItem('jp_fontsize', currentFontSize);
+            applyFont();
+        }
+        function resetFont() {
+            currentFontSize = 1.0;
+            localStorage.setItem('jp_fontsize', 1.0);
+            applyFont();
+        }
+
+        // ===== 面板 =====
+        function openPanel(name) {
+            if (currentPanel === name) { closePanel(); return; }
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('panel-' + name).classList.add('open');
+            document.getElementById('tb-' + name).classList.add('active');
+            currentPanel = name;
+            if (name === 'currency') loadExchangeRate();
+        }
+        function closePanel() {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('open'));
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            currentPanel = null;
+        }
+        document.addEventListener('click', (e) => {
+            if (currentPanel && !e.target.closest('.panel') && !e.target.closest('.toolbar')) closePanel();
+        });
+
+        // ===== 匯率 =====
+        async function loadExchangeRate() {
+            if (exchangeRate) { updateRateDisplay(); return; }
+            try {
+                const r = await fetch('https://api.exchangerate-api.com/v4/latest/TWD');
+                const d = await r.json();
+                exchangeRate = d.rates.JPY;
+                updateRateDisplay();
+                document.getElementById('rate-update-time').textContent = '匯率已更新 ✓';
+            } catch(e) {
+                // fallback
+                exchangeRate = 4.7;
+                updateRateDisplay();
+                document.getElementById('rate-update-time').textContent = '使用近似匯率 (離線)';
+            }
+        }
+        function updateRateDisplay() {
+            document.getElementById('rate-twd-to-jpy').textContent = exchangeRate.toFixed(2);
+            document.getElementById('rate-jpy-to-twd').textContent = (1/exchangeRate).toFixed(4);
+        }
+        function calcCurrency(dir) {
+            if (!exchangeRate) return;
+            if (dir === 'twd') {
+                const twd = parseFloat(document.getElementById('twd-input').value) || 0;
+                const jpy = Math.round(twd * exchangeRate);
+                document.getElementById('jpy-result').textContent = `= ${jpy.toLocaleString()} JPY`;
+            } else {
+                const jpy = parseFloat(document.getElementById('jpy-input').value) || 0;
+                const twd = (jpy / exchangeRate).toFixed(1);
+                document.getElementById('twd-result').textContent = `= ${parseFloat(twd).toLocaleString()} TWD`;
+            }
+        }
+
+        // ===== 設定切換 =====
+        function toggleAutoPlay() {
+            autoPlay = !autoPlay;
+            localStorage.setItem('jp_autoplay', autoPlay);
+            document.getElementById('toggle-auto-play').classList.toggle('on', autoPlay);
+        }
+        function toggleRomaji() {
+            showRomaji = !showRomaji;
+            localStorage.setItem('jp_romaji', showRomaji);
+            document.getElementById('toggle-romaji').classList.toggle('on', showRomaji);
+            doSearch();
+        }
+
+        // ===== 離線狀態 =====
+        window.addEventListener('online', () => document.getElementById('offline-badge').classList.remove('show'));
+        window.addEventListener('offline', () => document.getElementById('offline-badge').classList.add('show'));
+        if (!navigator.onLine) document.getElementById('offline-badge').classList.add('show');
+
+        // ===== 複製提示 =====
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+        function copyText(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('✓ 已複製！');
+                btn.classList.add('copy-flash');
+                setTimeout(() => btn.classList.remove('copy-flash'), 600);
+            });
+        }
+
+        // ===== 清除 =====
         function clearAllCache() {
             if(confirm("確定要清除所有紀錄與最愛嗎？")) { localStorage.clear(); location.reload(); }
         }
@@ -128,11 +456,10 @@
             const btn = document.getElementById('clear-cache-btn');
             if ((window.innerHeight + window.pageYOffset) >= document.documentElement.scrollHeight - 50) {
                 btn.classList.add('visible');
-            } else {
-                btn.classList.remove('visible');
-            }
+            } else { btn.classList.remove('visible'); }
         };
 
+        // ===== 翻譯 =====
         async function goTranslate() {
             const t = document.getElementById('search').value.trim();
             if(!t) return;
@@ -146,7 +473,8 @@
                 transHistory.unshift({ cat: '⚡ 紀錄', zh: t, jp: jp, romaji: '' });
                 if(transHistory.length > 50) transHistory.pop();
                 localStorage.setItem('jp_trans_hist', JSON.stringify(transHistory));
-                play(jp); curCat = '⚡ 紀錄'; drawCats(); doSearch(); 
+                if (autoPlay) play(jp); 
+                curCat = '⚡ 紀錄'; drawCats(); doSearch(); 
             } catch(e) { alert("翻譯失敗"); }
             btn.innerText = '⚡';
         }
@@ -155,7 +483,13 @@
             if(++clicks >= 10 && !unlocked) { unlocked = true; alert("髒話解鎖"); curCat = '🤬 隱藏情緒'; drawCats(); doSearch(); }
         };
 
+        // ===== 資料載入 =====
         async function init() {
+            applyTheme();
+            applyFont();
+            document.getElementById('toggle-auto-play').classList.toggle('on', autoPlay);
+            document.getElementById('toggle-romaji').classList.toggle('on', showRomaji);
+
             try {
                 const r = await fetch(CSV_URL);
                 const csv = await r.text();
@@ -166,7 +500,7 @@
                 }).filter(i => i.jp);
                 document.getElementById('loading').style.display = 'none';
                 drawCats(); doSearch();
-            } catch(e) { document.getElementById('loading').innerText = "連線失敗"; }
+            } catch(e) { document.getElementById('loading').innerText = "連線失敗 — 請檢查網路"; }
         }
 
         function drawCats() {
@@ -206,57 +540,53 @@
             filtered.forEach(i => {
                 const isF = favs.includes(i.jp);
                 const item = document.createElement('li');
-                item.onclick = () => play(i.jp);
+                item.onclick = () => { if(autoPlay) play(i.jp); };
+                
+                const romajiHTML = showRomaji && i.romaji 
+                    ? `<span class="romaji">${i.romaji}</span>` : '';
+
                 item.innerHTML = `
                     <div class="play-icon" style="${i.cat && i.cat.includes('🤬')?'color:var(--neon-red)':''}">🔊</div>
                     <div class="content">
                         <span class="zh">${i.zh}</span>
                         <span class="jp">${i.jp}</span>
-                        <span class="romaji">${i.romaji || ''}</span>
+                        ${romajiHTML}
                     </div>
                     <div class="actions">
-                        <button class="btn ${isF?'fav-on':''}" onclick="event.stopPropagation(); setFav('${i.jp}')">★</button>
-                        <button class="btn" onclick="event.stopPropagation(); goFS('${i.jp}','${i.zh}')">⛶</button>
+                        <button class="btn ${isF?'fav-on':''}" title="收藏" onclick="event.stopPropagation(); setFav('${i.jp}', this)">★</button>
+                        <button class="btn" title="複製日文" onclick="event.stopPropagation(); copyText('${i.jp.replace(/'/g,"\\'")}', this)">📋</button>
+                        <button class="btn" title="全螢幕" onclick="event.stopPropagation(); goFS('${i.jp.replace(/'/g,"\\'")}','${i.zh.replace(/'/g,"\\'")}')">⛶</button>
                     </div>`;
                 el.appendChild(item);
             });
         }
 
-        function setFav(j) {
+        function setFav(j, btn) {
             const idx = favs.indexOf(j);
             if(idx > -1) favs.splice(idx, 1); else favs.push(j);
             localStorage.setItem('jp_f', JSON.stringify(favs));
+            btn.classList.toggle('fav-on', favs.includes(j));
             doSearch();
         }
 
-        // --- 全螢幕自適應大字邏輯 ---
         function goFS(j, z) {
             const overlay = document.getElementById('fs-overlay');
             const jpEl = document.getElementById('fs-jp');
             const zhEl = document.getElementById('fs-zh');
-            
             jpEl.innerText = j;
             zhEl.innerText = z;
             overlay.style.display = 'flex';
-
-            // 確保元素渲染後計算
             setTimeout(() => {
-                // 設定一個極限字體，然後往下縮小直到符合容器
-                // 因為是直書，高度是主要限制 (扣除中文與內距)
                 const maxH = overlay.clientHeight * 0.7; 
                 const maxW = overlay.clientWidth * 0.8;
-                
-                let fontSize = 200; // 初始嘗試大字體
+                let fontSize = 200;
                 jpEl.style.fontSize = fontSize + 'px';
-
-                // 迴圈縮小字體直到不溢出
                 while ((jpEl.scrollHeight > maxH || jpEl.scrollWidth > maxW) && fontSize > 20) {
                     fontSize -= 2;
                     jpEl.style.fontSize = fontSize + 'px';
                 }
             }, 50);
-
-            play(j);
+            if (autoPlay) play(j);
         }
 
         init();
