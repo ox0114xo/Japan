@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>日本旅遊常用句</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        :root{--bg-dark:#0f172a;--neon-blue:#00f0ff;--neon-purple:#b026ff;--neon-green:#39ff14;--neon-red:#ff3333;--btn-depth:#1e3a8a;--text-main:#e2e8f0;--text-muted:#94a3b8;--base-font:1rem}
+        body.light-mode{--bg-dark:#f0f4ff;--btn-depth:#b0c4f8;--text-main:#1e293b;--text-muted:#475569;--neon-blue:#0066cc;--neon-purple:#7c3aed;--neon-green:#16a34a;--neon-red:#dc2626}
+        body{font-family:'Segoe UI',Roboto,sans-serif;background-color:var(--bg-dark);background-image:radial-gradient(circle at 50% 0%,#1e1b4b 0%,var(--bg-dark) 70%);color:var(--text-main);padding:15px;max-width:600px;margin:0 auto;line-height:1.6;padding-bottom:110px;min-height:100vh;font-size:var(--base-font);transition:background-color .3s,color .3s}
+        body.light-mode{background-image:radial-gradient(circle at 50% 0%,#dde8ff 0%,#f0f4ff 70%)}
+        body.light-mode li{background:linear-gradient(145deg,#fff,#e8f0ff);border-color:rgba(0,102,204,.3)}
+        body.light-mode .search-box{background:rgba(255,255,255,.8);color:#1e293b}
+        body.light-mode .cat-btn{background:rgba(255,255,255,.6);border-color:#cbd5e1}
+        body.light-mode .cat-btn.active{background:rgba(0,102,204,.1)}
+        body.light-mode .panel{background:rgba(255,255,255,.97);border-color:rgba(0,102,204,.2)}
+        body.light-mode .toolbar{background:rgba(240,244,255,.95);border-color:rgba(0,102,204,.15)}
+        body.light-mode .cat-container::after{background:linear-gradient(to right,transparent,#f0f4ff)}
+        body.light-mode h1{color:var(--neon-blue)}
+        body.light-mode .zh{color:#1e293b}
+        .header{text-align:center;margin-bottom:20px;padding-top:10px}
+        .logo{width:70px;height:70px;border-radius:18px;box-shadow:0 0 15px var(--neon-blue);margin-bottom:12px;border:2px solid var(--neon-blue);cursor:pointer}
+        h1{color:#fff;text-shadow:0 0 10px var(--neon-blue);font-size:22px;margin:0;user-select:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+        .jp-time{font-size:13px;color:var(--neon-green);font-family:monospace;background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.25);padding:4px 12px;border-radius:20px;letter-spacing:.05em;margin-top:8px;display:inline-block}
+        #weather-bar{display:none;background:rgba(0,240,255,.05);border:1px solid rgba(0,240,255,.15);border-radius:12px;padding:10px 15px;margin-bottom:15px;font-size:13px;color:var(--text-muted);align-items:center;gap:12px;flex-wrap:wrap}
+        #weather-bar.show{display:flex}
+        .cat-container{position:relative;width:100%;overflow:hidden;margin-bottom:15px}
+        .cat-container::after{content:'';position:absolute;top:0;right:0;width:50px;height:100%;background:linear-gradient(to right,transparent,var(--bg-dark));pointer-events:none;z-index:2}
+        .cat-row{display:flex;overflow-x:auto;gap:12px;padding:5px 40px 10px 5px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+        .cat-row::-webkit-scrollbar{display:none}
+        .cat-btn{white-space:nowrap;background:rgba(0,0,0,.5);color:var(--text-muted);border:1px solid #334155;padding:8px 20px;border-radius:20px;font-size:14px;cursor:pointer;transition:.3s}
+        .cat-btn.active{color:var(--neon-blue);border-color:var(--neon-blue);background:rgba(0,240,255,.1);font-weight:bold}
+        .cat-btn.secret-active{color:var(--neon-red);border-color:var(--neon-red);background:rgba(255,51,51,.1)}
+        .search-row{display:flex;gap:10px;margin-bottom:15px}
+        .search-box{flex:1;padding:15px;background:rgba(0,0,0,.4);border:1px solid var(--neon-purple);border-radius:12px;color:#fff;font-size:16px;outline:none}
+        .trans-btn{background:var(--neon-purple);border:none;border-radius:12px;padding:0 18px;color:white;cursor:pointer;font-size:20px}
+        ul{list-style:none;padding:0;margin:0}
+        li{background:linear-gradient(145deg,#1e293b,#0f172a);border:1px solid rgba(0,240,255,.3);border-radius:14px;margin-bottom:20px;padding:18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;box-shadow:0 6px 0 var(--btn-depth),0 10px 15px rgba(0,0,0,.4);transform:translateY(0);transition:.1s}
+        li:active{transform:translateY(6px);box-shadow:0 0 0 var(--btn-depth),0 2px 4px rgba(0,0,0,.4)}
+        li.custom-item{border-color:rgba(176,38,255,.4)}
+        .play-icon{font-size:22px;margin-right:15px;color:var(--neon-blue);opacity:.8}
+        .content{flex:1}
+        .zh{font-size:calc(var(--base-font)*1.25);font-weight:bold;color:#fff;display:block;margin-bottom:5px}
+        .jp{font-size:var(--base-font);color:var(--text-main);display:block;margin-bottom:3px}
+        .romaji{font-size:calc(var(--base-font)*.75);color:var(--neon-blue);font-family:monospace;display:block;opacity:.8}
+        .actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+        .btn{background:rgba(0,0,0,.3);border:1px solid #334155;border-radius:8px;color:#64748b;padding:8px;font-size:16px;cursor:pointer;transition:.2s}
+        .btn.fav-on{color:#fbbf24;border-color:#fbbf24}
+        .btn.copy-flash{color:var(--neon-green);border-color:var(--neon-green)}
+        #fs-overlay{display:none;position:fixed;inset:0;background:#000;z-index:10000;flex-direction:column;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;overflow:hidden}
+        #fs-jp{writing-mode:vertical-rl;text-orientation:upright;color:var(--neon-green);font-weight:bold;line-height:1.1;letter-spacing:.1em;text-shadow:0 0 20px var(--neon-green);white-space:nowrap}
+        #fs-zh{font-size:5vw;color:#fff;opacity:.7;border-top:1px solid #333;padding-top:15px;width:80%;text-align:center;margin-top:20px}
+        #scan-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:10001;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:20px;box-sizing:border-box}
+        #scan-overlay.open{display:flex}
+        #scan-video{width:100%;max-width:400px;border-radius:12px;border:2px solid var(--neon-blue)}
+        #scan-canvas{display:none}
+        #scan-result{color:var(--neon-green);font-size:18px;text-align:center;min-height:40px}
+        .scan-close{position:absolute;top:20px;right:20px;background:none;border:none;color:#fff;font-size:28px;cursor:pointer}
+        .toolbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:600px;background:rgba(15,23,42,.92);border-top:1px solid rgba(0,240,255,.15);backdrop-filter:blur(10px);display:flex;justify-content:space-around;align-items:center;padding:8px 5px;box-sizing:border-box;z-index:1000}
+        .tool-btn{background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;padding:6px 10px;border-radius:10px;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:2px}
+        .tool-btn span{font-size:10px}
+        .tool-btn:hover,.tool-btn.active{color:var(--neon-blue);background:rgba(0,240,255,.08)}
+        .panel{display:none;position:fixed;bottom:70px;left:50%;transform:translateX(-50%);width:calc(100% - 30px);max-width:570px;background:rgba(15,23,42,.97);border:1px solid rgba(0,240,255,.2);border-radius:18px;z-index:999;backdrop-filter:blur(10px);box-shadow:0 -10px 40px rgba(0,0,0,.5);max-height:65vh;overflow-y:auto}
+        .panel.open{display:block}
+        .panel-header{padding:14px 20px;border-bottom:1px solid rgba(0,240,255,.1);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:rgba(15,23,42,.97);z-index:1}
+        .panel-header h3{margin:0;color:var(--neon-blue);font-size:16px}
+        .panel-close{background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer}
+        .panel-body{padding:18px}
+        .rate-display{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
+        .rate-card{background:rgba(0,240,255,.05);border:1px solid rgba(0,240,255,.15);border-radius:10px;padding:12px;text-align:center}
+        .rate-card .label{font-size:11px;color:var(--text-muted);margin-bottom:4px}
+        .rate-card .value{font-size:20px;font-weight:bold;color:var(--neon-blue)}
+        .rate-card .sub{font-size:11px;color:var(--text-muted)}
+        .rate-input-row{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+        .rate-input{flex:1;padding:12px;background:rgba(0,0,0,.4);border:1px solid rgba(0,240,255,.3);border-radius:10px;color:#fff;font-size:18px;outline:none;text-align:right}
+        .rate-label{color:var(--text-muted);font-size:14px;min-width:40px;text-align:center}
+        .rate-result{text-align:center;color:var(--neon-green);font-size:22px;font-weight:bold;padding:10px}
+        .rate-update{text-align:center;font-size:11px;color:var(--text-muted);margin-top:5px}
+        .city-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:15px}
+        .city-btn{background:rgba(0,0,0,.3);border:1px solid #334155;border-radius:10px;color:var(--text-muted);padding:10px 5px;font-size:13px;cursor:pointer;transition:.2s;text-align:center}
+        .city-btn.active{border-color:var(--neon-blue);color:var(--neon-blue);background:rgba(0,240,255,.08)}
+        .map-links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .map-link{background:rgba(0,240,255,.05);border:1px solid rgba(0,240,255,.2);border-radius:10px;padding:12px;text-align:center;color:var(--text-main);font-size:13px;cursor:pointer;transition:.2s}
+        .map-link:hover{background:rgba(0,240,255,.12)}
+        .map-link .icon{font-size:24px;display:block;margin-bottom:5px}
+        .custom-form{display:flex;flex-direction:column;gap:10px;margin-bottom:15px}
+        .custom-input{padding:12px;background:rgba(0,0,0,.4);border:1px solid rgba(0,240,255,.2);border-radius:10px;color:#fff;font-size:15px;outline:none}
+        .custom-input::placeholder{color:var(--text-muted)}
+        .add-btn{background:var(--neon-blue);color:#000;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:bold;cursor:pointer}
+        .custom-list-item{display:flex;justify-content:space-between;align-items:center;padding:10px;background:rgba(176,38,255,.07);border:1px solid rgba(176,38,255,.2);border-radius:10px;margin-bottom:8px;font-size:13px}
+        .custom-list-item .texts{flex:1}
+        .custom-list-item .zh-s{font-weight:bold;color:var(--text-main)}
+        .custom-list-item .jp-s{color:var(--text-muted);font-size:12px}
+        .del-small{background:none;border:none;color:var(--neon-red);cursor:pointer;font-size:18px;padding:4px 8px}
+        .w-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+        .w-card{background:rgba(0,240,255,.05);border:1px solid rgba(0,240,255,.1);border-radius:10px;padding:12px;text-align:center}
+        .w-card .wlabel{font-size:11px;color:var(--text-muted)}
+        .w-card .wval{font-size:20px;font-weight:bold;color:var(--neon-blue);margin:4px 0}
+        .setting-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+        .setting-row:last-child{border:none}
+        .setting-label{color:var(--text-main);font-size:15px}
+        .toggle{width:44px;height:24px;background:#334155;border-radius:12px;cursor:pointer;position:relative;transition:.3s;border:none;flex-shrink:0}
+        .toggle.on{background:var(--neon-blue)}
+        .toggle::after{content:'';position:absolute;width:18px;height:18px;background:white;border-radius:9px;top:3px;left:3px;transition:.3s}
+        .toggle.on::after{left:23px}
+        .font-row{display:flex;align-items:center;gap:15px;justify-content:center;padding:10px 0}
+        .font-btn{background:rgba(0,0,0,.3);border:1px solid #334155;border-radius:8px;color:var(--text-main);padding:10px 20px;font-size:18px;cursor:pointer;transition:.2s}
+        .font-btn:hover{border-color:var(--neon-blue);color:var(--neon-blue)}
+        .quiz-card{background:linear-gradient(145deg,#1e293b,#0f172a);border:2px solid var(--neon-purple);border-radius:14px;padding:20px;text-align:center}
+        .quiz-jp{font-size:28px;color:#fff;margin-bottom:10px}
+        .quiz-romaji{font-size:13px;color:var(--neon-blue);font-family:monospace;margin-bottom:20px;min-height:20px}
+        .quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
+        .quiz-opt{background:rgba(0,0,0,.3);border:1px solid #334155;border-radius:10px;color:var(--text-main);padding:12px;font-size:15px;cursor:pointer;transition:.2s}
+        .quiz-opt.correct{border-color:var(--neon-green);color:var(--neon-green);background:rgba(57,255,20,.08)}
+        .quiz-opt.wrong{border-color:var(--neon-red);color:var(--neon-red);background:rgba(255,51,51,.08)}
+        .quiz-score{color:var(--neon-blue);font-size:13px;margin-bottom:12px;text-align:right}
+        .next-btn{background:var(--neon-purple);color:#fff;border:none;border-radius:10px;padding:12px 30px;font-size:15px;cursor:pointer}
+        .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--neon-green);color:#000;padding:10px 20px;border-radius:20px;font-weight:bold;font-size:14px;z-index:99999;transition:transform .3s;pointer-events:none}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+        .offline-badge{display:none;background:var(--neon-red);color:white;font-size:11px;padding:3px 8px;border-radius:8px}
+        .offline-badge.show{display:inline}
+    </style>
+</head>
+<body>
+<div id="fs-overlay" onclick="this.style.display='none'">
+    <div id="fs-jp"></div>
+    <div id="fs-zh"></div>
+</div>
+<div id="scan-overlay">
+    <button class="scan-close" onclick="closeScan()">✕</button>
+    <video id="scan-video" autoplay playsinline></video>
+    <canvas id="scan-canvas"></canvas>
+    <button class="add-btn" style="width:100%;max-width:400px" onclick="captureAndTranslate()">📸 拍照翻譯</button>
+    <div id="scan-result"></div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="header">
+    <img src="https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png" class="logo" onclick="location.reload()">
+    <h1 id="app-title"><span>日本旅遊常用句</span><span class="offline-badge" id="offline-badge">離線</span></h1>
+    <div class="jp-time" id="jp-time">🕐 --:--:--</div>
+</div>
+<div id="weather-bar"></div>
+<div class="cat-container"><div class="cat-row" id="top-cats"></div></div>
+<div class="search-row">
+    <input type="text" id="search" class="search-box" placeholder="搜尋或翻譯..." onkeyup="doSearch()">
+    <button class="trans-btn" onclick="goTranslate()" id="trans-icon">⚡</button>
+</div>
+<div class="cat-container"><div class="cat-row" id="sub-cats"></div></div>
+<div id="loading" style="text-align:center;padding:40px;color:var(--neon-blue);font-family:monospace">📡 連線中...</div>
+<ul id="list"></ul>
+
+<div class="toolbar">
+    <button class="tool-btn" onclick="openPanel('quiz')" id="tb-quiz">🎯<span>測驗</span></button>
+    <button class="tool-btn" onclick="openPanel('currency')" id="tb-currency">💱<span>匯率</span></button>
+    <button class="tool-btn" onclick="openPanel('map')" id="tb-map">🗺️<span>地圖</span></button>
+    <button class="tool-btn" onclick="openPanel('custom')" id="tb-custom">📝<span>自訂</span></button>
+    <button class="tool-btn" onclick="openPanel('weather')" id="tb-weather">🌡️<span>天氣</span></button>
+    <button class="tool-btn" onclick="openPanel('settings')" id="tb-settings">⚙️<span>設定</span></button>
+</div>
+
+<!-- 測驗 -->
+<div class="panel" id="panel-quiz">
+    <div class="panel-header"><h3>🎯 測驗模式</h3><button class="panel-close" onclick="closePanel()">✕</button></div>
+    <div class="panel-body">
+        <div class="quiz-score" id="quiz-score">答對：0 / 0</div>
+        <div class="quiz-card">
+            <div class="quiz-jp" id="quiz-jp">載入中...</div>
+            <div class="quiz-romaji" id="quiz-romaji"></div>
+            <div class="quiz-options" id="quiz-options"></div>
+        </div>
+        <div style="text-align:center;margin-top:12px"><button class="next-btn" onclick="nextQuiz()">下一題 ▶</button></div>
+    </div>
+</div>
+<!-- 匯率 -->
+<div class="panel" id="panel-currency">
+    <div class="panel-header"><h3>💱 匯率換算</h3><button class="panel-close" onclick="closePanel()">✕</button></div>
+    <div class="panel-body">
+        <div class="rate-display">
+            <div class="rate-card"><div class="label">1 TWD =</div><div class="value" id="rate-twd-to-jpy">—</div><div class="sub">JPY</div></div>
+            <div class="rate-card"><div class="label">1 JPY =</div><div class="value" id="rate-jpy-to-twd">—</div><div class="sub">TWD</div></div>
+        </div>
+        <div class="rate-input-row"><input class="rate-input" id="twd-input" type="number" placeholder="0" oninput="calcCurrency('twd')"><span class="rate-label">TWD</span></div>
+        <div class="rate-result" id="jpy-result">= — JPY</div>
+        <hr style="border-color:rgba(255,255,255,.05);margin:15px 0">
+        <div class="rate-input-row"><input class="rate-input" id="jpy-input" type="number" placeholder="0" oninput="calcCurrency('jpy')"><span class="rate-label">JPY</span></div>
+        <div class="rate-result" id="twd-result">= — TWD</div>
+        <div class="rate-update" id="rate-update-time">匯率載入中...</div>
+    </div>
+</div>
+<!-- 地圖 -->
+<div class="panel" id="panel-map">
+    <div class="panel-header"><h3>🗺️ 實用地圖</h3><button class="panel-close" onclick="closePanel()">✕</button></div>
+    <div class="panel-body">
+        <p style="color:var(--text-muted);font-size:13px;margin-bottom:12px">選擇城市，點擊下方按鈕在 Google Maps 搜尋</p>
+        <div class="city-grid" id="city-grid"></div>
+        <div class="map-links">
+            <div class="map-link" onclick="openMap('便利商店')"><span class="icon">🏪</span>便利商店</div>
+            <div class="map-link" onclick="openMap('薬局 ドラッグストア')"><span class="icon">💊</span>藥妝店</div>
+            <div class="map-link" onclick="openMap('地下鉄 駅')"><span class="icon">🚇</span>地鐵站</div>
+            <div class="map-link" onclick="openMap('観光地 神社')"><span class="icon">⛩️</span>觀光景點</div>
+            <div class="map-link" onclick="openMap('ラーメン')"><span class="icon">🍜</span>拉麵</div>
+            <div class="map-link" onclick="openMap('100円ショップ')"><span class="icon">💴</span>百元商店</div>
+            <div class="map-link" onclick="openMap('居酒屋')"><span class="icon">🍶</span>居酒屋</div>
+            <div class="map-link" onclick="openMap('病院 クリニック')"><span class="icon">🏥</span>醫院診所</div>
+        </div>
+    </div>
+</div>
+<!-- 自訂 -->
+<div class="panel" id="panel-custom">
+    <div class="panel-header"><h3>📝 自訂句子</h3><button class="panel-close" onclick="closePanel()">✕</button></div>
+    <div class="panel-body">
+        <div class="custom-form">
+            <input class="custom-input" id="c-zh" placeholder="中文（例：我要結帳）">
+            <input class="custom-input" id="c-jp" placeholder="日文（選填，空白自動翻譯）">
+            <input class="custom-input" id="c-romaji" placeholder="羅馬拼音（選填）">
+            <button class="add-btn" onclick="addCustom()">＋ 新增句子</button>
+        </div>
+        <div class="custom-list" id="custom-list"></div>
+    </div>
+</div>
+<!-- 天氣 -->
+<div class="panel" id="panel-weather">
+    <div class="panel-header"><h3>🌡️ 日本天氣</h3><button class="panel-close" onclick="closePanel()">✕</button></div>
+    <div class="panel-body">
+        <div class="city-grid" id="weather-city-grid"></div>
+        <div id="weather-detail" style="margin-top:15px;color:var(--text-muted);text-align:center">請選擇城市</div>
+    </div>
+</div>
+<!-- 字體 -->
+<div class="panel" id="panel-font">
+    <div class="panel-header"><h3>🔤 字體大小</h3><button class="panel-close" onclick="closePanel()">✕</button></div>
+    <div class="panel-body">
+        <div class="font-row">
+            <button class="font-btn" onclick="changeFont(-.1)">A−</button>
+            <div id="font-preview" style="flex:1;text-align:center;color:var(--neon-blue)">中文 あいう ABC</div>
+            <button class="font-btn" onclick="changeFont(.1)">A+</button>
+        </div>
+        <div style="text-align:center;color:var(--text-muted);font-size:13px;margin-top:10px">目前大小：<span id="font-size-label">16px</span></div>
+        <div style="display:flex;justify-content:center;margin-top:15px"><button class="font-btn" onclick="resetFont()" style="font-size:14px">重設預設</button></div>
+    </div>
+</div>
+<!-- 設定 -->
+<div class="panel" id="panel-settings">
+    <div class="panel-header"><h3>⚙️ 設定</h3><button class="panel-close" onclick="closePanel()">✕</button></div>
+    <div class="panel-body">
+        <div class="setting-row"><span class="setting-label">🌙 深色 / ☀️ 淺色模式</span><button class="toggle" id="toggle-theme" onclick="toggleTheme()"></button></div>
+        <div class="setting-row"><span class="setting-label">🔊 點擊自動播放語音</span><button class="toggle on" id="toggle-auto-play" onclick="toggleAutoPlay()"></button></div>
+        <div class="setting-row"><span class="setting-label">📖 顯示羅馬拼音</span><button class="toggle on" id="toggle-romaji" onclick="toggleRomaji()"></button></div>
+        <div class="setting-row"><span class="setting-label">🌡️ 頂部天氣列</span><button class="toggle" id="toggle-weather-bar" onclick="toggleWeatherBar()"></button></div>
+        <div class="setting-row"><span class="setting-label">🔤 字體大小</span><button class="font-btn" onclick="openPanel('font')" style="font-size:13px;padding:8px 14px">調整</button></div>
+        <div class="setting-row"><span class="setting-label">📸 掃描翻譯（相機）</span><button class="font-btn" onclick="openScan()" style="font-size:13px;padding:8px 14px">開啟</button></div>
+        <div class="setting-row"><span class="setting-label">🔔 每日一句通知</span><button class="toggle" id="toggle-notif" onclick="toggleNotif()"></button></div>
+        <div class="setting-row"><span class="setting-label">🧹 清除全部資料</span><button class="font-btn" onclick="clearAllCache()" style="font-size:13px;padding:8px 14px;border-color:var(--neon-red);color:var(--neon-red)">清除</button></div>
+    </div>
+</div>
+
+<script>
+const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRHq-l6EXN9TgJN023pKVvrVHYQOb2-1rczW8Zzbq6jE3tfZS4x7HOFMdBicA0zs6LDYc2BjA6CMAfw/pub?output=csv';
+const CITIES=['東京','大阪','京都','札幌','福岡','沖繩','名古屋','神戶','橫濱','奈良'];
+const CITY_EN={東京:'Tokyo',大阪:'Osaka',京都:'Kyoto',札幌:'Sapporo',福岡:'Fukuoka',沖繩:'Naha',名古屋:'Nagoya',神戶:'Kobe',橫濱:'Yokohama',奈良:'Nara'};
+
+let raw=[],curCat='全部',
+    favs=JSON.parse(localStorage.getItem('jp_f'))||[],
+    transHistory=JSON.parse(localStorage.getItem('jp_trans_hist'))||[],
+    customPhrases=JSON.parse(localStorage.getItem('jp_custom'))||[],
+    unlocked=false,clicks=0,
+    autoPlay=localStorage.getItem('jp_autoplay')!=='false',
+    showRomaji=localStorage.getItem('jp_romaji')!=='false',
+    showWeatherBar=localStorage.getItem('jp_wbar')==='true',
+    exchangeRate=null,
+    currentFontSize=parseFloat(localStorage.getItem('jp_fontsize'))||1.0,
+    currentPanel=null,
+    selectedCity='東京',
+    quizScore={correct:0,total:0},
+    quizAnswered=false,
+    videoStream=null;
+
+// 時間
+function updateJPTime(){
+    const jst=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tokyo'}));
+    const pad=n=>String(n).padStart(2,'0');
+    document.getElementById('jp-time').textContent=`🕐 日本 ${pad(jst.getHours())}:${pad(jst.getMinutes())}:${pad(jst.getSeconds())}`;
+}
+setInterval(updateJPTime,1000);updateJPTime();
+
+function play(t){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='ja-JP';window.speechSynthesis.speak(u);}
+
+// 主題
+function applyTheme(){const l=localStorage.getItem('jp_theme')==='light';document.body.classList.toggle('light-mode',l);const b=document.getElementById('toggle-theme');if(b)b.classList.toggle('on',l);}
+function toggleTheme(){const l=document.body.classList.toggle('light-mode');localStorage.setItem('jp_theme',l?'light':'dark');document.getElementById('toggle-theme').classList.toggle('on',l);}
+
+// 字體
+function applyFont(){document.documentElement.style.setProperty('--base-font',currentFontSize+'rem');const el=document.getElementById('font-size-label');if(el)el.textContent=Math.round(currentFontSize*16)+'px';}
+function changeFont(d){currentFontSize=Math.max(.7,Math.min(1.6,Math.round((currentFontSize+d)*10)/10));localStorage.setItem('jp_fontsize',currentFontSize);applyFont();}
+function resetFont(){currentFontSize=1.0;localStorage.setItem('jp_fontsize',1.0);applyFont();}
+
+// 面板
+function openPanel(name){
+    if(currentPanel===name){closePanel();return;}
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));
+    document.getElementById('panel-'+name).classList.add('open');
+    const tb=document.getElementById('tb-'+name);if(tb)tb.classList.add('active');
+    currentPanel=name;
+    if(name==='currency')loadExchangeRate();
+    if(name==='quiz')renderQuiz();
+    if(name==='custom')renderCustomList();
+    if(name==='weather')renderWeatherCities();
+    if(name==='map')renderMapCities();
+}
+function closePanel(){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('open'));document.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));currentPanel=null;}
+document.addEventListener('click',e=>{if(currentPanel&&!e.target.closest('.panel')&&!e.target.closest('.toolbar'))closePanel();});
+
+// 匯率
+async function loadExchangeRate(){
+    if(exchangeRate){updateRateDisplay();return;}
+    try{const r=await fetch('https://api.exchangerate-api.com/v4/latest/TWD');const d=await r.json();exchangeRate=d.rates.JPY;updateRateDisplay();document.getElementById('rate-update-time').textContent='匯率已更新 ✓';}
+    catch{exchangeRate=4.7;updateRateDisplay();document.getElementById('rate-update-time').textContent='使用近似匯率（離線）';}
+}
+function updateRateDisplay(){document.getElementById('rate-twd-to-jpy').textContent=exchangeRate.toFixed(2);document.getElementById('rate-jpy-to-twd').textContent=(1/exchangeRate).toFixed(4);}
+function calcCurrency(dir){
+    if(!exchangeRate)return;
+    if(dir==='twd'){const v=parseFloat(document.getElementById('twd-input').value)||0;document.getElementById('jpy-result').textContent='= '+Math.round(v*exchangeRate).toLocaleString()+' JPY';}
+    else{const v=parseFloat(document.getElementById('jpy-input').value)||0;document.getElementById('twd-result').textContent='= '+(v/exchangeRate).toFixed(1)+' TWD';}
+}
+
+// 地圖
+function renderMapCities(){
+    const g=document.getElementById('city-grid');g.innerHTML='';
+    CITIES.forEach(c=>{const b=document.createElement('button');b.className='city-btn'+(c===selectedCity?' active':'');b.textContent=c;b.onclick=()=>{selectedCity=c;g.querySelectorAll('.city-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');};g.appendChild(b);});
+}
+function openMap(type){const city=CITY_EN[selectedCity]||'Tokyo';window.open('https://www.google.com/maps/search/'+encodeURIComponent(type+' '+city),'_blank');}
+
+// 天氣
+function renderWeatherCities(){
+    const g=document.getElementById('weather-city-grid');g.innerHTML='';
+    CITIES.forEach(c=>{const b=document.createElement('button');b.className='city-btn';b.textContent=c;b.onclick=()=>{g.querySelectorAll('.city-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');loadWeather(c);};g.appendChild(b);});
+}
+async function loadWeather(city){
+    const detail=document.getElementById('weather-detail');
+    detail.innerHTML='<span style="color:var(--neon-blue)">載入中...</span>';
+    try{
+        const r=await fetch('https://wttr.in/'+encodeURIComponent(CITY_EN[city]||'Tokyo')+'?format=j1');
+        const d=await r.json();const cur=d.current_condition[0];
+        const desc=cur.lang_zh?.[0]?.value||cur.weatherDesc[0].value;
+        detail.innerHTML='<div class="w-grid">'+
+            '<div class="w-card"><div class="wlabel">天氣</div><div class="wval" style="font-size:14px">'+desc+'</div></div>'+
+            '<div class="w-card"><div class="wlabel">氣溫</div><div class="wval">'+cur.temp_C+'°C</div></div>'+
+            '<div class="w-card"><div class="wlabel">體感</div><div class="wval">'+cur.FeelsLikeC+'°C</div></div>'+
+            '<div class="w-card"><div class="wlabel">濕度</div><div class="wval">'+cur.humidity+'%</div></div>'+
+            '<div class="w-card"><div class="wlabel">風速</div><div class="wval">'+cur.windspeedKmph+'km/h</div></div>'+
+            '<div class="w-card"><div class="wlabel">能見度</div><div class="wval">'+cur.visibility+'km</div></div>'+
+            '</div><div style="text-align:center;margin-top:10px;font-size:12px;color:var(--text-muted)">'+city+'・即時天氣</div>';
+    }catch{detail.innerHTML='<span style="color:var(--neon-red)">天氣載入失敗</span>';}
+}
+function toggleWeatherBar(){
+    showWeatherBar=!showWeatherBar;localStorage.setItem('jp_wbar',showWeatherBar);
+    document.getElementById('toggle-weather-bar').classList.toggle('on',showWeatherBar);
+    document.getElementById('weather-bar').classList.toggle('show',showWeatherBar);
+    if(showWeatherBar)loadWeatherBar();
+}
+async function loadWeatherBar(){
+    const bar=document.getElementById('weather-bar');
+    try{const r=await fetch('https://wttr.in/Tokyo?format=j1');const d=await r.json();const cur=d.current_condition[0];bar.innerHTML='🌡️ 東京 '+cur.temp_C+'°C &nbsp;|&nbsp; 💧 '+cur.humidity+'% &nbsp;|&nbsp; 💨 '+cur.windspeedKmph+'km/h';}
+    catch{bar.innerHTML='🌡️ 天氣資訊暫時無法載入';}
+}
+
+// 掃描
+async function openScan(){
+    closePanel();
+    document.getElementById('scan-overlay').classList.add('open');
+    try{videoStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});document.getElementById('scan-video').srcObject=videoStream;}
+    catch(e){document.getElementById('scan-result').textContent='無法存取相機：'+e.message;}
+}
+function closeScan(){
+    document.getElementById('scan-overlay').classList.remove('open');
+    if(videoStream){videoStream.getTracks().forEach(t=>t.stop());videoStream=null;}
+    document.getElementById('scan-result').textContent='';
+}
+async function captureAndTranslate(){
+    const video=document.getElementById('scan-video');
+    const canvas=document.getElementById('scan-canvas');
+    canvas.width=video.videoWidth;canvas.height=video.videoHeight;
+    canvas.getContext('2d').drawImage(video,0,0);
+    const res=document.getElementById('scan-result');res.textContent='🔍 辨識中...';
+    canvas.toBlob(async blob=>{
+        const form=new FormData();form.append('file',blob,'photo.jpg');form.append('apikey','K81891498388957');form.append('language','jpn');
+        try{
+            const r=await fetch('https://api.ocr.space/parse/image',{method:'POST',body:form});
+            const d=await r.json();
+            const text=d.ParsedResults?.[0]?.ParsedText?.trim();
+            if(!text){res.textContent='⚠️ 無法辨識文字';return;}
+            const tr=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(text)+'&langpair=ja|zh-TW');
+            const td=await tr.json();const zh=td.responseData.translatedText;
+            res.innerHTML='<b style="color:var(--neon-blue)">'+text+'</b><br><span style="color:var(--neon-green)">'+zh+'</span>';
+            play(text);
+        }catch(e){res.textContent='翻譯失敗';}
+    },'image/jpeg',.8);
+}
+
+// 自訂句子
+async function addCustom(){
+    const zh=document.getElementById('c-zh').value.trim();
+    let jp=document.getElementById('c-jp').value.trim();
+    const romaji=document.getElementById('c-romaji').value.trim();
+    if(!zh){showToast('請輸入中文句子');return;}
+    if(!jp){
+        showToast('翻譯中...');
+        try{const r=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(zh)+'&langpair=zh-TW|ja');const d=await r.json();jp=d.responseData.translatedText;}catch{jp='';}
+    }
+    customPhrases.unshift({cat:'📝 自訂',zh,jp,romaji});
+    localStorage.setItem('jp_custom',JSON.stringify(customPhrases));
+    document.getElementById('c-zh').value='';document.getElementById('c-jp').value='';document.getElementById('c-romaji').value='';
+    renderCustomList();drawCats();doSearch();showToast('✓ 已新增！');
+}
+function deleteCustom(idx){customPhrases.splice(idx,1);localStorage.setItem('jp_custom',JSON.stringify(customPhrases));renderCustomList();drawCats();doSearch();}
+function renderCustomList(){
+    const el=document.getElementById('custom-list');el.innerHTML='';
+    if(!customPhrases.length){el.innerHTML='<div style="color:var(--text-muted);text-align:center;font-size:13px">尚無自訂句子</div>';return;}
+    customPhrases.forEach((p,i)=>{
+        const div=document.createElement('div');div.className='custom-list-item';
+        div.innerHTML='<div class="texts"><div class="zh-s">'+p.zh+'</div><div class="jp-s">'+p.jp+'</div></div><button class="del-small" onclick="deleteCustom('+i+')">🗑️</button>';
+        el.appendChild(div);
+    });
+}
+
+// 測驗
+let quizCurrent=null;
+function getPool(){return[...raw,...customPhrases].filter(i=>i.zh&&i.jp&&!i.cat?.includes('🤬'));}
+function renderQuiz(){
+    const pool=getPool();
+    if(pool.length<4){document.getElementById('quiz-jp').textContent='需要至少4個句子才能測驗';return;}
+    quizAnswered=false;
+    const idx=Math.floor(Math.random()*pool.length);quizCurrent=pool[idx];
+    const wrong=pool.filter((_,i)=>i!==idx);const opts=[quizCurrent];
+    while(opts.length<4){const r=wrong[Math.floor(Math.random()*wrong.length)];if(!opts.find(o=>o.zh===r.zh))opts.push(r);}
+    opts.sort(()=>Math.random()-.5);
+    document.getElementById('quiz-jp').textContent=quizCurrent.jp;
+    document.getElementById('quiz-romaji').textContent=quizCurrent.romaji||'';
+    document.getElementById('quiz-score').textContent='答對：'+quizScore.correct+' / '+quizScore.total;
+    const optsEl=document.getElementById('quiz-options');optsEl.innerHTML='';
+    opts.forEach(o=>{
+        const b=document.createElement('button');b.className='quiz-opt';b.textContent=o.zh;
+        b.onclick=()=>{
+            if(quizAnswered)return;quizAnswered=true;quizScore.total++;
+            if(o.zh===quizCurrent.zh){quizScore.correct++;b.classList.add('correct');showToast('🎉 答對了！');}
+            else{b.classList.add('wrong');showToast('❌ 答錯！');optsEl.querySelectorAll('.quiz-opt').forEach(x=>{if(x.textContent===quizCurrent.zh)x.classList.add('correct');});}
+            document.getElementById('quiz-score').textContent='答對：'+quizScore.correct+' / '+quizScore.total;
+        };
+        optsEl.appendChild(b);
+    });
+    if(autoPlay)play(quizCurrent.jp);
+}
+function nextQuiz(){renderQuiz();}
+
+// 通知
+async function toggleNotif(){
+    const btn=document.getElementById('toggle-notif');
+    if(Notification.permission!=='granted'){
+        const p=await Notification.requestPermission();
+        if(p!=='granted'){showToast('請允許通知權限');return;}
+    }
+    const on=!btn.classList.contains('on');btn.classList.toggle('on',on);localStorage.setItem('jp_notif',on);
+    if(on){showToast('🔔 通知已開啟，10秒後測試');scheduleNotif();}else showToast('🔕 通知已關閉');
+}
+function scheduleNotif(){
+    const pool=getPool();if(!pool.length)return;
+    const p=pool[Math.floor(Math.random()*pool.length)];
+    setTimeout(()=>{
+        if(Notification.permission==='granted'&&localStorage.getItem('jp_notif')==='true')
+            new Notification('🇯🇵 今日一句',{body:p.zh+'\n'+p.jp,icon:'https://raw.githubusercontent.com/ox0114xo/Japan/refs/heads/main/IMG_20260225_194735.png'});
+    },10000);
+}
+
+// 設定
+function toggleAutoPlay(){autoPlay=!autoPlay;localStorage.setItem('jp_autoplay',autoPlay);document.getElementById('toggle-auto-play').classList.toggle('on',autoPlay);}
+function toggleRomaji(){showRomaji=!showRomaji;localStorage.setItem('jp_romaji',showRomaji);document.getElementById('toggle-romaji').classList.toggle('on',showRomaji);doSearch();}
+function clearAllCache(){if(confirm('確定要清除所有紀錄與最愛嗎？')){localStorage.clear();location.reload();}}
+
+// Toast & 複製
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+function copyText(text,btn){navigator.clipboard.writeText(text).then(()=>{showToast('✓ 已複製！');btn.classList.add('copy-flash');setTimeout(()=>btn.classList.remove('copy-flash'),600);});}
+
+// 離線
+window.addEventListener('online',()=>document.getElementById('offline-badge').classList.remove('show'));
+window.addEventListener('offline',()=>document.getElementById('offline-badge').classList.add('show'));
+if(!navigator.onLine)document.getElementById('offline-badge').classList.add('show');
+
+// 翻譯
+async function goTranslate(){
+    const t=document.getElementById('search').value.trim();if(!t)return;
+    const btn=document.getElementById('trans-icon');btn.innerText='⌛';
+    try{
+        const r=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(t)+'&langpair=zh-TW|ja');
+        const d=await r.json();const jp=d.responseData.translatedText;
+        transHistory=transHistory.filter(i=>i.jp!==jp);
+        transHistory.unshift({cat:'⚡ 紀錄',zh:t,jp,romaji:''});
+        if(transHistory.length>50)transHistory.pop();
+        localStorage.setItem('jp_trans_hist',JSON.stringify(transHistory));
+        if(autoPlay)play(jp);curCat='⚡ 紀錄';drawCats();doSearch();
+    }catch{showToast('翻譯失敗');}
+    btn.innerText='⚡';
+}
+
+document.getElementById('app-title').onclick=()=>{if(++clicks>=10&&!unlocked){unlocked=true;alert('髒話解鎖');curCat='🤬 隱藏情緒';drawCats();doSearch();}};
+
+async function init(){
+    applyTheme();applyFont();
+    document.getElementById('toggle-auto-play').classList.toggle('on',autoPlay);
+    document.getElementById('toggle-romaji').classList.toggle('on',showRomaji);
+    document.getElementById('toggle-weather-bar').classList.toggle('on',showWeatherBar);
+    document.getElementById('toggle-notif').classList.toggle('on',localStorage.getItem('jp_notif')==='true');
+    if(showWeatherBar){document.getElementById('weather-bar').classList.add('show');loadWeatherBar();}
+    try{
+        const r=await fetch(CSV_URL);const csv=await r.text();
+        raw=csv.split('\n').slice(1).map(line=>{const c=line.split(',');return{cat:c[0],zh:c[1],jp:c[2],romaji:c[3]};}).filter(i=>i.jp);
+        document.getElementById('loading').style.display='none';
+        drawCats();doSearch();
+    }catch{document.getElementById('loading').innerText='連線失敗 — 請檢查網路';}
+}
+
+function drawCats(){
+    const topSet=new Set(['全部','⭐最愛','⚡ 紀錄']);
+    if(customPhrases.length)topSet.add('📝 自訂');
+    const subSet=new Set();
+    raw.forEach(i=>{if(i.cat==='🤬 隱藏情緒'){if(unlocked)subSet.add(i.cat);}else subSet.add(i.cat);});
+    const topDiv=document.getElementById('top-cats');const subDiv=document.getElementById('sub-cats');
+    topDiv.innerHTML='';subDiv.innerHTML='';
+    const mk=(c,p)=>{
+        const b=document.createElement('button');
+        b.className='cat-btn '+(c===curCat?(c.includes('🤬')?'secret-active':'active'):'');
+        b.innerText=c;
+        if(c==='⭐最愛'&&c!==curCat)b.style.color='#fbbf24';
+        if((c==='⚡ 紀錄'||c==='📝 自訂')&&c!==curCat)b.style.color='var(--neon-purple)';
+        b.onclick=()=>{curCat=c;drawCats();doSearch();};p.appendChild(b);
+    };
+    topSet.forEach(c=>mk(c,topDiv));subSet.forEach(c=>mk(c,subDiv));
+}
+
+function doSearch(){
+    const q=document.getElementById('search').value.toLowerCase();
+    let source=curCat==='⚡ 紀錄'?transHistory:curCat==='📝 自訂'?customPhrases:[...raw,...customPhrases];
+    const filtered=source.filter(i=>{
+        if(i.cat==='🤬 隱藏情緒'&&!unlocked)return false;
+        if(curCat==='全部'&&i.cat==='🤬 隱藏情緒')return false;
+        const mC=curCat==='全部'?true:curCat==='⭐最愛'?favs.includes(i.jp):curCat==='⚡ 紀錄'||curCat==='📝 自訂'?true:i.cat===curCat;
+        return mC&&((i.zh||'').includes(q)||(i.jp||'').includes(q));
+    });
+    const el=document.getElementById('list');el.innerHTML='';
+    filtered.forEach(i=>{
+        const isF=favs.includes(i.jp);const isCustom=i.cat==='📝 自訂';
+        const item=document.createElement('li');if(isCustom)item.classList.add('custom-item');
+        item.onclick=()=>{if(autoPlay)play(i.jp);};
+        const romajiHTML=showRomaji&&i.romaji?'<span class="romaji">'+i.romaji+'</span>':'';
+        const jpS=(i.jp||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        const zhS=(i.zh||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        item.innerHTML=
+            '<div class="play-icon" style="'+(i.cat?.includes('🤬')?'color:var(--neon-red)':isCustom?'color:var(--neon-purple)':'')+'">🔊</div>'+
+            '<div class="content"><span class="zh">'+i.zh+'</span><span class="jp">'+i.jp+'</span>'+romajiHTML+'</div>'+
+            '<div class="actions">'+
+            '<button class="btn '+(isF?'fav-on':'')+'" onclick="event.stopPropagation();setFav(\''+jpS+'\',this)">★</button>'+
+            '<button class="btn" onclick="event.stopPropagation();copyText(\''+jpS+'\',this)">📋</button>'+
+            '<button class="btn" onclick="event.stopPropagation();goFS(\''+jpS+'\',\''+zhS+'\')">⛶</button>'+
+            '</div>';
+        el.appendChild(item);
+    });
+}
+
+function setFav(j,btn){const idx=favs.indexOf(j);if(idx>-1)favs.splice(idx,1);else favs.push(j);localStorage.setItem('jp_f',JSON.stringify(favs));btn.classList.toggle('fav-on',favs.includes(j));if(curCat==='⭐最愛')doSearch();}
+
+function goFS(j,z){
+    const ov=document.getElementById('fs-overlay');
+    document.getElementById('fs-jp').innerText=j;document.getElementById('fs-zh').innerText=z;
+    ov.style.display='flex';
+    setTimeout(()=>{
+        const maxH=ov.clientHeight*.7;const maxW=ov.clientWidth*.8;let fs=200;
+        const el=document.getElementById('fs-jp');el.style.fontSize=fs+'px';
+        while((el.scrollHeight>maxH||el.scrollWidth>maxW)&&fs>20){fs-=2;el.style.fontSize=fs+'px';}
+    },50);
+    if(autoPlay)play(j);
+}
+
+init();
+</script>
+</body>
+</html>
